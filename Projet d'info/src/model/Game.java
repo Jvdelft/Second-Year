@@ -335,7 +335,6 @@ public class Game implements DeletableObserver, Runnable {
 	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
 	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1));
 			System.out.println("Chargement MapTest"); 
-			System.out.println(sizeH);
 		}
 		return initialisation;
 	}
