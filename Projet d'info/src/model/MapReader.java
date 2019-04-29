@@ -31,6 +31,12 @@ public class MapReader {
 			else if (Maps.get(i) == 'S') {
 				tiles.add(Constantes.Sol);
 			}
+			else if (Maps.get(i) == 'P') {
+				tiles.add(Constantes.Path);
+			}
+			else if (Maps.get(i) == 'C') {
+				tiles.add(Constantes.Chemin);
+			}
 		}
 	}
 	public void ReadMap(String s) {
