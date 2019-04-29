@@ -16,13 +16,15 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import model.ActivableObject;
 import model.Game;
 import model.GameObject;
 import model.Sums;
 
-public class ActionPanel extends JPanel implements ActionListener {
+public class ActionPanel extends JPanel implements ActionListener, ListSelectionListener {
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
 	private int x;
@@ -30,7 +32,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private Image background = Toolkit.getDefaultToolkit().createImage("Images/background.jpg");
 	private Font font = new Font("Monotype Corsiva", Font.BOLD, 20);
 	private Sums active_player;
-	private HashMap buttons = new HashMap();
+	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
 	private ArrayList<JButton> allButtons = new ArrayList<JButton>();
 	private ArrayList<JButton> visibleButtons = new ArrayList<JButton>();
 	private ArrayList<ActivableObject> activableObjects;
@@ -44,6 +46,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("INTERACT"));
 		initButton(new JButton("TAKE"));
 		initButton(new JButton("CLOSE"));
+		initButton(new JButton("OPEN"));
 		this.setLayout(this.box);
 		
 	}
@@ -90,11 +93,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
-			else {
-				if (e.getActionCommand() == "CLOSE") {
-					Window.getInstance().getMap().removeDrawContent();
-				}
-			}
 	}
 	public void setPlayer(Sums s) {
 		active_player = s;
@@ -131,7 +129,11 @@ public class ActionPanel extends JPanel implements ActionListener {
 			}
 		}
 	}
-	public HashMap getButtonsHashMap() {
+	public HashMap<String, JButton> getButtonsHashMap() {
 		return buttons;
+	}
+	public void valueChanged(ListSelectionEvent arg0) {
+		
+		
 	}
 }

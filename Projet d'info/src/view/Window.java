@@ -148,6 +148,9 @@ public class Window extends JFrame implements ActionListener {
 	public Map getMap() {
 		return this.map;
 	}
+	public Sums getActivePlayer() {
+		return active_player;
+	}
 	/*public Window getInstance() {
 		if (InstanceWindow == null) {
 			InstanceWindow = new Window("Game");

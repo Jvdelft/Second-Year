@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -57,6 +58,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	private String posButton3;
 	private ContainerObject container;
     private int row;
+    private Sums active_player;
 	
     private Map() {
         this.setFocusable(true);
@@ -246,6 +248,9 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		posButton3 = "pos " + (posX+widthButton*4) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
 		this.add((Component) buttons.get("TAKE"), posButton2);
 		this.add((Component) buttons.get("CLOSE"), posButton1);
+		((JButton) buttons.get("EAT")).addActionListener(this);
+		((JButton) buttons.get("CLOSE")).addActionListener(this);
+		((JButton) buttons.get("TAKE")).addActionListener(this);
 		
 	}
 	private void initJList(int nLabels) {
@@ -281,22 +286,41 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		if (arg0.getSource().equals(down)) {
-			row++;
-			updateContent();
+		int index = content.getSelectedIndex();
+		if (index < 0) {
+			index = 0;
 		}
-		else if (arg0.getSource().equals(up) && row >0) {
-			row --;
-			updateContent();
+		active_player = Window.getInstance().getActivePlayer();
+		if (((JButton) arg0.getSource()).getLocationOnScreen().getX() < 1470) {
+			if (arg0.getSource().equals(down)) {
+				row++;
+				updateContent();
+			}
+			else if (arg0.getSource().equals(up) && row >0) {
+				row --;
+				updateContent();
+			}
+			if (arg0.getActionCommand() == "CLOSE") {
+				removeDrawContent();
+			}
+			else if (arg0.getActionCommand() == "EAT") {
+				ActivableObject object = (ActivableObject) container.getObjectsContained().get(index);
+				object.activate(active_player);
+				container.getObjectsContained().remove(object);
+				updateContent();
+			}
+			else if (arg0.getActionCommand() == "TAKE") {
+				GameObject object = container.getObjectsContained().get(index);
+				container.getObjectsContained().remove(object);
+				active_player.getObjects().add(object);
+				updateContent();
+			}
 		}
-		
 	}
 	public void valueChanged(ListSelectionEvent arg0) {
 		int index = content.getSelectedIndex();
 		ArrayList<GameObject> objects = container.switchRow(row);
-		System.out.println(index);
-		System.out.println(objects.size());
-		if (index < objects.size()-1) {
+		if (index < objects.size()-1 && index >= 0) {
 			if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
 				this.add((Component) buttons.get("EAT"), posButton3);
 		

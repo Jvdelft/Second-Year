@@ -10,6 +10,10 @@ public class ContainerObject extends ActivableObject{
 		super(x,y);
 		type = "STOCK";
 		for (int i = 0; i<6; i++) {
+			if (i== 3) {
+				objectContained.add(new cigaret());
+				continue;
+			}
 			objectContained.add(new Apple());
 		}
 	}
@@ -32,6 +36,9 @@ public class ContainerObject extends ActivableObject{
 			}
 		}
 		return objectsToReturn;
+	}
+	public ArrayList<GameObject> getObjectsContained() {
+		return objectContained;
 	}
 	@Override
 	public boolean isObstacle() {
