@@ -21,9 +21,9 @@ import model.Sums;
 
 
 public class Status extends JPanel {
-	private HUD hud = new HUD();
-	private InventoryPanel inventoryPanel = new InventoryPanel();
-	private ActionPanel actionPanel = new ActionPanel();
+	private HUD hud = HUD.getInstance();
+	private InventoryPanel inventoryPanel = InventoryPanel.getInstance();
+	private ActionPanel actionPanel = ActionPanel.getInstance();
 	
     public Status() {
     	this.setLayout(new BorderLayout());
@@ -31,10 +31,10 @@ public class Status extends JPanel {
     	this.setOpaque(true);
     	hud.setPreferredSize(new Dimension(450,500));
         this.add(hud, BorderLayout.NORTH);
-        inventoryPanel.setPreferredSize(new Dimension(450,200));
-        this.add(inventoryPanel, BorderLayout.SOUTH);
         actionPanel.setPreferredSize(new Dimension(450,300));
         this.add(actionPanel,BorderLayout.CENTER);
+        inventoryPanel.setPreferredSize(new Dimension(450,200));
+        this.add(inventoryPanel, BorderLayout.SOUTH);
     }
 
     public void redraw() {

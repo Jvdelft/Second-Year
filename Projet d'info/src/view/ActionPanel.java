@@ -24,7 +24,7 @@ import model.Game;
 import model.GameObject;
 import model.Sums;
 
-public class ActionPanel extends JPanel implements ActionListener, ListSelectionListener {
+public class ActionPanel extends JPanel implements ActionListener {
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
 	private int x;
@@ -36,7 +36,9 @@ public class ActionPanel extends JPanel implements ActionListener, ListSelection
 	private ArrayList<JButton> allButtons = new ArrayList<JButton>();
 	private ArrayList<JButton> visibleButtons = new ArrayList<JButton>();
 	private ArrayList<ActivableObject> activableObjects;
-	public ActionPanel() {
+	private int index;
+	private static ActionPanel actionPanel_instance;
+	private ActionPanel() {
 		limits.weightx = 1;
 		limits.weighty = 1;
 		initButton(new JButton("EAT"));
@@ -71,6 +73,12 @@ public class ActionPanel extends JPanel implements ActionListener, ListSelection
 					mustAddButtons.add((JButton) buttons.get(type));
 				}
 			}
+			if (active_player.getObjects().size() >0) {
+				if (((ActivableObject) active_player.getObjects().get(index)).getType() == "EAT"){
+					this.addButton("EAT");
+					mustAddButtons.add(buttons.get("EAT"));
+				}
+			}
 			for (JButton object : allButtons) {
 				if (!(mustAddButtons.contains(object))) {
 					removeButton(object);
@@ -83,16 +91,23 @@ public class ActionPanel extends JPanel implements ActionListener, ListSelection
         g.drawImage(background, 0, 0, null);
 	}
 	public void actionPerformed(ActionEvent e) {
-		if (((JButton) e.getSource()).getLocationOnScreen().getX()>1470) {
-			Window.getInstance().getMap().requestFocusInWindow();
-			if (e.getActionCommand() == "EAT") {
-				for (ActivableObject o : activableObjects) {
-					if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-						o.activate(active_player);
-					}
+		JButton buttonPressed = (JButton) e.getSource();
+		if (buttonPressed.getLocationOnScreen().getX()>1470) {
+			if (buttonPressed.getText() == "EAT") {
+				ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
+				objectToEat.activate(active_player);
+				active_player.getObjects().remove(objectToEat);
+				
+			}
+			for (ActivableObject o : activableObjects) {
+				if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+					o.activate(active_player);
 				}
 			}
 		}
+		InventoryPanel.getInstance().updateInventory();
+		Map.getInstance().requestFocusInWindow();
+		updateVisibleButtons();
 	}
 	public void setPlayer(Sums s) {
 		active_player = s;
@@ -132,8 +147,17 @@ public class ActionPanel extends JPanel implements ActionListener, ListSelection
 	public HashMap<String, JButton> getButtonsHashMap() {
 		return buttons;
 	}
-	public void valueChanged(ListSelectionEvent arg0) {
-		
-		
+	public void setSelectedIndexInventory(int index) {
+		this.index = index;
+		if(this.index <0) {
+			this.index = 0;
+		}
+		updateVisibleButtons();
+	}
+	public static ActionPanel getInstance() {
+		if (actionPanel_instance == null) {
+			actionPanel_instance = new ActionPanel();
+		}
+		return actionPanel_instance;
 	}
 }

@@ -18,7 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-public class InventoryPanel extends JPanel implements ActionListener{
+public class InventoryPanel extends JPanel implements ActionListener, ListSelectionListener{
 	private JList list = new JList();
 	private Sums p = null;
 	private int row;
@@ -31,7 +31,8 @@ public class InventoryPanel extends JPanel implements ActionListener{
 	private JButton up;
 	private JButton down;
 	private Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
-	public InventoryPanel() {
+	private static InventoryPanel inventoryPanel_instance;
+	private InventoryPanel() {
 		Constantes.makeList();
 		limits.weightx = 1;
 		limits.weighty = 1;
@@ -39,7 +40,7 @@ public class InventoryPanel extends JPanel implements ActionListener{
 		this.setLayout(this.box);
 		initLabels(itemsNumber);
 		initButtons();
-	}
+		}
 	private void removeImage() {
 		combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
 		g = combined.getGraphics();
@@ -71,6 +72,7 @@ public class InventoryPanel extends JPanel implements ActionListener{
 		limits.gridwidth = 1;
 		limits.gridx = 2;
 		limits.gridy = 3;
+		list.addListSelectionListener(this);
 	}
 	private void initLabels(int nLabels) {
 		for (int i = 0; i<nLabels;i++) {
@@ -104,11 +106,26 @@ public class InventoryPanel extends JPanel implements ActionListener{
 		if(e.getSource().equals(up) && row > 0) {
 			row --;
 		}
-		else if (e.getSource().equals(down)) {
+		else if (e.getSource().equals(down) && row +1 <= p.getObjects().size()/4) {
 			row ++;
 		}
+		updateInventory();
 	}
 	public void setPlayer(Sums p2) {
 		this.p = p2;
+		if (this.p != null) {
+			updateInventory();
+		}
+	}
+	public void valueChanged(ListSelectionEvent e) {
+		ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
+		Map.getInstance().requestFocusInWindow();
+		ActionPanel.getInstance().updateVisibleButtons();
+	}
+	public static InventoryPanel getInstance() {
+		if (inventoryPanel_instance == null) {
+			inventoryPanel_instance = new InventoryPanel();
+		}
+		return inventoryPanel_instance;
 	}
 }

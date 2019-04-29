@@ -15,7 +15,8 @@ public class HUD extends JPanel{
 	private int BAR_LENGTH = 1;
 	private int BAR_WIDTH = 20;
 	private int AVATAR_SIZE = 100;
-	public HUD() {
+	private static HUD HUD_instance;
+	private HUD() {
 		this.setOpaque(true);
 	}
 	public void paintComponent(Graphics g) {
@@ -67,5 +68,11 @@ public class HUD extends JPanel{
 	}
 	public void setPlayer(Sums p2) {
 		this.p = p2;
+	}
+	public static HUD getInstance() {
+		if (HUD_instance == null) {
+			HUD_instance = new HUD();
+		}
+		return HUD_instance;
 	}
 }

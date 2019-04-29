@@ -78,7 +78,6 @@ public class Window extends JFrame implements ActionListener {
 
     public void update() {
         groupPanel.repaint();
-        status.getInventoryPanel().updateInventory();
     }
 
     public void setKeyListener(KeyListener keyboard) {
