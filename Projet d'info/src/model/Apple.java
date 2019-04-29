@@ -16,7 +16,7 @@ public class Apple extends Food{
 		super();
 	}
 	public void makeSprite() {
-		Sprite = Constantes.Apple;
+		Sprite = Constantes.apple;
 	}
 
 

@@ -11,7 +11,7 @@ public class ContainerObject extends ActivableObject{
 		type = "STOCK";
 		for (int i = 0; i<6; i++) {
 			if (i== 3) {
-				objectContained.add(new cigaret());
+				objectContained.add(new Cigaret());
 				continue;
 			}
 			objectContained.add(new Apple());

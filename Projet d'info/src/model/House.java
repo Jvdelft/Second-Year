@@ -33,6 +33,6 @@ public class House extends GameObject{
 		return door;
 	}
 	public void makeSprite() {
-		Sprite = Constantes.House;
+		Sprite = Constantes.house;
 	}
 }

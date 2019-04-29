@@ -28,6 +28,7 @@ public class Game implements DeletableObserver, Runnable {
     private int numberOfBreakableBlocks = 40;
     private Thread t2= new Thread(this);
     private static Game GameInstance;
+    private int time;
 
     private Game(Window window) {
     	this.window = window;
@@ -67,6 +68,7 @@ public class Game implements DeletableObserver, Runnable {
         active_player.rotate(x, y);
         if (obstacle == false) {
             active_player.move(x, y);
+            active_player.tire();
         }
         Window.getInstance().getStatus().getActionPanel().updateVisibleButtons();
         notifyView();
@@ -77,12 +79,18 @@ public class Game implements DeletableObserver, Runnable {
             	Window.getInstance().getStatus().getActionPanel().updateActivableList();
             }
         };
+        TimerTask timeTask = new TimerTask() {
+        	public void run() {
+        		time+=1;
+        	}
+        };
         TimerTask musicTask = new TimerTask() {
         	public void run() {
         		sound.play("Never_Surrender");
         	}
         };
         Timer timer = new Timer("Timer");
+        timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
     }

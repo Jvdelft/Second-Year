@@ -20,7 +20,7 @@ public class HUD extends JPanel{
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(Constantes.BackgroundStatus, 0, 0, 450, 500, this);
+		g.drawImage(Constantes.backgroundStatus, 0, 0, 450, 500, this);
 		if (p instanceof Sums) {
 			g.drawImage(((Sums) p).Sprite_face, 150, 25, AVATAR_SIZE, AVATAR_SIZE, this);
 		}

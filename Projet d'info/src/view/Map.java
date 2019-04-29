@@ -84,7 +84,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     }
     
     public void paintComponent(Graphics g) {
-    	g.drawImage(Constantes.Background, 0, 0, 1470, 1080, this);
+    	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
     	if (changeMap) {
     		pixels.ReadMap(map);
     		changeMap = false;

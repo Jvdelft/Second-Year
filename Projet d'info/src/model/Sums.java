@@ -41,7 +41,7 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 		maison = h;
 		inventory.add(new Apple());
 		inventory.add(new Apple());
-		inventory.add(new cigaret());
+		inventory.add(new Cigaret());
 		inventory.add(new Apple());
 		inventory.add(new Apple());
 	}
@@ -130,8 +130,8 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
     }
 
 	public void tire() {
-		if (energy > 10)
-			energy -= 10;
+		if (energy > 20)
+			energy -= 1;
 	}
 	public void Toilet() {
 		this.toilet = 0;

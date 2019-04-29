@@ -19,7 +19,7 @@ public class Teen extends Sums{
 	public Teen() {
 		super();
 	}
-	public void Smoke(cigaret c) {
+	public void smoke(Cigaret c) {
 		this.happiness += 1;
 		this.age += 1/1000;
 	}
