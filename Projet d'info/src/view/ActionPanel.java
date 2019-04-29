@@ -22,7 +22,7 @@ import model.Game;
 import model.GameObject;
 import model.Sums;
 
-public class ActionPanel extends JPanel implements ActionListener {
+public class ActionPanel extends JPanel implements ActionListener{
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
 	private int x;
