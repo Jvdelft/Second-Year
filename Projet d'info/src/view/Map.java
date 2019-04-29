@@ -327,7 +327,10 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	public void valueChanged(ListSelectionEvent arg0) {
 		int index = content.getSelectedIndex();
 		ArrayList<GameObject> objects = container.switchRow(row);
-		if (index < objects.size()-1 && index >= 0) {
+		if (index < 0) {
+			index = 0;
+		}
+		if (index <= objects.size()-1) {
 			if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
 				this.add(buttonEAT, posButton3);
 		
