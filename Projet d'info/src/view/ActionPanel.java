@@ -35,7 +35,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private ArrayList<JButton> visibleButtons = new ArrayList<JButton>();
 	private ArrayList<ActivableObject> activableObjects;
 	public ActionPanel() {
-		System.out.println("EY");
 		limits.weightx = 1;
 		limits.weighty = 1;
 		initButton(new JButton("EAT"));
