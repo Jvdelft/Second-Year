@@ -8,8 +8,12 @@ public class ContainerObject extends ActivableObject{
 	private int row;
 	public ContainerObject(int x, int y) {
 		super(x,y);
-		type = "STOCK";
+		type = "OPEN";
 		for (int i = 0; i<6; i++) {
+			if (i== 3) {
+				objectContained.add(new Cigaret());
+				continue;
+			}
 			objectContained.add(new Apple());
 		}
 	}
@@ -32,6 +36,9 @@ public class ContainerObject extends ActivableObject{
 			}
 		}
 		return objectsToReturn;
+	}
+	public ArrayList<GameObject> getObjectsContained() {
+		return objectContained;
 	}
 	@Override
 	public boolean isObstacle() {

@@ -15,12 +15,13 @@ public class HUD extends JPanel{
 	private int BAR_LENGTH = 1;
 	private int BAR_WIDTH = 20;
 	private int AVATAR_SIZE = 100;
-	public HUD() {
+	private static HUD HUD_instance;
+	private HUD() {
 		this.setOpaque(true);
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(Constantes.BackgroundStatus, 0, 0, 450, 500, this);
+		g.drawImage(Constantes.backgroundStatus, 0, 0, 450, 500, this);
 		if (p instanceof Sums) {
 			g.drawImage(((Sums) p).Sprite_face, 150, 25, AVATAR_SIZE, AVATAR_SIZE, this);
 		}
@@ -67,5 +68,11 @@ public class HUD extends JPanel{
 	}
 	public void setPlayer(Sums p2) {
 		this.p = p2;
+	}
+	public static HUD getInstance() {
+		if (HUD_instance == null) {
+			HUD_instance = new HUD();
+		}
+		return HUD_instance;
 	}
 }

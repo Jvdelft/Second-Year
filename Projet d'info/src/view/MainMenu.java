@@ -33,7 +33,7 @@ public class MainMenu extends JPanel{
 		initButton(Exit);
 	}
 	public void paint(Graphics g) {
-		g.drawImage(Constantes.Menu, 0, 0, 1920, 1080, this);
+		g.drawImage(Constantes.menu, 0, 0, 1920, 1080, this);
 		
 	}
 	public ArrayList<JButton> getButtons(){

@@ -78,7 +78,6 @@ public class Window extends JFrame implements ActionListener {
 
     public void update() {
         groupPanel.repaint();
-        status.getInventoryPanel().updateInventory();
     }
 
     public void setKeyListener(KeyListener keyboard) {
@@ -147,6 +146,9 @@ public class Window extends JFrame implements ActionListener {
 	}
 	public Map getMap() {
 		return this.map;
+	}
+	public Sums getActivePlayer() {
+		return active_player;
 	}
 	/*public Window getInstance() {
 		if (InstanceWindow == null) {

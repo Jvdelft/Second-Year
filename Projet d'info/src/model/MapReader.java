@@ -18,25 +18,25 @@ public class MapReader {
 	public void makeTiles() {
 		for (int i=0; i<Maps.size();i++) {
 			if (Maps.get(i) == 'A') {
-				tiles.add(Constantes.Tree);
+				tiles.add(Constantes.tree);
 			}
 			else if(Maps.get(i) == 'H') {
-				tiles.add(Constantes.Herb);
+				tiles.add(Constantes.herb);
 			}
 			else if(Maps.get(i) == 'D') {
-				tiles.add(Constantes.Door);
+				tiles.add(Constantes.door);
 			}
 			else if (Maps.get(i) == 'R') {
-				tiles.add(Constantes.Rock);
+				tiles.add(Constantes.rock);
 			}
 			else if (Maps.get(i) == 'S') {
-				tiles.add(Constantes.Sol);
+				tiles.add(Constantes.sol);
 			}
 			else if (Maps.get(i) == 'P') {
-				tiles.add(Constantes.Path);
+				tiles.add(Constantes.path);
 			}
 			else if (Maps.get(i) == 'C') {
-				tiles.add(Constantes.Chemin);
+				tiles.add(Constantes.chemin);
 			}
 		}
 	}
