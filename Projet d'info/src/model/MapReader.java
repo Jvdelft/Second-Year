@@ -11,6 +11,7 @@ import model.Constantes;
 public class MapReader {
 	public ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
 	private ArrayList<Character> Maps = new ArrayList<Character>();
+	public int hTiles ;
 	public MapReader() {
 		Constantes.Images();
 		}
@@ -50,6 +51,8 @@ public class MapReader {
 			br = new BufferedReader(fr);
 
 			String sCurrentLine;
+			String sizeLine = br.readLine();
+			hTiles = Integer.parseInt(sizeLine);
 			while ((sCurrentLine = br.readLine()) != null) {
 				for (int i=0;i<sCurrentLine.length();i++) {
 					char aChar = sCurrentLine.charAt(i);

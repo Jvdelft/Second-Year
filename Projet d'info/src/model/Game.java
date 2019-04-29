@@ -42,14 +42,10 @@ public class Game implements DeletableObserver, Runnable {
     	notifyView();
     	t2.start();
     	sound = new Sound();
-    	sound.play("Never_Surrender");
+    	//sound.play("Never_Surrender");
     	givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect();
         
     }
-    public Sound getSound() {
-    	return sound;
-    }
-
 
     public void movePlayer(int x, int y) {
         int nextX = active_player.getPosX() + x;
@@ -216,6 +212,8 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
+		sizeH = window.getHMapSize();
+        sizeV = window.getVMapSize();
 		boolean newMap = true;
 		objectsOnMap.remove(active_player);
 		for (String key : objectDictionary.keySet()) {
@@ -231,6 +229,7 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap = objectDictionary.get(s);
 		objectsOnMap.add(active_player);
 		window.setGameObjects(objectsOnMap);
+		
 	}
 	
 	private ArrayList<GameObject> mapConstructor(String map){
@@ -313,13 +312,30 @@ public class Game implements DeletableObserver, Runnable {
 			for (int i = 0; i < sizeH; i++) {
 	    		initialisation.add(new Border(i, 0));
 	    		initialisation.add(new Border(i, sizeV - 1));
-	    		if (i>9) {
-	    			initialisation.add(new Border(0, i-10));
-	    			initialisation.add(new Border(sizeH - 1, i-10));
+	    		if (i >= sizeH - sizeV) {
+	    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
+	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
 	    		}
 			}
-			initialisation.add(new Door(Math.round(sizeH/2)-1,sizeV-1));
+			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
 			System.out.println("Chargement MapMaison"); 
+		}
+		else if (map.equals("MapTest")) {
+			for (int i = 0; i < sizeH; i++) {
+	    		initialisation.add(new Border(i, 0));
+	    		initialisation.add(new Border(i, sizeV - 1));
+	    		if (i >= sizeH - sizeV) {
+	    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
+	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
+	    		}
+			}
+			//initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
+			initialisation.add(new Door(Math.round(sizeH/2),0));
+	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1));
+	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
+	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1));
+			System.out.println("Chargement MapTest"); 
+			System.out.println(sizeH);
 		}
 		return initialisation;
 	}

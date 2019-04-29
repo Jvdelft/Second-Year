@@ -24,35 +24,36 @@ public class Door extends ActivableObject{
 		int sizeV = map.tileVerticale;
 		boolean DoorN = this.getPosY() == 0;
 		boolean DoorW = this.getPosX() == 0;
-		boolean DoorE = this.getPosX() == 29;
-		boolean DoorS = this.getPosY()== 19;
+		boolean DoorE = this.getPosX() == sizeH - 1;
+		boolean DoorS = this.getPosY()== sizeV - 1;
 		if (DoorN) {
 			e.teleportation(Math.round(sizeH/2)- 1 ,sizeV - 2);
-			choosingMap("N");
+			choosingMap("N",e);
 		}
 		else if (DoorW) {
 			e.teleportation(sizeH - 2 , Math.round(sizeV/2) - 1);
-			choosingMap("W");
+			choosingMap("W",e);
 		}
 		else if (DoorE) {
 			e.teleportation(1, Math.round(sizeV/2) - 1);
-			choosingMap("E");
+			choosingMap("E",e);
 		}
 		else if (DoorS) {
 			if (map.map != Constantes.MapMaison) {e.teleportation(Math.round(sizeH/2) - 1, 1);}
 			else {e.teleportation(e.getHouse().getDoor().getPosX(), e.getHouse().getDoor().getPosY() + 1);}
-			choosingMap("S");
+			choosingMap("S",e);
 		}
 		else if (this.getPosX() == e.getHouse().getDoor().getPosX() && this.getPosY() == e.getHouse().getDoor().getPosY()) {
-			e.teleportation(Math.round(sizeH/2)- 1 ,sizeV - 2);
-			choosingMap("H");
+			
+			choosingMap("H",e);
 		}
 	}
-	private void choosingMap(String s) {
+	private void choosingMap(String s, Sums e) {
 		Game game = Game.getInstance();
-		if (map.map == Constantes.MapBase && s != "H") {
-			game.changeMap("MapRock");
-			map.changeMap(Constantes.MapRock);	
+		if (map.map == Constantes.MapBase && s == "N") {
+			map.changeMap(Constantes.MapTest);
+			e.teleportation(Math.round(map.tileHorizontale/2) ,map.tileVerticale - 2);
+			game.changeMap("MapTest");
 		}
 		else if ( map.map == Constantes.MapRock && s != "H") {
 			map.changeMap(Constantes.MapBase);
@@ -64,6 +65,7 @@ public class Door extends ActivableObject{
 		}
 		else {
 			map.changeMap(Constantes.MapMaison);
+			e.teleportation(Math.round(map.tileHorizontale/2) ,map.tileVerticale - 2);
 			game.changeMap("MapMaison");
 		}
 	}

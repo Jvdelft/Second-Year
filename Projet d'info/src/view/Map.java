@@ -34,14 +34,13 @@ import controller.Keyboard;
 public class Map extends JPanel implements ActionListener, ListSelectionListener{
     private ArrayList<GameObject> objects = null;
     public final int MAP_SIZE = 30;
-    private int BLOC_SIZE = 48;
     private Mouse mouseController = null;
     public int tileVerticale = 20;
     public int tileHorizontale = 30;
     private int tileSize = 48;
     private MapReader tiles;
     public String map = Constantes.MapBase;
-    private boolean changeMap = true;
+    private boolean firstMap = true;
     private MapReader pixels = new MapReader();
     private static Map instance_map = null;
     private JList content = new JList();
@@ -61,7 +60,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     private Map() {
         this.setFocusable(true);
         this.requestFocusInWindow();
-        this.setPreferredSize(new Dimension(tileHorizontale*BLOC_SIZE, tileVerticale*BLOC_SIZE));
+        this.setPreferredSize(new Dimension(tileHorizontale*tileSize, tileVerticale*tileSize));
         this.setBackground(Color.GREEN);
         this.setLayout(new MigLayout());
 		content.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -70,8 +69,8 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
         
         addMouseListener(new MouseListener() {
 			public void mousePressed(MouseEvent e) {
-				int x = e.getX()/BLOC_SIZE;
-				int y = e.getY()/BLOC_SIZE;
+				int x = e.getX()/tileSize;
+				int y = e.getY()/tileSize;
 				mouseController.mapEvent(x, y);
 			}
 			public void mouseClicked(MouseEvent arg0) {}
@@ -83,11 +82,10 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     
     public void paintComponent(Graphics g) {
     	g.drawImage(Constantes.Background, 0, 0, 1470, 1080, this);
-    	if (changeMap) {
-    		pixels.ReadMap(map);
-    		changeMap = false;
+    	if (firstMap) {
+    		this.changeMap(Constantes.MapBase);
+    		firstMap = false;
     	}
-    	
         for (int i = 0; i < tileVerticale; i++) {
         	int lines = i;
             for (int j = 0; j < tileHorizontale; j++) {
@@ -109,15 +107,15 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
             	drawSprites((Sums) object, g);
             }
             else if (object instanceof House) {
-            	g.drawImage(object.Sprite, x*BLOC_SIZE, y*BLOC_SIZE, ((House) object).getSizeW()*BLOC_SIZE,((House) object).getSizeH ()*BLOC_SIZE, this);
+            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((House) object).getSizeW()*tileSize,((House) object).getSizeH ()*tileSize, this);
             }
             else {
-            	g.drawImage(object.Sprite, x*BLOC_SIZE, y*BLOC_SIZE, BLOC_SIZE, BLOC_SIZE, this);
+            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, tileSize, tileSize, this);
             // Decouper en fontions
                 
 
-                //int xCenter = x * BLOC_SIZE + (BLOC_SIZE-2)/2;
-                //int yCenter = y * BLOC_SIZE + (BLOC_SIZE-2)/2;
+                //int xCenter = x * tileSize + (tileSize-2)/2;
+                //int yCenter = y * tileSize + (tileSize-2)/2;
                 //g.drawLine(xCenter, yCenter, xCenter + deltaX, yCenter + deltaY);
             }
         }
@@ -137,16 +135,16 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
         
         switch (direction) {
         case Directable.EAST:
-            g.drawImage(s.Sprite_r, x*BLOC_SIZE, y*BLOC_SIZE, BLOC_SIZE, BLOC_SIZE, this);
+            g.drawImage(s.Sprite_r, x*tileSize, y*tileSize, tileSize, tileSize, this);
             break;
         case Directable.NORTH:
-        	g.drawImage(s.Sprite_u, x*BLOC_SIZE, y*BLOC_SIZE, BLOC_SIZE, BLOC_SIZE, this);
+        	g.drawImage(s.Sprite_u, x*tileSize, y*tileSize, tileSize, tileSize, this);
             break;
         case Directable.WEST:
-        	g.drawImage(s.Sprite_l, x*BLOC_SIZE, y*BLOC_SIZE, BLOC_SIZE, BLOC_SIZE, this);
+        	g.drawImage(s.Sprite_l, x*tileSize, y*tileSize, tileSize, tileSize, this);
             break;
         case Directable.SOUTH:
-        	g.drawImage(s.Sprite_d, x*BLOC_SIZE, y*BLOC_SIZE, BLOC_SIZE, BLOC_SIZE, this);
+        	g.drawImage(s.Sprite_d, x*tileSize, y*tileSize, tileSize, tileSize, this);
             break;
         }
     	
@@ -166,7 +164,10 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     }
     public void changeMap(String Change) {
     	this.map = Change;
-    	changeMap = true;
+    	pixels.ReadMap(map);
+    	tileHorizontale = pixels.hTiles; //problème avec pixels 
+		tileVerticale = (tileHorizontale * 2)/3 ;
+		tileSize = 1440 / tileHorizontale;
     }
 
 	public void addMouse(Mouse m) {
@@ -194,24 +195,24 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		int posX;
 		int width = 220;
 		int height = 80;
-		if (container.getPosX()*BLOC_SIZE-Constantes.image_size-90 <0) {
+		if (container.getPosX()*tileSize-Constantes.image_size-90 <0) {
 			posX = 0;
 		}
-		else if (container.getPosX()*BLOC_SIZE-Constantes.image_size-90 > this.getWidth()-width*2) {
+		else if (container.getPosX()*tileSize-Constantes.image_size-90 > this.getWidth()-width*2) {
 			posX = 1470-width*2;
 		}
 		else {
-			posX = container.getPosX()*BLOC_SIZE-Constantes.image_size-90;
+			posX = container.getPosX()*tileSize-Constantes.image_size-90;
 		}
 		int posY;
-		if ((container.getPosY()-2)*BLOC_SIZE <= 0) {
+		if ((container.getPosY()-2)*tileSize <= 0) {
 			posY = 30;
 		}
-		else if ((container.getPosY()-2)*BLOC_SIZE > this.getHeight()-2*height) {
+		else if ((container.getPosY()-2)*tileSize > this.getHeight()-2*height) {
 			posY = this.getHeight()-2*height;
 		}
 		else {
-			posY = (container.getPosY()-2)*BLOC_SIZE;
+			posY = (container.getPosY()-2)*tileSize;
 		}
 		initJList(Constantes.itemsNumber);
 		content.setModel(items);
