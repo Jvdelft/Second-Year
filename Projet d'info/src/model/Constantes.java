@@ -36,6 +36,7 @@ public class Constantes {
 	public static HashMap imageHashMap = new HashMap(); 
 	public static BufferedImage fridge;
 	public static int itemsNumber = 4;
+	public static BufferedImage toilet;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -58,6 +59,7 @@ public class Constantes {
 			apple = ImageIO.read(new File("Images/Apple.png"));
 			imageList.add(apple);
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
+			toilet = ImageIO.read(new File("Images/toilet.png"));
 			
 		}
 		catch (IOException e) {
