@@ -59,6 +59,9 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	private ContainerObject container;
     private int row;
     private Sums active_player;
+    private JButton buttonEAT;
+    private JButton buttonTAKE;
+    private JButton buttonCLOSE;
 	
     private Map() {
         this.setFocusable(true);
@@ -240,17 +243,20 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		this.add(up, pos2);
 	}
 	private void initActionButtons(int width, int height, int posX, int posY) {
-		buttons = Window.getInstance().getStatus().getActionPanel().getButtonsHashMap();
+		buttons =ActionPanel.getInstance().getButtonsHashMap();
+		buttonEAT = (JButton) buttons.get("EAT IT");
+		buttonTAKE = (JButton) buttons.get("TAKE");
+		buttonCLOSE = (JButton) buttons.get("CLOSE");
 		int widthButton = width/4;
 		int heightButton = height/3;
 		posButton1 =  "pos " + (posX) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
 		posButton2 = "pos " + (posX+widthButton*2) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
 		posButton3 = "pos " + (posX+widthButton*4) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
-		this.add((Component) buttons.get("TAKE"), posButton2);
-		this.add((Component) buttons.get("CLOSE"), posButton1);
-		((JButton) buttons.get("EAT")).addActionListener(this);
-		((JButton) buttons.get("CLOSE")).addActionListener(this);
-		((JButton) buttons.get("TAKE")).addActionListener(this);
+		this.add(buttonTAKE, posButton2);
+		this.add(buttonCLOSE, posButton1);
+		buttonTAKE.addActionListener(this);
+		buttonEAT.addActionListener(this);
+		buttonCLOSE.addActionListener(this);
 		
 	}
 	private void initJList(int nLabels) {
@@ -269,10 +275,10 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	}
 	public void removeDrawContent() {
 		this.remove(content);
-		this.remove((Component) buttons.get("TAKE"));
-		this.remove((Component) buttons.get("CLOSE"));
+		this.remove(buttonTAKE);
+		this.remove(buttonCLOSE);
 		try {
-			this.remove((Component) buttons.get("EAT"));
+			this.remove(buttonEAT);
 		}
 		finally {
 		}
@@ -303,7 +309,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 			if (arg0.getActionCommand() == "CLOSE") {
 				removeDrawContent();
 			}
-			else if (arg0.getActionCommand() == "EAT") {
+			else if (arg0.getActionCommand() == "EAT IT") {
 				ActivableObject object = (ActivableObject) container.getObjectsContained().get(index);
 				object.activate(active_player);
 				container.getObjectsContained().remove(object);
@@ -316,18 +322,19 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 				updateContent();
 			}
 		}
+		ActionPanel.getInstance().updateVisibleButtons();
 	}
 	public void valueChanged(ListSelectionEvent arg0) {
 		int index = content.getSelectedIndex();
 		ArrayList<GameObject> objects = container.switchRow(row);
 		if (index < objects.size()-1 && index >= 0) {
 			if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
-				this.add((Component) buttons.get("EAT"), posButton3);
+				this.add(buttonEAT, posButton3);
 		
 			}
 			else {
 				try {
-					this.remove((Component) buttons.get("EAT"));
+					this.remove(buttonEAT);
 				}
 				finally {
 				}

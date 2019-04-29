@@ -49,6 +49,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("TAKE"));
 		initButton(new JButton("CLOSE"));
 		initButton(new JButton("OPEN"));
+		initButton(new JButton("EAT IT"));
 		this.setLayout(this.box);
 		
 	}
@@ -92,16 +93,18 @@ public class ActionPanel extends JPanel implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		JButton buttonPressed = (JButton) e.getSource();
-		if (buttonPressed.getLocationOnScreen().getX()>1470) {
+		if (buttonPressed.isValid() && buttonPressed.getLocationOnScreen().getX()>1470) {
 			if (buttonPressed.getText() == "EAT") {
 				ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
 				objectToEat.activate(active_player);
 				active_player.getObjects().remove(objectToEat);
 				
 			}
-			for (ActivableObject o : activableObjects) {
-				if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-					o.activate(active_player);
+			if (buttonPressed.isValid() && buttonPressed.getText() == "INTERACT") {
+				for (ActivableObject o : activableObjects) {
+					if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+						o.activate(active_player);
+					}
 				}
 			}
 		}
