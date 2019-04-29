@@ -22,6 +22,8 @@ public class Constantes {
 	public static BufferedImage House;
 	public static BufferedImage Sol;
 	public static BufferedImage Wall;
+	public static BufferedImage Path;
+	public static BufferedImage Chemin;
 	public static BufferedImage Background;
 	public static BufferedImage BackgroundStatus;
 	public static BufferedImage Menu;
@@ -42,6 +44,8 @@ public class Constantes {
 			Rock = ImageIO.read(new File("Images/Rock.png"));
 			House = ImageIO.read(new File("Images/maison.jpg"));
 			Sol = ImageIO.read(new File("Images/sol.png"));
+			Path = ImageIO.read(new File("Images/Stone_Floor.png"));
+			Chemin = ImageIO.read(new File("Images/Dirt_Path.jpg"));
 			Background = ImageIO.read(new File("Images/background.jpg"));
 			BackgroundStatus = ImageIO.read(new File("Images/BackgroundStatus.jpg"));
 			Menu = ImageIO.read(new File("Images/Menu.jpg"));

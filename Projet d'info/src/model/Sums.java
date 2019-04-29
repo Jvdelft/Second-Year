@@ -1,6 +1,7 @@
 package model;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,6 +20,7 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 	protected House maison;
 	public int energy;
 	private int direction = EAST ;
+	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
 	public BufferedImage Sprite_l;
 	@JsonIgnore
@@ -78,7 +80,22 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
         else if(x == -1 && y == 0)
             direction = WEST;
     }
-
+    public void interraction(Sums s) {
+    	boolean newFriend = true;
+    	for (Sums key : loveHashMap.keySet()) {
+			if (key.equals(s)) {
+				newFriend = false;
+			}
+		}
+		if (newFriend) {
+			loveHashMap.put(s, new Integer(0));
+		}
+		Integer chiffre = loveHashMap.get(s);
+		chiffre++;
+		loveHashMap.put(s, chiffre);
+		System.out.println(chiffre);
+		System.out.println("Amour "+ loveHashMap.get(s).intValue());
+    }
    // //////////////////////////////////////////////////////////////////////////////////////
 
 

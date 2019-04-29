@@ -39,23 +39,32 @@ public class Door extends ActivableObject{
 			choosingMap("E");
 		}
 		else if (DoorS) {
-			e.teleportation(Math.round(sizeH/2) - 1, 1);
+			if (map.map != Constantes.MapMaison) {e.teleportation(Math.round(sizeH/2) - 1, 1);}
+			else {e.teleportation(e.getHouse().getDoor().getPosX(), e.getHouse().getDoor().getPosY() + 1);}
 			choosingMap("S");
 		}
 		else if (this.getPosX() == e.getHouse().getDoor().getPosX() && this.getPosY() == e.getHouse().getDoor().getPosY()) {
+			e.teleportation(Math.round(sizeH/2)- 1 ,sizeV - 2);
 			choosingMap("H");
 		}
 	}
 	private void choosingMap(String s) {
+		Game game = Game.getInstance();
 		if (map.map == Constantes.MapBase && s != "H") {
-			map.changeMap(Constantes.MapRock);
-			
+			game.changeMap("MapRock");
+			map.changeMap(Constantes.MapRock);	
 		}
 		else if ( map.map == Constantes.MapRock && s != "H") {
 			map.changeMap(Constantes.MapBase);
+			game.changeMap("MapBase");
+		}
+		else if (map.map == Constantes.MapMaison && s == "S") {
+			map.changeMap(Constantes.MapBase);
+			game.changeMap("MapBase");
 		}
 		else {
 			map.changeMap(Constantes.MapMaison);
+			game.changeMap("MapMaison");
 		}
 	}
 	public void makeSprite() {
