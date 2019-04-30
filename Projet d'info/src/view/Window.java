@@ -2,7 +2,6 @@ package view;
 
 import model.GameObject;
 import model.Load;
-import model.Save;
 import model.Sums;
 import model.Constantes;
 import model.Game;
@@ -127,13 +126,13 @@ public class Window extends JFrame implements ActionListener {
 	        Mouse mouse = new Mouse(game);
 	        Window.getInstance().setKeyListener(keyboard);
 	        Window.getInstance().setMouseListener(mouse);
-			Load load = new Load();
+			//Load load = new Load();
 			cards.next(this.getContentPane());
 			map.requestFocusInWindow();
 		}
 	}
 	public static void Exit() {
-		Save save = new Save();
+		//Save save = new Save();
 	}
 	public static Window getInstance() {
 		if (WindowInstance == null) {

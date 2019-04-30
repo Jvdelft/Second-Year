@@ -23,8 +23,8 @@ public class Game implements DeletableObserver, Runnable {
     private Sound sound;
 
     private Window window;
+    private int sizeW;
     private int sizeH;
-    private int sizeV;
     private int numberOfBreakableBlocks = 40;
     private Thread t2= new Thread(this);
     private static Game GameInstance;
@@ -33,8 +33,8 @@ public class Game implements DeletableObserver, Runnable {
 
     private Game(Window window) {
     	this.window = window;
-        sizeH = window.getMapSizeW();
-        sizeV = window.getMapSizeH();
+        sizeW = window.getMapSizeW();
+        sizeH = window.getMapSizeH();
         // Creating one Player at position (1,1)
         if (objectDictionary.isEmpty()) {
         	initialisation = mapConstructor("MapBase");
@@ -119,11 +119,13 @@ public class Game implements DeletableObserver, Runnable {
     	timer.schedule(waitTask, delay);
     }
     public void setNextActivePlayer(Sums s) {
-    	for (Sums perso : sums) {
-    		if (perso != s && perso.isPlayable()) {
-    			active_player = perso;
-    			window.setPlayer(active_player);
-    			break;
+    	for (GameObject perso : objectsOnMap) {
+    		if (perso instanceof Sums) {
+    			if (perso != s && ((Sums) perso).isPlayable()) {
+    				active_player = (Sums) perso;
+    				window.setPlayer(active_player);
+    				break;
+    			}
     		}
     	}
     }
@@ -246,8 +248,8 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
-		sizeH = window.getMapSizeW();
-        sizeV = window.getMapSizeH();
+		sizeW = window.getMapSizeW();
+        sizeH = window.getMapSizeH();
 		boolean newMap = true;
 		objectsOnMap.remove(active_player);
 		for (String key : objectDictionary.keySet()) {
@@ -268,12 +270,12 @@ public class Game implements DeletableObserver, Runnable {
 	
 	private ArrayList<GameObject> mapConstructor(String map){
 		House h = new House(21,2);
-		for (int i = 0; i < sizeH; i++) {
+		for (int i = 0; i < sizeW; i++) {
     		initialisation.add(new Border(i, 0));
-    		initialisation.add(new Border(i, sizeV - 1));
-    		if (i >= sizeH - sizeV) {
-    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
-    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
+    		initialisation.add(new Border(i, sizeH - 1));
+    		if (i >= sizeW - sizeH) {
+    			initialisation.add(new Border(0, i-(sizeW-sizeH)));
+    			initialisation.add(new Border(sizeW - 1, i-(sizeW-sizeH)));
     		}
 		}
 		if (map.equals("MapBase")) {
@@ -298,12 +300,12 @@ public class Game implements DeletableObserver, Runnable {
 	    	building.add(m);
 	    	active_player = p;
 	    	window.setPlayer(active_player);
-			for (int i = 0; i < sizeH; i++) {
+			for (int i = 0; i < sizeW; i++) {
 	    		initialisation.add(new Border(i, 0));
-	    		initialisation.add(new Border(i, sizeV - 1));
+	    		initialisation.add(new Border(i, sizeH - 1));
 	    		if (i>9) {
 	    			initialisation.add(new Border(0, i-10));
-	    			initialisation.add(new Border(sizeH - 1, i-10));
+	    			initialisation.add(new Border(sizeW - 1, i-10));
 	    		}
 	    	}
 			for (Building b : building) {
@@ -320,43 +322,43 @@ public class Game implements DeletableObserver, Runnable {
 			
 	    	Random rand = new Random();
 	    	for (int i = 0; i < numberOfBreakableBlocks/2; i++) {
-	    		int x = rand.nextInt(sizeH-4) + 2;
-	    		int y = rand.nextInt(sizeV-4) + 2;
+	    		int x = rand.nextInt(sizeW-4) + 2;
+	    		int y = rand.nextInt(sizeH-4) + 2;
 	    		Food test = new Apple(x,y);
 	    		test.attachDeletable(this);
 	    		initialisation.add(test);
 	    	}
-	    	initialisation.add(new Door(Math.round(sizeH/2),0, "MapRock", 'S'));
-	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1, "MapRock", 'E'));
-	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapRock", 'N'));
-	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1, "MapRock", 'W'));
+	    	initialisation.add(new Door(Math.round(sizeW/2),0, "MapRock", 'S'));
+	    	initialisation.add(new Door(0,Math.round(sizeH/2)-1, "MapRock", 'E'));
+	    	initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapRock", 'N'));
+	    	initialisation.add(new Door(sizeW-1,Math.round(sizeH/2)-1, "MapRock", 'W'));
 
 		}
-		else if (map.equals("MapRock")) { //modifier sizeH, sizeV en fonction de la taille de la map
+		else if (map.equals("MapRock")) { //modifier sizeW, sizeH en fonction de la taille de la map
 	    	Random rand = new Random();
 	    	for (int i = 0; i < numberOfBreakableBlocks/5; i++) {
-	    		int x = rand.nextInt(sizeH-4) + 2;
-	    		int y = rand.nextInt(sizeV-4) + 2;
+	    		int x = rand.nextInt(sizeW-4) + 2;
+	    		int y = rand.nextInt(sizeH-4) + 2;
 	    		Food test = new Apple(x,y);
 	    		test.attachDeletable(this);
 	    		initialisation.add(test);
 	    	}
-	    	initialisation.add(new Door(Math.round(sizeH/2),0, "MapBase", 'S'));
-	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1, "MapBase", 'E'));
-	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'N'));
-	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1, "MapBase", 'W'));
+	    	initialisation.add(new Door(Math.round(sizeW/2),0, "MapBase", 'S'));
+	    	initialisation.add(new Door(0,Math.round(sizeH/2)-1, "MapBase", 'E'));
+	    	initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'N'));
+	    	initialisation.add(new Door(sizeW-1,Math.round(sizeH/2)-1, "MapBase", 'W'));
 	    	System.out.println("Chargement map rock");
 
 		}
 		else if (map.equals("MapMaison")) {
 			initialisation.add(new Adult(10,4,h));
 			initialisation.add(new Fridge(10,1));
-			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'H'));
-			initialisation.add(new Toilet(Math.round(sizeH/2), 1));
+			initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'H'));
+			initialisation.add(new Toilet(Math.round(sizeW/2), 1));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (map.equals("MapMarket")) {
-			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'M'));
+			initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'M'));
 			Fridge f = new Fridge(2, 1);
 			Fridge f2 = new Fridge(3, 1);
 			Fridge f3 = new Fridge(1,2);
