@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+
+import controller.Keyboard;
 import view.Map;
 
 public class ContainerObject extends ActivableObject{
@@ -23,6 +25,7 @@ public class ContainerObject extends ActivableObject{
 	}
 	public void activate(Sums s) {
 		this.open();
+		s.setIsPlayable(false);
 	}
 	public void open(ContainerObject this) {
 		Map.getInstance().drawContent(this);

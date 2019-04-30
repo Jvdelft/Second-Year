@@ -112,7 +112,7 @@ public class Window extends JFrame implements ActionListener {
 		else if (e.getActionCommand() == "NEW GAME") {
 			this.setPlayer(active_player);
 			Game game = Game.getInstance();
-			Keyboard keyboard = new Keyboard(game);
+			Keyboard keyboard = Keyboard.getInstance();
 	        Mouse mouse = new Mouse(game);
 	        Window.getInstance().setKeyListener(keyboard);
 	        Window.getInstance().setMouseListener(mouse);
@@ -122,7 +122,7 @@ public class Window extends JFrame implements ActionListener {
 		else if (e.getActionCommand() == "CONTINUE") {
 			this.setPlayer(active_player);
 			Game game = Game.getInstance();
-			Keyboard keyboard = new Keyboard(game);
+			Keyboard keyboard = Keyboard.getInstance();
 	        Mouse mouse = new Mouse(game);
 	        Window.getInstance().setKeyListener(keyboard);
 	        Window.getInstance().setMouseListener(mouse);

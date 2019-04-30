@@ -7,8 +7,9 @@ import model.Game;
 
 public class Keyboard implements KeyListener {
     private Game game;
+    private static Keyboard keyboard_instance;
 
-    public Keyboard(Game game) {
+    private Keyboard(Game game) {
         this.game = game;
     }
 
@@ -49,5 +50,11 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+    public static Keyboard getInstance() {
+    	if (keyboard_instance == null) {
+    		keyboard_instance = new Keyboard(Game.getInstance());
+    	}
+    	return keyboard_instance;
     }
 }

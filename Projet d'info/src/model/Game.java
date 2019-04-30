@@ -50,28 +50,30 @@ public class Game implements DeletableObserver, Runnable {
     }
 
     public void movePlayer(int x, int y) {
-        int nextX = active_player.getPosX() + x;
-        int nextY = active_player.getPosY() + y;
-
-        boolean obstacle = false;
-        for (GameObject object : objectsOnMap) {
-            if (object.isAtPosition(nextX, nextY)) {
-                obstacle = object.isObstacle();
-            }
-            if (obstacle == true) {
-                break;
-            }
-        }
-        active_player.rotate(x, y);
-        if (obstacle == false) {
-            active_player.move(x, y);
-            active_player.tire();
-        }
-        if (active_player instanceof Adult) {
-        	
-        }
-        Window.getInstance().getStatus().getActionPanel().updateVisibleButtons();
-        notifyView();
+    	if (active_player.isPlayable()) {
+	        int nextX = active_player.getPosX() + x;
+	        int nextY = active_player.getPosY() + y;
+	
+	        boolean obstacle = false;
+	        for (GameObject object : objectsOnMap) {
+	            if (object.isAtPosition(nextX, nextY)) {
+	                obstacle = object.isObstacle();
+	            }
+	            if (obstacle == true) {
+	                break;
+	            }
+	        }
+	        active_player.rotate(x, y);
+	        if (obstacle == false) {
+	            active_player.move(x, y);
+	            active_player.tire();
+	        }
+	        if (active_player instanceof Adult) {
+	        	
+	        }
+	        Window.getInstance().getStatus().getActionPanel().updateVisibleButtons();
+	        notifyView();
+    	}
     }
     public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
         TimerTask repeatedTask = new TimerTask() {

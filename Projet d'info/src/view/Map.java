@@ -309,6 +309,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 			}
 			if (arg0.getActionCommand() == "CLOSE") {
 				removeDrawContent();
+				active_player.setIsPlayable(true);
 			}
 			else if (arg0.getActionCommand() == "EAT IT") {
 				ActivableObject object = (ActivableObject) container.getObjectsContained().get(index);
