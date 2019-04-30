@@ -101,11 +101,14 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 			loveHashMap.put(s, new Integer(0));
 		}
 		Integer chiffre = loveHashMap.get(s);
-		if (s instanceof Adult && this instanceof Adult &&  chiffre == 5) {
-			Game.getInstance().makeBaby(s.getHouse());	
-		}
-		
 		chiffre++;
+		if (s instanceof Adult && this instanceof Adult ) {
+			maison.money -= 10;
+			if (chiffre == 5) {
+				Game.getInstance().makeBaby(maison);
+				chiffre = 0;
+			}
+		}
 		loveHashMap.put(s, chiffre);
 		System.out.println("Amour "+ loveHashMap.get(s).intValue());
     }

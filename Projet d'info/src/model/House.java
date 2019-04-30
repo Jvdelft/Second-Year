@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 
 public class House extends Building{
-	public int money;
+	public int money = 100;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
 	private int sizeH = 5;
 	private int sizeV = 4;
