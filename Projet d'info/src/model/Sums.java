@@ -103,7 +103,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		Integer chiffre = loveHashMap.get(s);
 		chiffre++;
 		if (s instanceof Adult && this instanceof Adult ) {
-			maison.money -= 10;
+			this.maison.changeMoney(-10);
 			if (chiffre == 5) {
 				Game.getInstance().makeBaby(maison);
 				chiffre = 0;

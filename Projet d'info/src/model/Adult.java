@@ -23,7 +23,7 @@ public class Adult extends Sums {
 	}
 	public void work() {
 		this.energy -= 70;
-		maison.money += 2000; 
+		maison.changeMoney(2000); 
 	}
 	public void makeSprite() {
 		try {

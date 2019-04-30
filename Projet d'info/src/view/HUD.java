@@ -29,6 +29,8 @@ public class HUD extends JPanel{
 
 		// bars 
         // Energy 
+		g.setColor(Color.WHITE);
+		g.drawString("Argent : "+ p.getHouse().getMoney(), 0, 165);
         g.setColor(Color.WHITE);
         g.drawString("Energy", 0, 190);
         g.setColor(Color.RED);
