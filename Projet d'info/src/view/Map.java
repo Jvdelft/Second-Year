@@ -299,7 +299,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		}
 		active_player = Window.getInstance().getActivePlayer();
 		if (((JButton) arg0.getSource()).getLocationOnScreen().getX() < 1470) {
-			if (arg0.getSource().equals(down)) {
+			if (arg0.getSource().equals(down) && container.getObjectsContained().size() > (row+1)*4) {
 				row++;
 				updateContent();
 			}

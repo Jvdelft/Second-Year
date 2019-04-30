@@ -3,6 +3,11 @@ package model;
 public class Toilet extends ActivableObject {
 	public Toilet(int x, int y) {
 		super(x,y);
+		type = "TOILET";
+	}
+	public Toilet() {
+		super();
+		type = "TOILET";
 	}
 	public boolean isObstacle() {
 		return true;
@@ -11,7 +16,7 @@ public class Toilet extends ActivableObject {
 		Sprite = Constantes.toilet;
 	}
 	public void activate (Sums s) {
-		new Thread (new Sound("pee",s.getToilet()*500)).start();
+		Game.getInstance().playerWait(10000L, s, type);
 		s.pee();
 	}
 

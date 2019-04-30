@@ -33,6 +33,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	@JsonIgnore
 	public BufferedImage Sprite_face;
 	private ArrayList<GameObject> inventory = new ArrayList<GameObject>();
+	protected boolean playable = true;
 	public Sums(int x, int y, House h) {
 		super(x, y);
 		this.faim = max_faim;
@@ -186,5 +187,12 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public ArrayList<GameObject> getObjects(){
     	return this.inventory;
     }
+    public boolean isPlayable() {
+    	return playable;
+    }
+    public void setIsPlayable(boolean ip) {
+    	this.playable = ip;
+    }
+
 
 }

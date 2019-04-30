@@ -29,6 +29,7 @@ public class Game implements DeletableObserver, Runnable {
     private Thread t2= new Thread(this);
     private static Game GameInstance;
     private int time;
+    private Timer timer;
 
     private Game(Window window) {
     	this.window = window;
@@ -88,7 +89,7 @@ public class Game implements DeletableObserver, Runnable {
         		//sound.play("Never_Surrender");
         	}
         };
-        Timer timer = new Timer("Timer");
+        timer = new Timer("Timer");
         timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
         //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
@@ -103,6 +104,28 @@ public class Game implements DeletableObserver, Runnable {
     	Sums k = new Kid(1,1,h);
     	objectsOnMap.add(k);
     	notifyView();
+    }
+    public void playerWait(long delay, Sums s, String type) {
+    	setNextActivePlayer(s);
+    	s.setIsPlayable(false);
+    	if (type == "TOILET") {
+			new Thread (new Sound("pee",10000)).start();
+		}
+    	TimerTask waitTask = new TimerTask() {
+    		public void run() {
+    			s.setIsPlayable(true);
+    		}
+    	};
+    	timer.schedule(waitTask, delay);
+    }
+    public void setNextActivePlayer(Sums s) {
+    	for (Sums perso : sums) {
+    		if (perso != s && perso.isPlayable()) {
+    			active_player = perso;
+    			window.setPlayer(active_player);
+    			break;
+    		}
+    	}
     }
     public void action() {
     	ActivableObject aimedObject = null;
@@ -245,6 +268,14 @@ public class Game implements DeletableObserver, Runnable {
 	
 	private ArrayList<GameObject> mapConstructor(String map){
 		House h = new House(21,2);
+		for (int i = 0; i < sizeH; i++) {
+    		initialisation.add(new Border(i, 0));
+    		initialisation.add(new Border(i, sizeV - 1));
+    		if (i >= sizeH - sizeV) {
+    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
+    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
+    		}
+		}
 		if (map.equals("MapBase")) {
 	    	Sums p = new Adult(10, 10,h);
 	    	Sums q = new Kid(5,5,h);
@@ -302,14 +333,6 @@ public class Game implements DeletableObserver, Runnable {
 
 		}
 		else if (map.equals("MapRock")) { //modifier sizeH, sizeV en fonction de la taille de la map
-			for (int i = 0; i < sizeH; i++) {
-	    		initialisation.add(new Border(i, 0));
-	    		initialisation.add(new Border(i, sizeV - 1));
-	    		if (i>9) {
-	    			initialisation.add(new Border(0, i-10));
-	    			initialisation.add(new Border(sizeH - 1, i-10));
-	    		}
-	    	}
 	    	Random rand = new Random();
 	    	for (int i = 0; i < numberOfBreakableBlocks/5; i++) {
 	    		int x = rand.nextInt(sizeH-4) + 2;
@@ -326,14 +349,6 @@ public class Game implements DeletableObserver, Runnable {
 
 		}
 		else if (map.equals("MapMaison")) {
-			for (int i = 0; i < sizeH; i++) {
-	    		initialisation.add(new Border(i, 0));
-	    		initialisation.add(new Border(i, sizeV - 1));
-	    		if (i >= sizeH - sizeV) {
-	    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
-	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
-	    		}
-			}
 			initialisation.add(new Adult(10,4,h));
 			initialisation.add(new Fridge(10,1));
 			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'H'));
@@ -341,14 +356,6 @@ public class Game implements DeletableObserver, Runnable {
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (map.equals("MapMarket")) {
-			for (int i = 0; i < sizeH; i++) {
-	    		initialisation.add(new Border(i, 0));
-	    		initialisation.add(new Border(i, sizeV - 1));
-	    		if (i >= sizeH - sizeV) {
-	    			initialisation.add(new Border(0, i-(sizeH-sizeV)));
-	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
-	    		}
-			}
 			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'M'));
 			Fridge f = new Fridge(2, 1);
 			Fridge f2 = new Fridge(3, 1);
