@@ -88,10 +88,10 @@ public class Window extends JFrame implements ActionListener {
         this.map.addMouse(m);
     }
 
-	public int getHMapSize() {
+	public int getMapSizeW() {
 		return map.tileHorizontale;
 	}
-	public int getVMapSize() {
+	public int getMapSizeH() {
 		return map.tileVerticale;
 	}
 	

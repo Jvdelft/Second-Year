@@ -33,8 +33,8 @@ public class Game implements DeletableObserver, Runnable {
 
     private Game(Window window) {
     	this.window = window;
-        sizeH = window.getHMapSize();
-        sizeV = window.getVMapSize();
+        sizeH = window.getMapSizeW();
+        sizeV = window.getMapSizeH();
         // Creating one Player at position (1,1)
         if (objectDictionary.isEmpty()) {
         	initialisation = mapConstructor("MapBase");
@@ -246,8 +246,8 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
-		sizeH = window.getHMapSize();
-        sizeV = window.getVMapSize();
+		sizeH = window.getMapSizeW();
+        sizeV = window.getMapSizeH();
 		boolean newMap = true;
 		objectsOnMap.remove(active_player);
 		for (String key : objectDictionary.keySet()) {
