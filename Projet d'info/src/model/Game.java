@@ -82,7 +82,7 @@ public class Game implements DeletableObserver, Runnable {
         };
         TimerTask musicTask = new TimerTask() {
         	public void run() {
-        		sound.play("Never_Surrender");
+        		//sound.play("Never_Surrender");
         	}
         };
         Timer timer = new Timer("Timer");
