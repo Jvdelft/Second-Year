@@ -14,13 +14,14 @@ public class Constantes {
 	public static String MapBase = "Maps/MapBase.txt";
 	public static String MapRock = "Maps/MapRock.txt";
 	public static String MapMaison = "Maps/MapMaison.txt";
-	public static String MapTest = "Maps/MapTest.txt";
+	public static String MapMarket = "Maps/MapMarket.txt";
 	public static int image_size = 70;
 	public static BufferedImage tree;
 	public static BufferedImage herb;
 	public static BufferedImage door;
 	public static BufferedImage rock;
 	public static BufferedImage house;
+	public static BufferedImage market;
 	public static BufferedImage sol;
 	public static BufferedImage wall;
 	public static BufferedImage path;
@@ -45,6 +46,7 @@ public class Constantes {
 			imageList.add(door);
 			rock = ImageIO.read(new File("Images/Rock.png"));
 			house = ImageIO.read(new File("Images/maison.jpg"));
+			market = ImageIO.read(new File("Images/market.png"));
 			sol = ImageIO.read(new File("Images/sol.png"));
 			path = ImageIO.read(new File("Images/Stone_Floor.png"));
 			chemin = ImageIO.read(new File("Images/Dirt_Path.jpg"));

@@ -42,7 +42,7 @@ public class Game implements DeletableObserver, Runnable {
         }
     	notifyView();
     	t2.start();
-    	sound = new Sound();
+    	//sound = new Sound();
     	//sound.play("Never_Surrender");
     	givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect();
         
@@ -88,7 +88,7 @@ public class Game implements DeletableObserver, Runnable {
         Timer timer = new Timer("Timer");
         timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
-        timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
+        //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
     }
 
     public void tirePlayer() {
@@ -242,12 +242,13 @@ public class Game implements DeletableObserver, Runnable {
 	
 	private ArrayList<GameObject> mapConstructor(String map){
 		if (map.equals("MapBase")) {
-			House h = new House(21,3);
+			House h = new House(21,2);
 	    	Sums p = new Adult(10, 10,h);
 	    	Sums q = new Kid(5,5,h);
 	    	Sums r = new Elder(15,15,h);
 	    	Sums s = new Teen(24,5,h);
 	    	Fridge f = new Fridge(5, 5);
+	    	Market m = new Market(4,2);
 	    	sums.add(p);
 	    	sums.add(q);
 	    	sums.add(r);
@@ -259,6 +260,10 @@ public class Game implements DeletableObserver, Runnable {
 	    	initialisation.add(r);
 	    	initialisation.add(s);
 	    	initialisation.add(f);
+	    	initialisation.add(m);
+	    	ArrayList <Building> building = new ArrayList<Building>();
+	    	building.add(h);
+	    	building.add(m);
 	    	active_player = p;
 	    	window.setPlayer(active_player);
 			for (int i = 0; i < sizeH; i++) {
@@ -269,15 +274,18 @@ public class Game implements DeletableObserver, Runnable {
 	    			initialisation.add(new Border(sizeH - 1, i-10));
 	    		}
 	    	}
-	    	for (int i = 0; i< h.getSizeH(); i++) {
-	    		initialisation.add(new Border(h.getPosX(),i+h.getPosY()));
-	    		initialisation.add(new Border (h.getPosX()+h.getSizeH()-1,i+h.getPosY()));
-	    	}
-	    	for (int i = 0; i< h.getSizeW(); i++) {
-	    		initialisation.add(new Border(i+h.getPosX(),h.getPosY()));
-	    		initialisation.add(new Border (i+h.getPosX(),h.getPosY()+h.getSizeH()-1));
-	    	}
-	    	initialisation.add(h.getDoor());
+			for (Building b : building) {
+				for (int i = 0; i< b.getSizeH(); i++) {
+					initialisation.add(new Border(b.getPosX(),i+b.getPosY()));
+					initialisation.add(new Border (b.getPosX()+b.getSizeH()-1,i+b.getPosY()));
+				}
+				for (int i = 0; i< b.getSizeW(); i++) {
+					initialisation.add(new Border(i+b.getPosX(),b.getPosY()));
+					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
+				}
+				initialisation.add(b.getDoor());
+			}
+			
 	    	Random rand = new Random();
 	    	for (int i = 0; i < numberOfBreakableBlocks/2; i++) {
 	    		int x = rand.nextInt(sizeH-4) + 2;
@@ -286,10 +294,10 @@ public class Game implements DeletableObserver, Runnable {
 	    		test.attachDeletable(this);
 	    		initialisation.add(test);
 	    	}
-	    	initialisation.add(new Door(Math.round(sizeH/2)-1,0));
-	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1));
-	    	initialisation.add(new Door(Math.round(sizeH/2)-1,sizeV-1));
-	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1));
+	    	initialisation.add(new Door(Math.round(sizeH/2),0, "MapRock", 'S'));
+	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1, "MapRock", 'E'));
+	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapRock", 'N'));
+	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1, "MapRock", 'W'));
 
 		}
 		else if (map.equals("MapRock")) { //modifier sizeH, sizeV en fonction de la taille de la map
@@ -309,10 +317,10 @@ public class Game implements DeletableObserver, Runnable {
 	    		test.attachDeletable(this);
 	    		initialisation.add(test);
 	    	}
-	    	initialisation.add(new Door(Math.round(sizeH/2)-1,0));
-	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1));
-	    	initialisation.add(new Door(Math.round(sizeH/2)-1,sizeV-1));
-	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1));
+	    	initialisation.add(new Door(Math.round(sizeH/2),0, "MapBase", 'S'));
+	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1, "MapBase", 'E'));
+	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'N'));
+	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1, "MapBase", 'W'));
 	    	System.out.println("Chargement map rock");
 
 		}
@@ -325,10 +333,11 @@ public class Game implements DeletableObserver, Runnable {
 	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
 	    		}
 			}
-			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
+			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'H'));
+			initialisation.add(new Toilet(Math.round(sizeH/2), 1));
 			System.out.println("Chargement MapMaison"); 
 		}
-		else if (map.equals("MapTest")) {
+		else if (map.equals("MapMarket")) {
 			for (int i = 0; i < sizeH; i++) {
 	    		initialisation.add(new Border(i, 0));
 	    		initialisation.add(new Border(i, sizeV - 1));
@@ -337,12 +346,16 @@ public class Game implements DeletableObserver, Runnable {
 	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
 	    		}
 			}
-			//initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
-			initialisation.add(new Door(Math.round(sizeH/2),0));
-	    	initialisation.add(new Door(0,Math.round(sizeV/2)-1));
-	    	initialisation.add(new Door(Math.round(sizeH/2),sizeV-1));
-	    	initialisation.add(new Door(sizeH-1,Math.round(sizeV/2)-1));
-			System.out.println("Chargement MapTest"); 
+			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'M'));
+			Fridge f = new Fridge(2, 1);
+			Fridge f2 = new Fridge(3, 1);
+			Fridge f3 = new Fridge(1,2);
+			Fridge f4 = new Fridge(1,3);
+			initialisation.add(f);
+			initialisation.add(f2);
+			initialisation.add(f3);
+			initialisation.add(f4);
+			System.out.println("Chargement MapMarket"); 
 		}
 		return initialisation;
 	}

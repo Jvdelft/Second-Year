@@ -37,6 +37,7 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 		this.faim = max_faim;
 		this.energy = max_energy;
 		this.happiness = max_happiness;
+		this.toilet = 10;
 		h.AddHabitant(this);
 		maison = h;
 		inventory.add(new Apple());
@@ -79,6 +80,21 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
             direction = EAST;
         else if(x == -1 && y == 0)
             direction = WEST;
+    }
+    
+    public void pee() {
+    	System.out.println("pee");
+    	Thread t1 = new Thread (new Sound("pee",toilet*500));
+    	t1.start();
+    	try {
+    		while (toilet > 0) {
+    			this.toilet --;
+    			Thread.sleep(500);
+    		}
+    	}
+    	catch (Exception e) {};
+    	t1.stop();
+
     }
     public void interraction(Sums s) {
     	boolean newFriend = true;
@@ -133,8 +149,8 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 		if (energy > 20)
 			energy -= 1;
 	}
-	public void Toilet() {
-		this.toilet = 0;
+	public int getToilet() {
+		return this.toilet;
 	}
 	public void setToilet(int t) {
 		this.toilet = t;

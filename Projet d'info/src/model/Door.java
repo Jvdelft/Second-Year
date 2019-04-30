@@ -9,9 +9,13 @@ import view.Map;
 
 public class Door extends ActivableObject{
 	private Map map = Map.getInstance();
+	private String destination;
+	private char character;
 
-	public Door(int X, int Y) {
+	public Door(int X, int Y, String s, char c) {
 		super(X, Y);
+		destination = s;
+		character = c;
 	}
 	public Door() {
 		super();
@@ -20,12 +24,28 @@ public class Door extends ActivableObject{
 		return true;
 	}
 	public void activate(Sums e) {
+		Game game = Game.getInstance();
+		switch (destination) {
+			case "MapBase" : map.changeMap(Constantes.MapBase); break;
+			case "MapRock" : map.changeMap(Constantes.MapRock); break;
+			case "MapMaison" : map.changeMap(Constantes.MapMaison); break;
+			case "MapMarket" : map.changeMap(Constantes.MapMarket); break;
+		}
+		/*String path = "Constantes." + destination;
+		map.changeMap(Constantes.MapRock);*/
 		int sizeH = map.tileHorizontale;
 		int sizeV = map.tileVerticale;
-		boolean DoorN = this.getPosY() == 0;
-		boolean DoorW = this.getPosX() == 0;
-		boolean DoorE = this.getPosX() == sizeH - 1;
-		boolean DoorS = this.getPosY()== sizeV - 1;
+		switch (character) {
+			case 'N' : e.teleportation(Math.round(sizeH/2) , 1); break;
+			case 'S' : e.teleportation(Math.round(sizeH/2) ,sizeV - 2); break;
+			case 'W' : e.teleportation(1, Math.round(sizeV/2) - 1); break;
+			case 'E' : e.teleportation(sizeH - 2 , Math.round(sizeV/2) - 1); break;
+			case 'H' : e.teleportation(e.getHouse().getDoor().getPosX(), e.getHouse().getDoor().getPosY() + 1); break;
+			case 'M' : e.teleportation(6, 6); break;
+		}
+		game.changeMap(destination);
+	}
+		/*choosingMap(this.destination, e);
 		if (DoorN) {
 			e.teleportation(Math.round(sizeH/2)- 1 ,sizeV - 2);
 			choosingMap("N",e);
@@ -50,8 +70,8 @@ public class Door extends ActivableObject{
 	}
 	private void choosingMap(String s, Sums e) {
 		Game game = Game.getInstance();
-		if (map.map == Constantes.MapBase && s == "N") {
-			map.changeMap(Constantes.MapTest);
+		if (map.map == Constantes.MapBase && s != "H") {
+			map.changeMap(Constantes.MapRock);
 			e.teleportation(Math.round(map.tileHorizontale/2) ,map.tileVerticale - 2);
 			game.changeMap("MapTest");
 		}
@@ -63,12 +83,12 @@ public class Door extends ActivableObject{
 			map.changeMap(Constantes.MapBase);
 			game.changeMap("MapBase");
 		}
-		else {
+		else if (map.map == Constantes.MapBase && s == "H"){
 			map.changeMap(Constantes.MapMaison);
 			e.teleportation(Math.round(map.tileHorizontale/2) ,map.tileVerticale - 2);
 			game.changeMap("MapMaison");
 		}
-	}
+	}*/
 	public void makeSprite() {
 	}
 }

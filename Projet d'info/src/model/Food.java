@@ -10,7 +10,6 @@ public abstract class Food extends ActivableObject implements Deletable{
 	private ArrayList<DeletableObserver> observers = new ArrayList<DeletableObserver>();
     protected int NutritionalValue;
 	protected int EnergyValue;
-	private Sound sound = Sound.getInstance();
 	protected Food(int X, int Y) {
 		super(X, Y);
 		type = "EAT";
@@ -53,7 +52,7 @@ public abstract class Food extends ActivableObject implements Deletable{
 	
 	public void activate (Sums s) {
 		s.Eat(this);
-		sound.play("Eat_Toast");
+		new Thread(new Sound("Eat_Toast")).start();
 		notifyDeletableObserver();
 		
 		

@@ -1,15 +1,15 @@
 package model;
 import java.util.ArrayList;
 
-public class House extends GameObject{
+public class House extends Building{
 	public int money;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
 	private int sizeW = 5;
-	private int sizeH = 3;
+	private int sizeH = 4;
 	private Door door;
 	public House(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1);
+		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, "MapMaison", 'S');
 	}
 	public House() {
 		super();
