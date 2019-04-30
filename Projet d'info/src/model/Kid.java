@@ -15,6 +15,7 @@ public class Kid extends Sums{
 		energy = max_energy;
 		faim = max_faim;
 		happiness = max_happiness;
+		type = "PLAY";
 		
 	}
 	public Kid() {

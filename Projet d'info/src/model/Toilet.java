@@ -11,6 +11,7 @@ public class Toilet extends ActivableObject {
 		Sprite = Constantes.toilet;
 	}
 	public void activate (Sums s) {
+		new Thread (new Sound("pee",s.getToilet()*500)).start();
 		s.pee();
 	}
 

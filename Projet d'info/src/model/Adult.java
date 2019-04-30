@@ -15,6 +15,8 @@ public class Adult extends Sums {
 		energy = max_energy;
 		faim = max_faim;
 		happiness = max_happiness;
+		type = "GIVE FLOWER";
+		ageRange = "Adult";
 	}
 	public Adult() {
 		super();

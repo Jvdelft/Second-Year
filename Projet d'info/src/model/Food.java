@@ -52,7 +52,7 @@ public abstract class Food extends ActivableObject implements Deletable{
 	
 	public void activate (Sums s) {
 		s.Eat(this);
-		new Thread(new Sound("Eat_Toast")).start();
+		new Thread(new Sound("Eat_Toast", 2500)).start();
 		notifyDeletableObserver();
 		
 		

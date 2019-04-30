@@ -112,7 +112,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
             	drawSprites((Sums) object, g);
             }
             else if (object instanceof Building) {
-            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((Building) object).getSizeW()*tileSize,((Building) object).getSizeH ()*tileSize, this);
+            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV ()*tileSize, this);
             }
             else {
             	g.drawImage(object.Sprite, x*tileSize, y*tileSize, tileSize, tileSize, this);

@@ -50,6 +50,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("CLOSE"));
 		initButton(new JButton("OPEN"));
 		initButton(new JButton("EAT IT"));
+		initButton(new JButton("GIVE FLOWER"));
 		this.setLayout(this.box);
 		
 	}
@@ -70,8 +71,10 @@ public class ActionPanel extends JPanel implements ActionListener {
 			for (ActivableObject object : activableObjects) {
 				if (object.getPosX() == active_player.getFrontX() && object.getPosY() == active_player.getFrontY()) {
 					String type = object.getType();
-					this.addButton(type);
-					mustAddButtons.add((JButton) buttons.get(type));
+					if (type != "GIVE FLOWER" || active_player.getAgeRange() == "Adult") {
+						this.addButton(type);
+						mustAddButtons.add((JButton) buttons.get(type));
+					}
 				}
 			}
 			if (active_player.getObjects().size() >0) {
@@ -100,7 +103,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 				active_player.getObjects().remove(objectToEat);
 				
 			}
-			if (buttonPressed.isValid() && buttonPressed.getText() == "INTERACT") {
+			if (buttonPressed.isValid() && (buttonPressed.getText() == "INTERACT" || buttonPressed.getText() == "GIVE FLOWER")) {
 				for (ActivableObject o : activableObjects) {
 					if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
 						o.activate(active_player);
@@ -115,6 +118,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public void setPlayer(Sums s) {
 		active_player = s;
 	}
+	
 	public void removeButton(JButton button) {
 		if (visibleButtons.contains(button)) {
 			this.remove(button);

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 public class House extends Building{
 	public int money;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
-	private int sizeW = 5;
-	private int sizeH = 4;
+	private int sizeH = 5;
+	private int sizeV = 4;
 	private Door door;
 	public House(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, "MapMaison", 'S');
+		door = new Door(Math.round(sizeH/2)+x,y+sizeV-1, "MapMaison", 'S');
 	}
 	public House() {
 		super();
@@ -23,11 +23,11 @@ public class House extends Building{
 	public boolean isObstacle() {
 		return true;
 	}
-	public int getSizeW() {
-		return sizeW;
-	}
 	public int getSizeH() {
 		return sizeH;
+	}
+	public int getSizeV() {
+		return sizeV;
 	}
 	public Door getDoor() {
 		return door;

@@ -66,6 +66,9 @@ public class Game implements DeletableObserver, Runnable {
             active_player.move(x, y);
             active_player.tire();
         }
+        if (active_player instanceof Adult) {
+        	
+        }
         Window.getInstance().getStatus().getActionPanel().updateVisibleButtons();
         notifyView();
     }
@@ -95,6 +98,12 @@ public class Game implements DeletableObserver, Runnable {
     	active_player.tire();
     	notifyView();
     }
+    public void makeBaby(House h) {
+    	System.out.println("New baby");
+    	Sums k = new Kid(1,1,h);
+    	objectsOnMap.add(k);
+    	notifyView();
+    }
     public void action() {
     	ActivableObject aimedObject = null;
         Sums owner = null;
@@ -103,16 +112,10 @@ public class Game implements DeletableObserver, Runnable {
 			    if(object instanceof ActivableObject){
 			        aimedObject = (ActivableObject) object;
 			    }
-			    else if (object instanceof Sums) {
-			    	owner = (Sums) object;
-			    }
 			}
 		}
 		if(aimedObject != null){
 		    aimedObject.activate(active_player);
-		}
-		else if (owner != null) {
-			owner.interraction(active_player);
 		}
         notifyView();
 		}
@@ -241,13 +244,12 @@ public class Game implements DeletableObserver, Runnable {
 	}
 	
 	private ArrayList<GameObject> mapConstructor(String map){
+		House h = new House(21,2);
 		if (map.equals("MapBase")) {
-			House h = new House(21,2);
 	    	Sums p = new Adult(10, 10,h);
 	    	Sums q = new Kid(5,5,h);
 	    	Sums r = new Elder(15,15,h);
 	    	Sums s = new Teen(24,5,h);
-	    	Fridge f = new Fridge(5, 5);
 	    	Market m = new Market(4,2);
 	    	sums.add(p);
 	    	sums.add(q);
@@ -259,7 +261,6 @@ public class Game implements DeletableObserver, Runnable {
 	    	initialisation.add(q);
 	    	initialisation.add(r);
 	    	initialisation.add(s);
-	    	initialisation.add(f);
 	    	initialisation.add(m);
 	    	ArrayList <Building> building = new ArrayList<Building>();
 	    	building.add(h);
@@ -275,13 +276,13 @@ public class Game implements DeletableObserver, Runnable {
 	    		}
 	    	}
 			for (Building b : building) {
-				for (int i = 0; i< b.getSizeH(); i++) {
+				for (int i = 0; i< b.getSizeV(); i++) {
 					initialisation.add(new Border(b.getPosX(),i+b.getPosY()));
 					initialisation.add(new Border (b.getPosX()+b.getSizeH()-1,i+b.getPosY()));
 				}
-				for (int i = 0; i< b.getSizeW(); i++) {
+				for (int i = 0; i< b.getSizeH(); i++) {
 					initialisation.add(new Border(i+b.getPosX(),b.getPosY()));
-					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
+					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeV()-1));
 				}
 				initialisation.add(b.getDoor());
 			}
@@ -333,6 +334,8 @@ public class Game implements DeletableObserver, Runnable {
 	    			initialisation.add(new Border(sizeH - 1, i-(sizeH-sizeV)));
 	    		}
 			}
+			initialisation.add(new Adult(10,4,h));
+			initialisation.add(new Fridge(10,1));
 			initialisation.add(new Door(Math.round(sizeH/2),sizeV-1, "MapBase", 'H'));
 			initialisation.add(new Toilet(Math.round(sizeH/2), 1));
 			System.out.println("Chargement MapMaison"); 

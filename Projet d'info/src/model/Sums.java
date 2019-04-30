@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class Sums extends GameObject implements NeedToEat, Directable{
+public abstract class Sums extends ActivableObject implements NeedToEat, Directable{
 	protected String gender;
 	protected double age;
 	public int faim;
@@ -20,6 +20,7 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 	protected House maison;
 	public int energy;
 	private int direction = EAST ;
+	protected String ageRange ;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
 	public BufferedImage Sprite_l;
@@ -83,20 +84,13 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
     }
     
     public void pee() {
-    	System.out.println("pee");
-    	Thread t1 = new Thread (new Sound("pee",toilet*500));
-    	t1.start();
-    	try {
-    		while (toilet > 0) {
-    			this.toilet --;
-    			Thread.sleep(500);
-    		}
+    	while (toilet > 0) {
+    		this.toilet --;
+    		try { Thread.sleep(500);} catch (Exception e) {}
     	}
-    	catch (Exception e) {};
-    	t1.stop();
-
     }
-    public void interraction(Sums s) {
+    
+    public void activate(Sums s) {
     	boolean newFriend = true;
     	for (Sums key : loveHashMap.keySet()) {
 			if (key.equals(s)) {
@@ -107,13 +101,16 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
 			loveHashMap.put(s, new Integer(0));
 		}
 		Integer chiffre = loveHashMap.get(s);
+		if (s instanceof Adult && this instanceof Adult &&  chiffre == 5) {
+			Game.getInstance().makeBaby(s.getHouse());	
+		}
+		
 		chiffre++;
 		loveHashMap.put(s, chiffre);
-		System.out.println(chiffre);
 		System.out.println("Amour "+ loveHashMap.get(s).intValue());
     }
    // //////////////////////////////////////////////////////////////////////////////////////
-
+    
 
     @Override
     public boolean isObstacle() {
@@ -139,6 +136,10 @@ public abstract class Sums extends GameObject implements NeedToEat, Directable{
             delta += direction - 2;
         }
         return this.posY + delta;
+    }
+    
+    public String getAgeRange() {
+    	return ageRange;
     }
     
     public double getEnergy() {
