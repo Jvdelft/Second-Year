@@ -1,5 +1,6 @@
 package model;
 
+import view.Map;
 import view.Window;
 
 import java.awt.event.WindowEvent;
@@ -111,7 +112,8 @@ public class Game implements DeletableObserver, Runnable {
     	setNextActivePlayer(s);
     	s.setIsPlayable(false);
     	if (type == "TOILET") {
-			new Thread (new Sound("pee",10000)).start();
+    		Thread threadSound = new Thread (new Sound("pee",Math.round(delay)));
+    		threadSound.start();
 		}
     	TimerTask waitTask = new TimerTask() {
     		public void run() {
@@ -311,13 +313,13 @@ public class Game implements DeletableObserver, Runnable {
 	    		}
 	    	}
 			for (Building b : building) {
-				for (int i = 0; i< b.getSizeV(); i++) {
+				for (int i = 0; i< b.getSizeH(); i++) {
 					initialisation.add(new Border(b.getPosX(),i+b.getPosY()));
-					initialisation.add(new Border (b.getPosX()+b.getSizeH()-1,i+b.getPosY()));
+					initialisation.add(new Border (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
 				}
 				for (int i = 0; i< b.getSizeH(); i++) {
 					initialisation.add(new Border(i+b.getPosX(),b.getPosY()));
-					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeV()-1));
+					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
 				}
 				initialisation.add(b.getDoor());
 			}

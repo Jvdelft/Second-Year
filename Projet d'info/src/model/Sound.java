@@ -51,7 +51,6 @@ public class Sound implements Runnable {
 					double gain = 0.25;   
 					float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
 					gainControl.setValue(dB);
-					clip.setLoopPoints(0, );
 					clip.start();
 					Thread.sleep(clip.getMicrosecondLength());
 				}

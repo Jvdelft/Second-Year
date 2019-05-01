@@ -2,6 +2,7 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ public class HUD extends JPanel{
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setFont(new Font("Monotype Corsiva", Font.BOLD, 18));
 		g.drawImage(Constantes.backgroundStatus, 0, 0, 450, 500, this);
 		if (p instanceof Sums) {
 			g.drawImage(((Sums) p).Sprite_face, 150, 25, AVATAR_SIZE, AVATAR_SIZE, this);
@@ -30,8 +32,9 @@ public class HUD extends JPanel{
 		// bars 
         // Energy 
 		g.setColor(Color.WHITE);
-		g.drawString("Argent : "+ p.getHouse().getMoney(), 0, 165);
-        g.setColor(Color.WHITE);
+		g.drawString("Argent ", 0, 150);
+		g.drawString("x" +p.getHouse().getMoney(),35+Constantes.image_size, 90+Constantes.image_size);
+		g.drawImage(Constantes.coin, 50, 110, Constantes.image_size, Constantes.image_size,this);
         g.drawString("Energy", 0, 190);
         g.setColor(Color.RED);
         g.fillRect(0, 200, BAR_LENGTH*50, BAR_WIDTH);

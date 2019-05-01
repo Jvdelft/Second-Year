@@ -5,9 +5,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -61,6 +63,8 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     private JButton buttonEAT;
     private JButton buttonTAKE;
     private JButton buttonCLOSE;
+    private int posX;
+    private int posY;
 	
     private Map() {
         this.setFocusable(true);
@@ -112,7 +116,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
             	drawSprites((Sums) object, g);
             }
             else if (object instanceof Building) {
-            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV ()*tileSize, this);
+            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((Building) object).getSizeW()*tileSize,((Building) object).getSizeH ()*tileSize, this);
             }
             else {
             	g.drawImage(object.Sprite, x*tileSize, y*tileSize, tileSize, tileSize, this);
@@ -178,6 +182,15 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 	public void addMouse(Mouse m) {
 		this.mouseController = m;
 	}
+	/*public void drawTimeRemaining(int time, Sums s) {
+	    posX = s.getPosX() + Constantes.image_size;
+		posY = s.getPosY()+Constantes.image_size;
+		int size = Math.round(Constantes.image_size/2);
+		removeImage();
+		graphe.drawImage(Constantes.bubbleThought, 0,0,null);
+		graphe.setFont(new Font("Monotype Corsiva", Font.BOLD, 20));
+		graphe.drawString(Integer.toString(time), size, size);
+	}*/
 	private void removeImage() {
 		combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
 		graphe = combined.getGraphics();

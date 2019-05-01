@@ -38,6 +38,8 @@ public class Constantes {
 	public static BufferedImage fridge;
 	public static int itemsNumber = 4;
 	public static BufferedImage toilet;
+	public static BufferedImage bubbleThought;
+	public static BufferedImage coin;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -62,6 +64,8 @@ public class Constantes {
 			imageList.add(apple);
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
 			toilet = ImageIO.read(new File("Images/toilet.png"));
+			bubbleThought = ImageIO.read(new File("Images/bubbleThought.png"));
+			coin = ImageIO.read(new File("Images/coin.png"));
 			
 		}
 		catch (IOException e) {

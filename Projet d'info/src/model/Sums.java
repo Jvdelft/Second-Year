@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import view.Window;
+
 public abstract class Sums extends ActivableObject implements NeedToEat, Directable{
 	protected String gender;
 	protected double age;
@@ -85,10 +87,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     
     public void pee() {
-    	while (toilet > 0) {
-    		this.toilet --;
-    		try { Thread.sleep(500);} catch (Exception e) {}
-    	}
+    	Game.getInstance().playerWait(10000L, this, this.ageRange);
     }
     
     public void activate(Sums s) {
@@ -104,7 +103,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		Integer chiffre = loveHashMap.get(s);
 		chiffre++;
 		if (s instanceof Adult && this instanceof Adult ) {
-			this.maison.changeMoney(-10);
+			s.getHouse().changeMoney(-10);
 			if (chiffre == 5) {
 				Game.getInstance().makeBaby(maison);
 				chiffre = 0;
@@ -112,6 +111,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		}
 		loveHashMap.put(s, chiffre);
 		System.out.println("Amour "+ loveHashMap.get(s).intValue());
+		Window.getInstance().update();
     }
    // //////////////////////////////////////////////////////////////////////////////////////
     
