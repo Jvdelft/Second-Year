@@ -32,7 +32,8 @@ public class MainMenu extends JPanel{
 		initButton(Continue);
 		initButton(Exit);
 	}
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.drawImage(Constantes.menu, 0, 0, 1920, 1080, this);
 		
 	}

@@ -359,6 +359,7 @@ public class Game implements DeletableObserver, Runnable {
 			initialisation.add(new Fridge(10,1));
 			initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'H'));
 			initialisation.add(new Toilet(Math.round(sizeW/2), 1));
+			initialisation.add(new Sofa(1,Math.round(sizeH/2), 2));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (map.equals("MapMarket")) {

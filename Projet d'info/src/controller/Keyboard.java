@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import model.Game;
+import view.Window;
 
 public class Keyboard implements KeyListener {
     private Game game;
@@ -41,7 +42,10 @@ public class Keyboard implements KeyListener {
              break;
         case KeyEvent.VK_P:
              game.playerPos();
+        case KeyEvent.VK_ESCAPE:
+        	Window.getInstance().escapePressed();
         }
+        
     }
 
     @Override

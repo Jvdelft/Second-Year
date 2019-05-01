@@ -8,18 +8,22 @@ import javax.imageio.ImageIO;
 public class Kid extends Sums{
 	public Kid(int x, int y, House h) {
 		super(x, y,h);
-		max_energy = 200;
-		max_happiness = 200;
-		max_toilet = 75;
-		max_faim = 80;
-		energy = max_energy;
-		faim = max_faim;
-		happiness = max_happiness;
+		max_energy = Constantes.max_energy_kid;
+		max_happiness = Constantes.max_happiness_kid;
+		max_toilet = Constantes.max_toilet_kid;
+		max_faim = Constantes.max_faim_kid;
 		type = "PLAY";
+		if (this.energy == 0) {
+			this.faim = max_faim;
+			this.energy = max_energy;
+			this.happiness = max_happiness;
+			this.toilet = 10;
+		}
 		
 	}
 	public Kid() {
 		super();
+		energy = 1;
 	}
 	public void makeSprite() {
 		try {

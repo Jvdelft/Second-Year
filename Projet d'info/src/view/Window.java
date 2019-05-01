@@ -40,6 +40,7 @@ public class Window extends JFrame implements ActionListener {
     private MainMenu mainMenu = new MainMenu();
     private Sums active_player;
     private static Window WindowInstance;
+    private MenuInGame menuInGame;
 
     private Window(String title) {
     	super(title);
@@ -48,9 +49,9 @@ public class Window extends JFrame implements ActionListener {
         groupPanel.add(map, BorderLayout.CENTER);
         groupPanel.add(status, BorderLayout.EAST);
         this.getContentPane().setLayout(cards);
-        this.getContentPane().add((JPanel) mainMenu);
+        this.getContentPane().add((JPanel)mainMenu);
         this.getContentPane().add(groupPanel);
-        MakeMenus();
+        makeMenu();
         //this.getContentPane().setBackground(Color.BLACK);
         this.setVisible(true);
         WindowListener exitListener = new WindowAdapter() {
@@ -93,16 +94,28 @@ public class Window extends JFrame implements ActionListener {
 	public int getMapSizeH() {
 		return map.tileVerticale;
 	}
+	public void escapePressed() {
+		if (groupPanel.isVisible()) {
+			cards.next(this.getContentPane());
+		}
+	}
 	
 	public void setPlayer(Sums p) {
 		active_player = p;
 		status.setPlayer(p);
 	}
-	public void MakeMenus() {
+	public void makeMenu() {
 		ArrayList<JButton> Buttons = mainMenu.getButtons();
 		for (int i = 0; i < Buttons.size();i++) {
 			Buttons.get(i).addActionListener(this);
 		}
+	}
+	public void makeMenuInGame() {
+		ArrayList<JButton> Buttons = menuInGame.getButtons();
+		for (int i = 0; i < Buttons.size();i++) {
+			Buttons.get(i).addActionListener(this);
+		}
+		
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "EXIT") {
@@ -110,29 +123,39 @@ public class Window extends JFrame implements ActionListener {
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		else if (e.getActionCommand() == "NEW GAME") {
-			this.setPlayer(active_player);
-			Game game = Game.getInstance();
-			Keyboard keyboard = Keyboard.getInstance();
-	        Mouse mouse = new Mouse(game);
-	        Window.getInstance().setKeyListener(keyboard);
-	        Window.getInstance().setMouseListener(mouse);
-			cards.next(this.getContentPane());
-			map.requestFocusInWindow();
+			initGame();
 		}
 		else if (e.getActionCommand() == "CONTINUE") {
 			this.setPlayer(active_player);
-			Game game = Game.getInstance();
-			Keyboard keyboard = Keyboard.getInstance();
-	        Mouse mouse = new Mouse(game);
-	        Window.getInstance().setKeyListener(keyboard);
-	        Window.getInstance().setMouseListener(mouse);
+			initGame();
 			//Load load = new Load();
-			cards.next(this.getContentPane());
+		}
+		else if (e.getActionCommand() == "RESUME") {
+			cards.previous(this.getContentPane());
 			map.requestFocusInWindow();
+		}
+		else if (e.getActionCommand() == "QUIT") {
+			System.exit(0);
+		}
+		else if (e.getActionCommand() == "HELP") {
+			
 		}
 	}
 	public static void Exit() {
 		//Save save = new Save();
+	}
+	private void initGame() {
+		this.setPlayer(active_player);
+		Game game = Game.getInstance();
+		Keyboard keyboard = Keyboard.getInstance();
+        Mouse mouse = new Mouse(game);
+        Window.getInstance().setKeyListener(keyboard);
+        Window.getInstance().setMouseListener(mouse);
+		cards.next(this.getContentPane());
+		map.requestFocusInWindow();
+		menuInGame = new MenuInGame();
+        this.getContentPane().add((JPanel)menuInGame);
+        makeMenuInGame();
 	}
 	public static Window getInstance() {
 		if (WindowInstance == null) {

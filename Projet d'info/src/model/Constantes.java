@@ -40,6 +40,27 @@ public class Constantes {
 	public static BufferedImage toilet;
 	public static BufferedImage bubbleThought;
 	public static BufferedImage coin;
+	public static BufferedImage sofaWest;
+	public static BufferedImage sofaEast;
+	public static BufferedImage sofaNorth;
+	public static BufferedImage sofaSouth;
+	public static String menuInGame = "Images/forest.gif";
+	public static int max_faim_kid = 80;
+	public static int max_happiness_kid = 200;
+	public static int max_toilet_kid = 75;
+	public static int max_energy_kid = 200;
+	public static int max_faim_elder = 100;
+	public static int max_happiness_elder = 100;
+	public static int max_toilet_elder = 50;
+	public static int max_energy_elder = 50;
+	public static int max_faim_adult = 100;
+	public static int max_happiness_adult = 100;
+	public static int max_toilet_adult = 100;
+	public static int max_energy_adult = 100;
+	public static int max_faim_teen = 120;
+	public static int max_happiness_teen = 50;
+	public static int max_toilet_teen = 100;
+	public static int max_energy_teen = 75;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -66,6 +87,10 @@ public class Constantes {
 			toilet = ImageIO.read(new File("Images/toilet.png"));
 			bubbleThought = ImageIO.read(new File("Images/bubbleThought.png"));
 			coin = ImageIO.read(new File("Images/coin.png"));
+			sofaSouth = ImageIO.read(new File("Images/sofaSouth.png"));
+			sofaNorth = ImageIO.read(new File("Images/sofaNorth.png"));
+			sofaEast = ImageIO.read(new File("Images/sofaEast.png"));
+			sofaWest = ImageIO.read(new File("Images/sofaWest.png"));
 			
 		}
 		catch (IOException e) {

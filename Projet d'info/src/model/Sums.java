@@ -10,18 +10,18 @@ import view.Window;
 public abstract class Sums extends ActivableObject implements NeedToEat, Directable{
 	protected String gender;
 	protected double age;
-	public int faim;
-	public int toilet;
-	public int hygiene;
+	protected int faim;
+	protected int toilet;
+	protected int hygiene;
 	protected int max_faim;
 	protected int max_energy;
 	protected int max_toilet;
 	protected int cost;
-	public int happiness;
+	protected int happiness;
 	protected int max_happiness;
 	protected House maison;
-	public int energy;
-	private int direction = EAST ;
+	protected int energy;
+	protected int direction = EAST ;
 	protected String ageRange ;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
@@ -38,12 +38,14 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected boolean playable = true;
 	public Sums(int x, int y, House h) {
 		super(x, y);
-		this.faim = max_faim;
-		this.energy = max_energy;
-		this.happiness = max_happiness;
-		this.toilet = 10;
+		if (this.energy == 0) {
+			this.faim = max_faim;
+			this.energy = max_energy;
+			this.happiness = max_happiness;
+			this.toilet = 10;
+		}
 		h.AddHabitant(this);
-		maison = h;
+		this.maison = h;
 		inventory.add(new Apple());
 		inventory.add(new Apple());
 		inventory.add(new Cigaret());
@@ -52,6 +54,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	}
 	public Sums() {
 		super();
+		this.energy = 1;
 	}
 	
 	public void Eat(Food f) {

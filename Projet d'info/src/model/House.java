@@ -2,7 +2,7 @@ package model;
 import java.util.ArrayList;
 
 public class House extends Building{
-	private int money = 100;
+	private int money;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
 	private int sizeW = 5;
 	private int sizeH = 4;
@@ -10,6 +10,7 @@ public class House extends Building{
 	public House(int x, int y) {
 		super(x,y);
 		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, "MapMaison", 'S');
+		money = 100;
 	}
 	public House() {
 		super();

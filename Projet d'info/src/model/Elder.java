@@ -8,16 +8,20 @@ import javax.imageio.ImageIO;
 public class Elder extends Sums{
 	public Elder(int x, int y, House h) {
 		super(x,y,h);
-		max_energy = 50;
-		max_faim = 100;
-		max_toilet = 50;
-		max_happiness = 100;
-		energy = max_energy;
-		faim = max_faim;
-		happiness = max_happiness;
+		max_energy = Constantes.max_energy_elder;
+		max_faim = Constantes.max_faim_elder;
+		max_toilet = Constantes.max_toilet_elder;
+		max_happiness = Constantes.max_happiness_elder;
+		if (this.energy == 0) {
+			this.faim = max_faim;
+			this.energy = max_energy;
+			this.happiness = max_happiness;
+			this.toilet = 10;
+		}
 	}
 	public Elder() {
 		super();
+		energy = 1;
 	}
 	public void WatchTV() {
 		happiness += 1;
