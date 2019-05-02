@@ -34,18 +34,12 @@ import model.*;
 import net.miginfocom.swing.MigLayout;
 import controller.Keyboard;
 
-public class Map extends JPanel implements ActionListener, ListSelectionListener{
+public class MapDrawer extends JPanel implements ActionListener, ListSelectionListener{
     private ArrayList<GameObject> objects = null;
     public final int MAP_SIZE = 30;
-    private Mouse mouseController = null;
-    public int tileVerticale = 20;
-    public int tileHorizontale = 30;
-    private int tileSize = 48;
-    private MapReader tiles;
-    public String map = Constantes.MapBase;
     private boolean firstMap = true;
-    private MapReader pixels = new MapReader();
-    private static Map instance_map = null;
+    private Mouse mouseController = null;
+    private static MapDrawer instance_mapDrawer = null;
     private JList content = new JList();
 	private DefaultListModel items = new DefaultListModel();
 	private Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
@@ -63,13 +57,15 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     private JButton buttonEAT;
     private JButton buttonTAKE;
     private JButton buttonCLOSE;
-    private int posX;
-    private int posY;
+    private Map currentMap;
+    private int sizeH;
+    private int sizeW;
+    private int tileSize;
 	
-    private Map() {
+    private MapDrawer() {
         this.setFocusable(true);
         this.requestFocusInWindow();
-        this.setPreferredSize(new Dimension(tileHorizontale*tileSize, tileVerticale*tileSize));
+        this.setPreferredSize(new Dimension(sizeW*tileSize, sizeH*tileSize));
         this.setBackground(Color.GREEN);
         this.setLayout(new MigLayout());
 		content.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -91,21 +87,16 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     
     public void paintComponent(Graphics g) {
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
-    	if (firstMap) {
-    		this.changeMap(Constantes.MapBase);
-    		firstMap = false;
-    	}
-        for (int i = 0; i < tileVerticale; i++) {
+    	for (int i = 0; i < sizeH; i++) {
         	int lines = i;
-            for (int j = 0; j < tileHorizontale; j++) {
+            for (int j = 0; j < sizeW; j++) {
                 int Tileposx = j * tileSize;
                 int Tileposy = i * tileSize;
  
-                g.drawImage(pixels.tiles.get(j+lines*tileHorizontale), Tileposx, Tileposy, tileSize, tileSize, this);
+                g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
             }
         }
     	
-
         for (GameObject object : this.objects) {
             int x = object.getPosX();
             int y = object.getPosY();
@@ -142,28 +133,24 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
         int y = s.getPosY();
     	g.drawImage(s.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
     }
-    public static Map getInstance() {
-    	if (instance_map == null) {
-    		instance_map = new Map();
+    public static MapDrawer getInstance() {
+    	if (instance_mapDrawer == null) {
+    		instance_mapDrawer = new MapDrawer();
     	}
-    	return instance_map;
+    	return instance_mapDrawer;
     }
 
     public void redraw() {
         this.repaint();
     }
     public Dimension getDimension() {
-    	return new Dimension(tileHorizontale,tileVerticale);
+    	return new Dimension(sizeW,sizeH);
     }
-    public void changeMapSize() {
-    	tileHorizontale = pixels.getwTile(); //problème avec pixels 
-		tileVerticale = (tileHorizontale * 2)/3 ;
-		tileSize = 1440 / tileHorizontale;
-    	
-    }
-    public void changeMap(String Change) {
-    	this.map = Change;
-    	pixels.ReadMap(map);
+    public void changeMap(Map map) {
+    	currentMap = map;
+    	sizeH = currentMap.getSizeH();
+    	sizeW = currentMap.getSizeW();
+    	tileSize = currentMap.getTileSize();
     }
 
 	public void addMouse(Mouse m) {
@@ -346,7 +333,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 			}
 		}
 	}
-	public MapReader getMapReader() {
-		return pixels;
+	public Map getCurrentMap() {
+		return currentMap;
 	}
 }

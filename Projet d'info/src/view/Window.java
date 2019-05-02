@@ -34,7 +34,7 @@ import controller.Mouse;
 
 public class Window extends JFrame implements ActionListener {
 	private JPanel groupPanel = new JPanel(new BorderLayout());
-    private Map map = Map.getInstance();
+    private MapDrawer mapDrawer = MapDrawer.getInstance();
     private Status status = new Status();
     private CardLayout cards = new CardLayout();
     private MainMenu mainMenu = new MainMenu();
@@ -46,7 +46,7 @@ public class Window extends JFrame implements ActionListener {
     	super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBounds(0, 0, 1920, 1020);
-        groupPanel.add(map, BorderLayout.CENTER);
+        groupPanel.add(mapDrawer, BorderLayout.CENTER);
         groupPanel.add(status, BorderLayout.EAST);
         this.getContentPane().setLayout(cards);
         this.getContentPane().add((JPanel)mainMenu);
@@ -72,8 +72,8 @@ public class Window extends JFrame implements ActionListener {
     }
 
     public void setGameObjects(ArrayList<GameObject> objects) {
-        this.map.setObjects(objects);
-        this.map.redraw();
+        this.mapDrawer.setObjects(objects);
+        this.mapDrawer.redraw();
     }
 
     public void update() {
@@ -81,18 +81,18 @@ public class Window extends JFrame implements ActionListener {
     }
 
     public void setKeyListener(KeyListener keyboard) {
-        this.map.addKeyListener(keyboard);
+        this.mapDrawer.addKeyListener(keyboard);
     }
 
     public void setMouseListener(Mouse m) {
-        this.map.addMouse(m);
+        this.mapDrawer.addMouse(m);
     }
 
 	public int getMapSizeW() {
-		return map.tileHorizontale;
+		return mapDrawer.getCurrentMap().getSizeW();
 	}
 	public int getMapSizeH() {
-		return map.tileVerticale;
+		return mapDrawer.getCurrentMap().getSizeH();
 	}
 	public void escapePressed() {
 		if (groupPanel.isVisible()) {
@@ -100,9 +100,9 @@ public class Window extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void setPlayer(Sums p) {
-		active_player = p;
-		status.setPlayer(p);
+	public void setPlayer(Sums o) {
+		active_player = o;
+		status.setPlayer(o);
 	}
 	public void makeMenu() {
 		ArrayList<JButton> Buttons = mainMenu.getButtons();
@@ -132,7 +132,7 @@ public class Window extends JFrame implements ActionListener {
 		}
 		else if (e.getActionCommand() == "RESUME") {
 			cards.previous(this.getContentPane());
-			map.requestFocusInWindow();
+			mapDrawer.requestFocusInWindow();
 		}
 		else if (e.getActionCommand() == "QUIT") {
 			System.exit(0);
@@ -152,7 +152,7 @@ public class Window extends JFrame implements ActionListener {
         Window.getInstance().setKeyListener(keyboard);
         Window.getInstance().setMouseListener(mouse);
 		cards.next(this.getContentPane());
-		map.requestFocusInWindow();
+		mapDrawer.requestFocusInWindow();
 		menuInGame = new MenuInGame();
         this.getContentPane().add((JPanel)menuInGame);
         makeMenuInGame();
@@ -166,8 +166,8 @@ public class Window extends JFrame implements ActionListener {
 	public Status getStatus() {
 		return this.status;
 	}
-	public Map getMap() {
-		return this.map;
+	public MapDrawer getMapDrawer() {
+		return this.mapDrawer;
 	}
 	public Sums getActivePlayer() {
 		return active_player;

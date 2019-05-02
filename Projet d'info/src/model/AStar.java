@@ -13,12 +13,12 @@ package model;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import view.Map;
+import view.MapDrawer;
 
 public class AStar {
-	private Map map = Map.getInstance();
-	private int mapSizeW = map.getDimension().width;
-	private int mapSizeH = map.getDimension().height;
+	private MapDrawer mapDrawer = MapDrawer.getInstance();
+	private int mapSizeW = mapDrawer.getDimension().width;
+	private int mapSizeH = mapDrawer.getDimension().height;
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;

@@ -112,7 +112,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			}
 		}
 		InventoryPanel.getInstance().updateInventory();
-		Map.getInstance().requestFocusInWindow();
+		MapDrawer.getInstance().requestFocusInWindow();
 		updateVisibleButtons();
 	}
 	public void setPlayer(Sums s) {

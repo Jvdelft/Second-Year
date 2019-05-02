@@ -1,7 +1,7 @@
 package model;
 
 import view.ActionPanel;
-import view.Map;
+import view.MapDrawer;
 import view.Window;
 
 import java.awt.event.WindowEvent;
@@ -17,11 +17,9 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.omg.CosNaming.IstringHelper;
 
 public class Game implements DeletableObserver, Runnable {
-	private HashMap<String, ArrayList<GameObject>> objectDictionary= new HashMap <String, ArrayList<GameObject>>();
+	private HashMap<String, Map> maps= new HashMap <String, Map>();
     private ArrayList<Sums> sums = new ArrayList<Sums>();
-    private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private Sums active_player = null;
-    private ArrayList<GameObject> initialisation = new ArrayList <GameObject>();
     private Sound sound;
 
     private Window window;
@@ -32,23 +30,38 @@ public class Game implements DeletableObserver, Runnable {
     private static Game GameInstance;
     private int time;
     private Timer timer;
+    private Map currentMap;
+    private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
 
     private Game(Window window) {
     	this.window = window;
+        initMaps();
         sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
         // Creating one Player at position (1,1)
-        if (objectDictionary.isEmpty()) {
-        	initialisation = mapConstructor("MapBase");
-			objectDictionary.put("MapBase", initialisation);
-        	changeMap("MapBase");
-        }
     	notifyView();
     	t2.start();
     	//sound = new Sound();
     	//sound.play("Never_Surrender");
     	givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect();
         
+    }
+    private void initMaps() {
+    	maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
+    	maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
+    	maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
+    	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
+    	currentMap = maps.get(Constantes.mapBase);
+    	objectsOnMap = currentMap.getObjects();
+    	MapDrawer.getInstance().changeMap(currentMap);
+    	for(GameObject o : objectsOnMap) {
+    		if (o instanceof Sums) {
+    			active_player = (Sums) o;
+    			changeMap(Constantes.mapBase);
+    			window.setPlayer(active_player);
+    			break;
+    		}
+    	}
     }
 
     public void movePlayer(int x, int y) {
@@ -253,118 +266,27 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
+		objectsOnMap.remove(active_player);
+		currentMap = maps.get(s);
+		MapDrawer.getInstance().changeMap(currentMap);
+		objectsOnMap = currentMap.getObjects();
 		sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
 		boolean newMap = true;
-		objectsOnMap.remove(active_player);
-		for (String key : objectDictionary.keySet()) {
-			if (key.equals(s)) {
-				newMap = false;
-			}
-		}
-		if (newMap) {
-			initialisation = new ArrayList<GameObject>();
-			initialisation = mapConstructor(s);
-			objectDictionary.put(s, initialisation);
-		}
-		objectsOnMap = objectDictionary.get(s);
-		objectsOnMap.add(active_player);
+  		objectsOnMap.add(active_player);
 		window.setGameObjects(objectsOnMap);
 		
-	}
-	
-	private ArrayList<GameObject> mapConstructor(String map){
-		House h = new House(21,2);
-		if (map.equals("MapBase")) {
-	    	Sums p = new Adult(10, 10,h);
-	    	Sums q = new Kid(5,5,h);
-	    	Sums r = new Elder(15,15,h);
-	    	Sums s = new Teen(24,5,h);
-	    	Market m = new Market(4,2);
-	    	sums.add(p);
-	    	sums.add(q);
-	    	sums.add(r);
-	    	sums.add(s);
-	    	
-	    	initialisation.add(h);
-	    	initialisation.add(p);
-	    	initialisation.add(q);
-	    	initialisation.add(r);
-	    	initialisation.add(s);
-	    	initialisation.add(m);
-	    	ArrayList <Building> building = new ArrayList<Building>();
-	    	building.add(h);
-	    	building.add(m);
-	    	active_player = p;
-	    	window.setPlayer(active_player);
-			for (Building b : building) {
-				for (int i = 0; i< b.getSizeH(); i++) {
-					initialisation.add(new Border(b.getPosX(),i+b.getPosY()));
-					initialisation.add(new Border (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
-				}
-				for (int i = 0; i< b.getSizeH(); i++) {
-					initialisation.add(new Border(i+b.getPosX(),b.getPosY()));
-					initialisation.add(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
-				}
-				initialisation.add(b.getDoor());
-			}
-			
-	    	Random rand = new Random();
-	    	for (int i = 0; i < numberOfBreakableBlocks/2; i++) {
-	    		int x = rand.nextInt(sizeW-4) + 2;
-	    		int y = rand.nextInt(sizeH-4) + 2;
-	    		Food test = new Apple(x,y);
-	    		test.attachDeletable(this);
-	    		initialisation.add(test);
-	    	}
-	    	initialisation.add(new Door(Math.round(sizeW/2),0, "MapRock", 'S'));
-	    	initialisation.add(new Door(0,Math.round(sizeH/2)-1, "MapRock", 'E'));
-	    	initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapRock", 'N'));
-	    	initialisation.add(new Door(sizeW-1,Math.round(sizeH/2)-1, "MapRock", 'W'));
-
-		}
-		else if (map.equals("MapRock")) { //modifier sizeW, sizeH en fonction de la taille de la map
-	    	Random rand = new Random();
-	    	for (int i = 0; i < numberOfBreakableBlocks/5; i++) {
-	    		int x = rand.nextInt(sizeW-4) + 2;
-	    		int y = rand.nextInt(sizeH-4) + 2;
-	    		Food test = new Apple(x,y);
-	    		test.attachDeletable(this);
-	    		initialisation.add(test);
-	    	}
-	    	initialisation.add(new Door(Math.round(sizeW/2),0, "MapBase", 'S'));
-	    	initialisation.add(new Door(0,Math.round(sizeH/2)-1, "MapBase", 'E'));
-	    	initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'N'));
-	    	initialisation.add(new Door(sizeW-1,Math.round(sizeH/2)-1, "MapBase", 'W'));
-	    	System.out.println("Chargement map rock");
-
-		}
-		else if (map.equals("MapMaison")) {
-			initialisation.add(new Adult(10,4,h));
-			initialisation.add(new Fridge(10,1));
-			initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'H'));
-			initialisation.add(new Toilet(Math.round(sizeW/2), 1));
-			initialisation.add(new Sofa(1,Math.round(sizeH/2), 0));
-			System.out.println("Chargement MapMaison"); 
-		}
-		else if (map.equals("MapMarket")) {
-			initialisation.add(new Door(Math.round(sizeW/2),sizeH-1, "MapBase", 'M'));
-			Fridge f = new Fridge(2, 1);
-			Fridge f2 = new Fridge(3, 1);
-			Fridge f3 = new Fridge(1,2);
-			Fridge f4 = new Fridge(1,3);
-			initialisation.add(f);
-			initialisation.add(f2);
-			initialisation.add(f3);
-			initialisation.add(f4);
-			System.out.println("Chargement MapMarket"); 
-		}
-		return initialisation;
 	}
 	public int getTime() {
 		return time;
 	}
-	public void initObject(GameObject o) {
-		initialisation.add(o);
+	public HashMap<String,Map> getMaps(){
+		return maps;
+	}
+	public Map getCurrentMap() {
+		return currentMap;
+	}
+	public void setActivePlayer(Sums s) {
+		active_player = s;
 	}
 }

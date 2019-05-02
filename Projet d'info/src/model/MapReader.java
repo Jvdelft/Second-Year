@@ -7,23 +7,25 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import model.Constantes;
-import view.Map;
+import view.MapDrawer;
 
 public class MapReader {
-	public ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
-	private ArrayList<Character> Maps = new ArrayList<Character>();
-	private int wTiles;
-	private BlockFactory factory = new BlockFactory();
+	private static ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
+	private static ArrayList<Character> Maps = new ArrayList<Character>();
+	private static int wTiles;
+	private static BlockFactory factory = new BlockFactory();
+	private static ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private static Map mapBeingRead;
 	public MapReader() {
-		Constantes.Images();
 		}
-	public void makeTiles() {
+	private static void makeTiles() {
+		objects = new ArrayList<GameObject>();
 		for (int i=0; i<Maps.size();i++) {
 			int posY = i/wTiles;
 			int posX = i%wTiles;
 			if (Maps.get(i) == 'A') {
 				tiles.add(Constantes.tree);
-				factory.getInstance("Border", posX , posY);
+				objects.add(factory.getInstance("Border", posX , posY));
 			}
 			else if(Maps.get(i) == 'H') {
 				tiles.add(Constantes.herb);
@@ -45,11 +47,13 @@ public class MapReader {
 			}
 			else if (Maps.get(i) == 'W') {
 				tiles.add(Constantes.wall);
-				factory.getInstance("Border", posX , posY);
+				objects.add(factory.getInstance("Border", posX , posY));
 			}
 		}
+			mapBeingRead.setObjects(objects);
 	}
-	public void ReadMap(String s) {
+	public static ArrayList<BufferedImage> ReadMap(String s, Map map) {
+		mapBeingRead = map;
 		Maps = new ArrayList<Character>();
 		tiles = new ArrayList<BufferedImage>();
 		BufferedReader br = null;
@@ -88,13 +92,13 @@ public class MapReader {
 			ex.printStackTrace();
 
 		}
-		Map.getInstance().changeMapSize();
 		makeTiles();
+		return tiles;
 	}
-	public int getwTile() {
+	public static int getwTile() {
 		return wTiles;
 	}
-	public void readWidth(String s) {
+	public static void readWidth(String s) {
 		BufferedReader br = null;
 		FileReader fr = null;
 		try {
@@ -122,6 +126,8 @@ public class MapReader {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-		Map.getInstance().changeMapSize();
-}
+	}
+	public static ArrayList<BufferedImage> getTiles(){
+		return tiles;
+	}
 }

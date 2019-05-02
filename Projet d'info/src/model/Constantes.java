@@ -11,10 +11,10 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class Constantes {
-	public static final String MapBase = "Maps/MapBase.txt";
-	public static final String MapRock = "Maps/MapRock.txt";
-	public static final String MapMaison = "Maps/MapMaison.txt";
-	public static final String MapMarket = "Maps/MapMarket.txt";
+	public static final String mapBase = "Maps/MapBase.txt";
+	public static final String mapRock = "Maps/MapRock.txt";
+	public static final String mapMaison = "Maps/MapMaison.txt";
+	public static final String mapMarket = "Maps/MapMarket.txt";
 	public static final int image_size = 70;
 	public static BufferedImage tree;
 	public static BufferedImage herb;

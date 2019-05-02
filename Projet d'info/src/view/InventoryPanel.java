@@ -102,7 +102,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		this.add(down);
 	}
 	public void actionPerformed(ActionEvent e) {
-		Window.getInstance().getMap().requestFocusInWindow();
+		Window.getInstance().getMapDrawer().requestFocusInWindow();
 		if(e.getSource().equals(up) && row > 0) {
 			row --;
 		}
@@ -119,7 +119,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 	}
 	public void valueChanged(ListSelectionEvent e) {
 		ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
-		Map.getInstance().requestFocusInWindow();
+		MapDrawer.getInstance().requestFocusInWindow();
 		ActionPanel.getInstance().updateVisibleButtons();
 	}
 	public static InventoryPanel getInstance() {

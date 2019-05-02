@@ -9,7 +9,7 @@ public class House extends Building{
 	private Door door;
 	public House(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, "MapMaison", 'S');
+		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, Constantes.mapMaison, 'S');
 		money = 100;
 	}
 	public House() {

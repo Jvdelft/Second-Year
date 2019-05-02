@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import controller.Keyboard;
-import view.Map;
+import view.MapDrawer;
 
 public class ContainerObject extends ActivableObject{
 	private ArrayList<GameObject> objectContained = new ArrayList<GameObject>();
@@ -28,7 +28,7 @@ public class ContainerObject extends ActivableObject{
 		s.setIsPlayable(false);
 	}
 	public void open(ContainerObject this) {
-		Map.getInstance().drawContent(this);
+		MapDrawer.getInstance().drawContent(this);
 	}
 	public ArrayList<GameObject> switchRow(int row) {
 		this.row = row;

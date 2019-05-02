@@ -6,7 +6,7 @@ public class Market extends Building{
 	private Door door;
 	public Market(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1,"MapMarket", 'S');
+		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1,Constantes.mapMarket, 'S');
 	}
 	public Market() {
 		super();
