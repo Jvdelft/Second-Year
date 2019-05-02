@@ -136,7 +136,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (visibleButtons.contains(button)) {
 			notIn = false;
 		}
-		if (y < 3 && notIn) {
+		if (y < 3 && notIn && button != null) {
 			limits.gridx = x;
 			limits.gridy = y;
 			box.setConstraints(button, limits);

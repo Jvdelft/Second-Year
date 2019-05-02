@@ -26,16 +26,11 @@ public class Kid extends Sums{
 		energy = 1;
 	}
 	public void makeSprite() {
-		try {
-    		Sprite_d = ImageIO.read(new File("Images/Sprites Kid M/52.png"));
-    		Sprite_l = ImageIO.read(new File("Images/Sprites Kid M/64.png"));
-    		Sprite_r = ImageIO.read(new File("Images/Sprites Kid M/76.png"));
-    		Sprite_u = ImageIO.read(new File("Images/Sprites Kid M/88.png"));
-    		Sprite_face = ImageIO.read(new File("Images/Sprites Kid M Face/1.png"));
-    	}
-    	catch(IOException ex) {
-    		ex.printStackTrace();
-    	}
+		sprite_d = Constantes.spriteDKid;
+    	sprite_l = Constantes.spriteLKid;
+    	sprite_r = Constantes.spriteRKid;
+    	sprite_u = Constantes.spriteUKid;
+    	sprite_face = Constantes.spriteFaceKid;
 		
 	}
 	private ArrayList<Toy> toys = new ArrayList<Toy>();

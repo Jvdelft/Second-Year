@@ -38,6 +38,9 @@ public class MapReader {
 			else if (Maps.get(i) == 'C') {
 				tiles.add(Constantes.chemin);
 			}
+			else if (Maps.get(i) == 'W') {
+				tiles.add(Constantes.wall);
+			}
 		}
 	}
 	public void ReadMap(String s) {

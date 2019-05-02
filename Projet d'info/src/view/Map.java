@@ -116,10 +116,10 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
             	drawSprites((Sums) object, g);
             }
             else if (object instanceof Building) {
-            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, ((Building) object).getSizeW()*tileSize,((Building) object).getSizeH ()*tileSize, this);
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeW()*tileSize,((Building) object).getSizeH ()*tileSize, this);
             }
             else {
-            	g.drawImage(object.Sprite, x*tileSize, y*tileSize, tileSize, tileSize, this);
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
             // Decouper en fontions
                 
 
@@ -140,23 +140,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     public void drawSprites(Sums s, Graphics g) {
     	int x = s.getPosX();
         int y = s.getPosY();
-    	int direction = s.getDirection();
-        
-        switch (direction) {
-        case Directable.EAST:
-            g.drawImage(s.Sprite_r, x*tileSize, y*tileSize, tileSize, tileSize, this);
-            break;
-        case Directable.NORTH:
-        	g.drawImage(s.Sprite_u, x*tileSize, y*tileSize, tileSize, tileSize, this);
-            break;
-        case Directable.WEST:
-        	g.drawImage(s.Sprite_l, x*tileSize, y*tileSize, tileSize, tileSize, this);
-            break;
-        case Directable.SOUTH:
-        	g.drawImage(s.Sprite_d, x*tileSize, y*tileSize, tileSize, tileSize, this);
-            break;
-        }
-    	
+    	g.drawImage(s.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
     }
     public static Map getInstance() {
     	if (instance_map == null) {
@@ -201,7 +185,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 			removeImage();
 			graphe.drawImage(inventoryCase, 0, 0, null);
 			if (i < listToDraw.size()) {
-				Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).Sprite);
+				Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).getSprite());
 				graphe.drawImage(img, 5, 5, null);
 			}
 			items.setElementAt(new ImageIcon(combined), i);
@@ -279,7 +263,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 			removeImage();
 			graphe.drawImage(inventoryCase, 0, 0, null);
 			if (i < listToDraw.size()) {
-				Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).Sprite);
+				Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).getSprite());
 				graphe.drawImage(img, 5, 5, null);
 			}
 			items.add(i, new ImageIcon(combined));

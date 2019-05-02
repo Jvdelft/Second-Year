@@ -12,7 +12,7 @@ public class RedPotion extends Drinks{
 		Toilet = 10;
 		LifePoint = 1;
 		try {
-    		Sprite = ImageIO.read(new File("Projet d'info/Images/RedPotion.png"));
+    		sprite = ImageIO.read(new File("Projet d'info/Images/RedPotion.png"));
 		}
     	catch(IOException ex) {
     		ex.printStackTrace();

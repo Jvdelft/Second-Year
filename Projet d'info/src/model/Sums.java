@@ -25,15 +25,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected String ageRange ;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
-	public BufferedImage Sprite_l;
+	protected BufferedImage sprite_l;
 	@JsonIgnore
-	public BufferedImage Sprite_r;
+	protected BufferedImage sprite_r;
 	@JsonIgnore
-	public BufferedImage Sprite_u;
+	protected BufferedImage sprite_u;
 	@JsonIgnore
-	public BufferedImage Sprite_d;
+	protected BufferedImage sprite_d;
 	@JsonIgnore
-	public BufferedImage Sprite_face;
+	protected BufferedImage sprite_face;
 	private ArrayList<GameObject> inventory = new ArrayList<GameObject>();
 	protected boolean playable = true;
 	public Sums(int x, int y, House h) {
@@ -195,6 +195,26 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     public void setIsPlayable(boolean ip) {
     	this.playable = ip;
+    }
+    public BufferedImage getSprite() {
+    	BufferedImage sprite = null;
+    	switch(this.getDirection()) {
+    	case (EAST) : sprite = this.sprite_r; break;
+    	case(WEST) : sprite = this.sprite_l; break;
+    	case(NORTH) : sprite = this.sprite_u; break;
+    	case(SOUTH) : sprite = this.sprite_d; break;
+    	}
+    	return sprite;
+    }
+    public BufferedImage getFaceSprite() {
+    	return this.sprite_face;
+    }
+    public void setDirection(int direction) {
+    	this.direction = direction;
+    	makeSprite();
+    }
+    public void setEnergy(int e) {
+    	this.energy = e;
     }
 
 

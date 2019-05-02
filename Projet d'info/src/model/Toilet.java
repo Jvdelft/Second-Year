@@ -13,7 +13,7 @@ public class Toilet extends ActivableObject {
 		return true;
 	}
 	public void makeSprite() {
-		Sprite = Constantes.toilet;
+		sprite = Constantes.toilet;
 	}
 	public void activate (Sums s) {
 		Game.getInstance().playerWait(10000L, s, type);

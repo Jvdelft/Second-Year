@@ -25,7 +25,7 @@ public class HUD extends JPanel{
 		g.setFont(new Font("Monotype Corsiva", Font.BOLD, 18));
 		g.drawImage(Constantes.backgroundStatus, 0, 0, 450, 500, this);
 		if (p instanceof Sums) {
-			g.drawImage(((Sums) p).Sprite_face, 150, 25, AVATAR_SIZE, AVATAR_SIZE, this);
+			g.drawImage(((Sums) p).getFaceSprite(), 150, 25, AVATAR_SIZE, AVATAR_SIZE, this);
 		}
         //g.fillRect(150, 25, AVATAR_SIZE, AVATAR_SIZE);
 

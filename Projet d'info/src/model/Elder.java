@@ -27,16 +27,10 @@ public class Elder extends Sums{
 		happiness += 1;
 	}
 	public void makeSprite() {
-		try {
-    		Sprite_d = ImageIO.read(new File("Images/Sprites Old Man/0.png"));
-    		Sprite_l = ImageIO.read(new File("Images/Sprites Old Man/12.png"));
-    		Sprite_r = ImageIO.read(new File("Images/Sprites Old Man/24.png"));
-    		Sprite_u = ImageIO.read(new File("Images/Sprites Old Man/36.png"));
-    		Sprite_face = ImageIO.read(new File("Images/Sprites Old Man Face/0.png"));
-    	}
-    	catch(IOException ex) {
-    		ex.printStackTrace();
-    	}
-		
+		sprite_d = Constantes.spriteDElder;
+    	sprite_l = Constantes.spriteLElder;
+    	sprite_r = Constantes.spriteRElder;
+    	sprite_u = Constantes.spriteUElder;
+    	sprite_face = Constantes.spriteFaceElder;
 	}
 }

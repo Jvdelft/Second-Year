@@ -18,7 +18,7 @@ public class Cigaret extends DeletableObject{
 		return false;
 	}
 	public void makeSprite() {
-		Sprite = Constantes.door;
+		sprite = Constantes.door;
 	}
 
 }

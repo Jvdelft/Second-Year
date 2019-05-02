@@ -8,7 +8,7 @@ public class Fridge extends ContainerObject implements Activable{
 		super();
 	}
 	public void makeSprite() {
-		Sprite = Constantes.fridge;
+		sprite = Constantes.fridge;
 	}
 
 }

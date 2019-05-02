@@ -39,6 +39,6 @@ public class House extends Building{
 		return door;
 	}
 	public void makeSprite() {
-		Sprite = Constantes.house;
+		sprite = Constantes.house;
 	}
 }

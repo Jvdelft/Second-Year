@@ -28,16 +28,11 @@ public class Teen extends Sums{
 		this.age += 1/1000;
 	}
 	public void makeSprite() {
-		try {
-    		Sprite_d = ImageIO.read(new File("Images/Sprites Teen M/2.png"));
-    		Sprite_l = ImageIO.read(new File("Images/Sprites Teen M/5.png"));
-    		Sprite_r = ImageIO.read(new File("Images/Sprites Teen M/8.png"));
-    		Sprite_u = ImageIO.read(new File("Images/Sprites Teen M/11.png"));
-    		Sprite_face = ImageIO.read(new File("Images/Sprite Teen M Face/1.png"));
-    	}
-    	catch(IOException ex) {
-    		ex.printStackTrace();
-    	}
+		sprite_d = Constantes.spriteDTeen;
+    	sprite_l = Constantes.spriteLTeen;
+    	sprite_r = Constantes.spriteRTeen;
+    	sprite_u = Constantes.spriteUTeen;
+    	sprite_face = Constantes.spriteFaceTeen;
 	}
 	
 

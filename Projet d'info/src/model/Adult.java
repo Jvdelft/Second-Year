@@ -30,15 +30,10 @@ public class Adult extends Sums {
 		maison.changeMoney(2000); 
 	}
 	public void makeSprite() {
-		try {
-    		Sprite_d = ImageIO.read(new File("Images/Sprites Man/image_part_056.png"));
-    		Sprite_l = ImageIO.read(new File("Images/Sprites Man/image_part_068.png"));
-    		Sprite_r = ImageIO.read(new File("Images/Sprites Man/image_part_080.png"));
-    		Sprite_u = ImageIO.read(new File("Images/Sprites Man/image_part_092.png"));
-    		Sprite_face = ImageIO.read(new File("Images/Sprite Man Face/0.png"));
-    	}
-    	catch(IOException ex) {
-    		ex.printStackTrace();
-    	}
+    	sprite_d = Constantes.spriteDAdult;
+    	sprite_l = Constantes.spriteLAdult;
+    	sprite_r = Constantes.spriteRAdult;
+    	sprite_u = Constantes.spriteUAdult;
+    	sprite_face = Constantes.spriteFaceAdult;
 	}
 }

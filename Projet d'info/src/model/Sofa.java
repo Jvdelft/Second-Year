@@ -5,6 +5,7 @@ public class Sofa extends ActivableObject implements Directable{
 	public Sofa(int x, int y, int direction) {
 		super(x,y);
 		this.direction = direction;
+		makeSprite();
 	}
 	public Sofa() {
 		super();
@@ -29,16 +30,22 @@ public class Sofa extends ActivableObject implements Directable{
 	@Override
 	public void makeSprite() {
 		switch (direction) {
-		case NORTH : Sprite = Constantes.sofaNorth; break;
-		case EAST : Sprite = Constantes.sofaEast; break;
-		case WEST : Sprite = Constantes.sofaWest; break;
-		case SOUTH : Sprite = Constantes.sofaSouth; break;
+		case NORTH : sprite = Constantes.sofaNorth; break;
+		case EAST : sprite = Constantes.sofaEast; break;
+		case WEST : sprite = Constantes.sofaWest; break;
+		case SOUTH : sprite = Constantes.sofaSouth; break;
 		}
 	}
 
 	@Override
 	public int getDirection() {
 		return 0;
+	}
+	public void activate(Sums s) {
+		s.teleportation(this.posX, this.posY);
+		s.setDirection(this.direction);
+		Game.getInstance().playerWait(5000, s, s.getAgeRange());
+		s.setEnergy((int) (s.getEnergy() + 10));
 	}
 
 }

@@ -24,7 +24,7 @@ public class Market extends Building{
 		return door;
 	}
 	public void makeSprite() {
-		Sprite = Constantes.market;
+		sprite = Constantes.market;
 	}
 }
 

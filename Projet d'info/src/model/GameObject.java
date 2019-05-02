@@ -7,7 +7,7 @@ public abstract class GameObject {
     protected int posX;
     protected int posY;
     @JsonIgnore
-    public BufferedImage Sprite;
+    protected BufferedImage sprite;
 
     public GameObject(int X, int Y) {
         this.posX = X;
@@ -36,4 +36,7 @@ public abstract class GameObject {
     @JsonIgnore
     public abstract boolean isObstacle();
     public abstract void makeSprite();
+    public BufferedImage getSprite() {
+    	return sprite;
+    }
 }
