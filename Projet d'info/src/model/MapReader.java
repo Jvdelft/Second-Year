@@ -7,18 +7,23 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import model.Constantes;
+import view.Map;
 
 public class MapReader {
 	public ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
 	private ArrayList<Character> Maps = new ArrayList<Character>();
-	public int hTiles ;
+	private int wTiles;
+	private BlockFactory factory = new BlockFactory();
 	public MapReader() {
 		Constantes.Images();
 		}
 	public void makeTiles() {
 		for (int i=0; i<Maps.size();i++) {
+			int posY = i/wTiles;
+			int posX = i%wTiles;
 			if (Maps.get(i) == 'A') {
 				tiles.add(Constantes.tree);
+				factory.getInstance("Border", posX , posY);
 			}
 			else if(Maps.get(i) == 'H') {
 				tiles.add(Constantes.herb);
@@ -40,6 +45,7 @@ public class MapReader {
 			}
 			else if (Maps.get(i) == 'W') {
 				tiles.add(Constantes.wall);
+				factory.getInstance("Border", posX , posY);
 			}
 		}
 	}
@@ -55,7 +61,7 @@ public class MapReader {
 
 			String sCurrentLine;
 			String sizeLine = br.readLine();
-			hTiles = Integer.parseInt(sizeLine);
+			wTiles = Integer.parseInt(sizeLine);
 			while ((sCurrentLine = br.readLine()) != null) {
 				for (int i=0;i<sCurrentLine.length();i++) {
 					char aChar = sCurrentLine.charAt(i);
@@ -82,6 +88,40 @@ public class MapReader {
 			ex.printStackTrace();
 
 		}
+		Map.getInstance().changeMapSize();
 		makeTiles();
 	}
+	public int getwTile() {
+		return wTiles;
+	}
+	public void readWidth(String s) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+
+			fr = new FileReader(s);
+			br = new BufferedReader(fr);
+
+			String sizeLine = br.readLine();
+			wTiles = Integer.parseInt(sizeLine);
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+		
+		try {
+
+			if (br != null)
+				br.close();
+
+			if (fr != null)
+				fr.close();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		Map.getInstance().changeMapSize();
+}
 }

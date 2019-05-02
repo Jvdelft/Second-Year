@@ -1,5 +1,6 @@
 package model;
 
+import view.ActionPanel;
 import view.Map;
 import view.Window;
 
@@ -72,14 +73,14 @@ public class Game implements DeletableObserver, Runnable {
 	        if (active_player instanceof Adult) {
 	        	
 	        }
-	        Window.getInstance().getStatus().getActionPanel().updateVisibleButtons();
+	        ActionPanel.getInstance().updateVisibleButtons();
 	        notifyView();
     	}
     }
     public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
         TimerTask repeatedTask = new TimerTask() {
             public void run() {
-            	Window.getInstance().getStatus().getActionPanel().updateActivableList();
+            	ActionPanel.getInstance().updateActivableList();
             }
         };
         TimerTask timeTask = new TimerTask() {
@@ -274,14 +275,6 @@ public class Game implements DeletableObserver, Runnable {
 	
 	private ArrayList<GameObject> mapConstructor(String map){
 		House h = new House(21,2);
-		for (int i = 0; i < sizeW; i++) {
-    		initialisation.add(new Border(i, 0));
-    		initialisation.add(new Border(i, sizeH - 1));
-    		if (i >= sizeW - sizeH) {
-    			initialisation.add(new Border(0, i-(sizeW-sizeH)));
-    			initialisation.add(new Border(sizeW - 1, i-(sizeW-sizeH)));
-    		}
-		}
 		if (map.equals("MapBase")) {
 	    	Sums p = new Adult(10, 10,h);
 	    	Sums q = new Kid(5,5,h);
@@ -304,14 +297,6 @@ public class Game implements DeletableObserver, Runnable {
 	    	building.add(m);
 	    	active_player = p;
 	    	window.setPlayer(active_player);
-			for (int i = 0; i < sizeW; i++) {
-	    		initialisation.add(new Border(i, 0));
-	    		initialisation.add(new Border(i, sizeH - 1));
-	    		if (i>9) {
-	    			initialisation.add(new Border(0, i-10));
-	    			initialisation.add(new Border(sizeW - 1, i-10));
-	    		}
-	    	}
 			for (Building b : building) {
 				for (int i = 0; i< b.getSizeH(); i++) {
 					initialisation.add(new Border(b.getPosX(),i+b.getPosY()));
@@ -378,5 +363,8 @@ public class Game implements DeletableObserver, Runnable {
 	}
 	public int getTime() {
 		return time;
+	}
+	public void initObject(GameObject o) {
+		initialisation.add(o);
 	}
 }

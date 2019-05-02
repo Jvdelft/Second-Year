@@ -155,12 +155,15 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
     public Dimension getDimension() {
     	return new Dimension(tileHorizontale,tileVerticale);
     }
+    public void changeMapSize() {
+    	tileHorizontale = pixels.getwTile(); //problème avec pixels 
+		tileVerticale = (tileHorizontale * 2)/3 ;
+		tileSize = 1440 / tileHorizontale;
+    	
+    }
     public void changeMap(String Change) {
     	this.map = Change;
     	pixels.ReadMap(map);
-    	tileHorizontale = pixels.hTiles; //problème avec pixels 
-		tileVerticale = (tileHorizontale * 2)/3 ;
-		tileSize = 1440 / tileHorizontale;
     }
 
 	public void addMouse(Mouse m) {
@@ -272,6 +275,7 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		content.addListSelectionListener(this);
 	}
 	public void removeDrawContent() {
+		items.removeAllElements();
 		this.remove(content);
 		this.remove(buttonTAKE);
 		this.remove(buttonCLOSE);
@@ -283,7 +287,6 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 		
 		this.remove(up);
 		this.remove(down);
-		items.removeAllElements();
 		this.requestFocusInWindow();
 		row = 0;
 		
@@ -342,5 +345,8 @@ public class Map extends JPanel implements ActionListener, ListSelectionListener
 				}
 			}
 		}
+	}
+	public MapReader getMapReader() {
+		return pixels;
 	}
 }

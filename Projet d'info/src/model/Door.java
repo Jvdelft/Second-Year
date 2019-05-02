@@ -25,14 +25,18 @@ public class Door extends ActivableObject{
 	}
 	public void activate(Sums e) {
 		Game game = Game.getInstance();
+		String s = null;
 		switch (destination) {
-			case "MapBase" : map.changeMap(Constantes.MapBase); break;
-			case "MapRock" : map.changeMap(Constantes.MapRock); break;
-			case "MapMaison" : map.changeMap(Constantes.MapMaison); break;
-			case "MapMarket" : map.changeMap(Constantes.MapMarket); break;
+			case "MapBase" : s = Constantes.MapBase; break;
+			case "MapRock" : s = Constantes.MapRock; break;
+			case "MapMaison" : s = Constantes.MapMaison; break;
+			case "MapMarket" : s = Constantes.MapMarket; break;
 		}
 		/*String path = "Constantes." + destination;
 		map.changeMap(Constantes.MapRock);*/
+		map.getMapReader().readWidth(s);
+		game.changeMap(destination);
+		map.changeMap(s);
 		int sizeH = map.tileHorizontale;
 		int sizeV = map.tileVerticale;
 		switch (character) {
@@ -43,7 +47,6 @@ public class Door extends ActivableObject{
 			case 'H' : e.teleportation(e.getHouse().getDoor().getPosX(), e.getHouse().getDoor().getPosY() + 1); break;
 			case 'M' : e.teleportation(6, 6); break;
 		}
-		game.changeMap(destination);
 	}
 		/*choosingMap(this.destination, e);
 		if (DoorN) {
