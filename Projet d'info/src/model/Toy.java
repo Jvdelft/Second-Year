@@ -11,8 +11,8 @@ public class Toy extends ActivableObject{
 		user = "Kid";
 		type = "PLAY TOY";
 	}
-	public void activate(Kid s) {
-		s.play(this);
+	public void activate(Sums s) {
+		((Kid)s).play(this);
 	}
 	public int getValue(){
 		return value;

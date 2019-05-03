@@ -11,9 +11,8 @@ public abstract class ActivableObject extends GameObject implements Activable {
 	public ActivableObject() {
 		super();
 	}
-	public void activate(Sums s) {
-		
-	}
+	public abstract void activate(Sums s) ;
+
 	public String getType() {
 		return type;
 	}

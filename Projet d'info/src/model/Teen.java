@@ -12,6 +12,7 @@ public class Teen extends Sums{
 		max_faim = Constantes.max_faim_teen;
 		max_toilet = Constantes.max_toilet_teen;
 		max_happiness = Constantes.max_happiness_teen;
+		ageRange = "Teen";
 		if (this.energy == 0) {
 			this.faim = max_faim;
 			this.energy = max_energy;

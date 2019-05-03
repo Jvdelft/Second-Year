@@ -25,12 +25,12 @@ public class Map {
 		
     }
 	public void initMap() {
-		House h = new House(21,2);
+		House h = new House(20,1);
 		if (mapName.equals(Constantes.mapBase)) {
 	    	Sums p = new Adult(10, 10,h);
 	    	Sums q = new Kid(5,5,h);
 	    	Sums r = new Elder(15,15,h);
-	    	Sums s = new Teen(24,5,h);
+	    	Sums s = new Teen(24,6,h);
 	    	Market m = new Market(4,2);
 	    	
 	    	this.addObject(h);
@@ -39,6 +39,9 @@ public class Map {
 	    	this.addObject(r);
 	    	this.addObject(s);
 	    	this.addObject(m);
+	    	Cigaret c = new Cigaret(13,15);
+	    	this.addObject(c);
+	    	this.addObject(new Apple(7,7));
 	    	ArrayList <Building> building = new ArrayList<Building>();
 	    	building.add(h);
 	    	building.add(m);
@@ -88,6 +91,7 @@ public class Map {
 			this.addObject(f4);
 			System.out.println("Chargement MapMarket"); 
 		}
+		
 		Window.getInstance().update();
 	}
 	public void addObject(GameObject o) {

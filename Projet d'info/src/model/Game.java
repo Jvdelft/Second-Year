@@ -62,6 +62,11 @@ public class Game implements DeletableObserver, Runnable {
     			break;
     		}
     	}
+    	for(GameObject o : objectsOnMap) {
+    		if (o instanceof DeletableObject) {
+    			((DeletableObject) o).attachDeletable(this);
+    		}
+    	}
     }
 
     public void movePlayer(int x, int y) {
@@ -92,32 +97,24 @@ public class Game implements DeletableObserver, Runnable {
     }
    
    public void buttonPressed(String button) {
-   	switch (button) {
-   		case "EAT" : ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
+	   switch (button) {
+	   	case "EAT" : ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
 						 objectToEat.activate(active_player);
 						 active_player.getObjects().remove(objectToEat); break;
-   		case "INTERACT" : for (ActivableObject o : currentMap.getActivableObjects()) {
-							  		if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-							  			o.activate(active_player);
-							  		}
-							  } break;
-   		case "GIVE FLOWER" : for (ActivableObject o : currentMap.getActivableObjects()) {
-		  								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-		  									((Adult)o).receiveFlower(active_player);
-		  								}
-   							  } break;
-   		case "PLAY TOY" : for (ActivableObject o : currentMap.getActivableObjects()) {
-								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-									((Kid)active_player).play((Toy)o);
-								}
-   						  } break;
-   		case "MAKE LOVE" : for (ActivableObject o : currentMap.getActivableObjects()) {
-   								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-   										((Adult)o).makeLove();
-   								}
-   						    } break;
-   	 }
-    }
+   		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
+   		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
+   		default : getFrontObject().activate(active_player); 
+   	   }
+   }
+   
+   public ActivableObject getFrontObject() {
+	   for (ActivableObject o : currentMap.getActivableObjects()) {
+			if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+				return o;
+			}
+	   }
+	   return null;
+   }
     public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
         TimerTask repeatedTask = new TimerTask() {
             public void run() {
@@ -303,6 +300,11 @@ public class Game implements DeletableObserver, Runnable {
         sizeH = window.getMapSizeH();
 		boolean newMap = true;
   		objectsOnMap.add(active_player);
+  		for(GameObject o : objectsOnMap) {
+    		if (o instanceof DeletableObject) {
+    			((DeletableObject) o).attachDeletable(this);
+    		}
+    	}
 		window.setGameObjects(objectsOnMap);
 		
 	}

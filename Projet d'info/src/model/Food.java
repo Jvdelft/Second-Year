@@ -1,12 +1,12 @@
 package model;
 
-import java.io.File;
+import java.io.File; 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public abstract class Food extends ActivableObject implements Deletable{
+public abstract class Food extends DeletableObject implements Deletable{
 	private ArrayList<DeletableObserver> observers = new ArrayList<DeletableObserver>();
     protected int NutritionalValue;
 	protected int EnergyValue;
@@ -29,7 +29,7 @@ public abstract class Food extends ActivableObject implements Deletable{
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /*@Override
     public void attachDeletable(DeletableObserver po) {
         observers.add(po);
     }
@@ -42,7 +42,7 @@ public abstract class Food extends ActivableObject implements Deletable{
                 o.delete(this, null);
         	}
         }
-    }
+    }*/
 
     @Override
     public boolean isObstacle() {

@@ -53,6 +53,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("GIVE FLOWER"));
 		initButton(new JButton("MAKE LOVE"));
 		initButton(new JButton("PLAY TOY"));
+		initButton(new JButton("SMOKE"));
 		this.setLayout(this.box);
 		
 	}

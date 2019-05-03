@@ -33,6 +33,7 @@ public class Constantes {
 	public static BufferedImage arrowDown;
 	public static BufferedImage inventoryCase;
 	public static BufferedImage apple;
+	public static BufferedImage cigaret;
 	public static ArrayList<BufferedImage> imageList = new ArrayList<BufferedImage>();
 	public static HashMap imageHashMap = new HashMap(); 
 	public static BufferedImage fridge;
@@ -89,7 +90,7 @@ public class Constantes {
 			door = ImageIO.read(new File("Images/Door.png"));
 			imageList.add(door);
 			rock = ImageIO.read(new File("Images/Rock.png"));
-			house = ImageIO.read(new File("Images/maison.jpg"));
+			house = ImageIO.read(new File("Images/House.png"));
 			market = ImageIO.read(new File("Images/market.png"));
 			sol = ImageIO.read(new File("Images/sol.png"));
 			path = ImageIO.read(new File("Images/Stone_Floor.png"));
@@ -103,6 +104,7 @@ public class Constantes {
 			imageList.add(arrowDown);
 			inventoryCase = ImageIO.read(new File("Images/inventorycase.png"));
 			apple = ImageIO.read(new File("Images/Apple.png"));
+			cigaret = ImageIO.read(new File("Images/cigaret.png"));
 			imageList.add(apple);
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
 			toilet = ImageIO.read(new File("Images/toilet.png"));

@@ -1,24 +1,26 @@
 package model;
 
 public class Cigaret extends DeletableObject{
-	protected int LifePoint = 3;
 	public Cigaret(int X, int Y) {
-		super(X, Y, 5);
+		super(X, Y);
+		user = "Teen";
+		type = "SMOKE";
+		LifePoint = 5;
 	}
 	public Cigaret() {
 		super();
 	}
 	public void activate (Sums s) {
-		if (s instanceof Teen) {
-			((Teen) s).smoke(this);
-			notifyDeletableObserver();
-		}
+		System.out.println("Smoke");
+		((Teen) s).smoke(this);
+		notifyDeletableObserver();
 	}
+	
 	public boolean isObstacle() {
 		return false;
 	}
 	public void makeSprite() {
-		sprite = Constantes.door;
+		sprite = Constantes.cigaret;
 	}
 
 }
