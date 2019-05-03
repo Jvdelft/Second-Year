@@ -23,6 +23,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected int energy;
 	protected int direction = EAST ;
 	protected String ageRange ;
+	protected String typeAffection = type;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
 	protected BufferedImage sprite_l;
@@ -94,6 +95,9 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     
     public void activate(Sums s) {
+
+    }
+    public void interraction(Sums s, int valeur) {
     	boolean newFriend = true;
     	for (Sums key : loveHashMap.keySet()) {
 			if (key.equals(s)) {
@@ -103,21 +107,24 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		if (newFriend) {
 			loveHashMap.put(s, new Integer(0));
 		}
-		Integer chiffre = loveHashMap.get(s);
-		chiffre++;
-		if (s instanceof Adult && this instanceof Adult ) {
-			s.getHouse().changeMoney(-10);
-			if (chiffre == 5) {
-				Game.getInstance().makeBaby(maison);
-				chiffre = 0;
-			}
-		}
-		loveHashMap.put(s, chiffre);
-		System.out.println("Amour "+ loveHashMap.get(s).intValue());
-		Window.getInstance().update();
+		Integer affection = loveHashMap.get(s);
+		affection = affection + valeur;
+		loveHashMap.put(s, affection);
     }
    // //////////////////////////////////////////////////////////////////////////////////////
+    public int getAffection(Sums s) {
+    	int res = 0;
+    	for (Sums key : loveHashMap.keySet()) {
+			if (key.equals(s)) {
+				res = loveHashMap.get(s);
+			}
+    	}
+    	return res;
+    }
     
+    public String getTypeAffection() {
+    	return typeAffection;
+    }
 
     @Override
     public boolean isObstacle() {

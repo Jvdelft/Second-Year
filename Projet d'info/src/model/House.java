@@ -20,7 +20,6 @@ public class House extends Building{
 	}
 	public void changeMoney(int i) {
 		money += i;
-		System.out.println(money);
 	}
 
 	public boolean isObstacle() {

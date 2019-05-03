@@ -51,6 +51,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("OPEN"));
 		initButton(new JButton("EAT IT"));
 		initButton(new JButton("GIVE FLOWER"));
+		initButton(new JButton("MAKE LOVE"));
+		initButton(new JButton("PLAY TOY"));
 		this.setLayout(this.box);
 		
 	}
@@ -66,27 +68,36 @@ public class ActionPanel extends JPanel implements ActionListener {
 		activableObjects = Game.getInstance().getActivableObjects();
 	}
 	public void updateVisibleButtons() {
+    	ArrayList <String> typeList = new ArrayList <String>();
+    	if (activableObjects != null) {
+    	for (ActivableObject object : activableObjects) {
+            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
+                if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") { // = Si l'objet peut etre utilisé par active_player
+                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
+                		typeList.add(((Sums)object).getTypeAffection());
+                	}
+                	else { typeList.add(object.getType());}
+                }
+            }
+        }
+    	if (active_player.getObjects().size() >0) {
+			if (((ActivableObject) active_player.getObjects().get(index)).getType() == "EAT"){
+				typeList.add("EAT");
+			}
+		}
+    	showButtons(typeList);
+    	}
+    }
+	
+	public void showButtons(ArrayList<String> typeList) {
 		ArrayList<JButton> mustAddButtons = new ArrayList<JButton>();
-		if (activableObjects != null) {
-			for (ActivableObject object : activableObjects) {
-				if (object.getPosX() == active_player.getFrontX() && object.getPosY() == active_player.getFrontY()) {
-					String type = object.getType();
-					if (type != "GIVE FLOWER" || active_player.getAgeRange() == "Adult") {
-						this.addButton(type);
-						mustAddButtons.add((JButton) buttons.get(type));
-					}
-				}
-			}
-			if (active_player.getObjects().size() >0) {
-				if (((ActivableObject) active_player.getObjects().get(index)).getType() == "EAT"){
-					this.addButton("EAT");
-					mustAddButtons.add(buttons.get("EAT"));
-				}
-			}
-			for (JButton object : allButtons) {
-				if (!(mustAddButtons.contains(object))) {
-					removeButton(object);
-				}
+		for (String type : typeList) {
+			this.addButton(type);
+			mustAddButtons.add((JButton) buttons.get(type));
+		}
+		for (JButton object : allButtons) {
+			if (!(mustAddButtons.contains(object))) {
+				removeButton(object);
 			}
 		}
 	}
@@ -97,24 +108,13 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		JButton buttonPressed = (JButton) e.getSource();
 		if (buttonPressed.isValid() && buttonPressed.getLocationOnScreen().getX()>1470) {
-			if (buttonPressed.getText() == "EAT") {
-				ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
-				objectToEat.activate(active_player);
-				active_player.getObjects().remove(objectToEat);
-				
-			}
-			if (buttonPressed.isValid() && (buttonPressed.getText() == "INTERACT" || buttonPressed.getText() == "GIVE FLOWER")) {
-				for (ActivableObject o : activableObjects) {
-					if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-						o.activate(active_player);
-					}
-				}
-			}
+			Game.getInstance().buttonPressed(buttonPressed.getText());
 		}
 		InventoryPanel.getInstance().updateInventory();
 		MapDrawer.getInstance().requestFocusInWindow();
 		updateVisibleButtons();
 	}
+	
 	public void setPlayer(Sums s) {
 		active_player = s;
 	}

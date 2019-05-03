@@ -8,9 +8,11 @@ public class Toy extends ActivableObject{
 		Random r = new Random();
 		value = r.nextInt(20-10+1)+1;
 		BringHappiness = r.nextInt(10-5+1)+1;
+		user = "Kid";
+		type = "PLAY TOY";
 	}
 	public void activate(Kid s) {
-		s.Play(this);
+		s.play(this);
 	}
 	public int getValue(){
 		return value;
@@ -19,8 +21,9 @@ public class Toy extends ActivableObject{
 		return BringHappiness;
 	}
 	public boolean isObstacle() {
-		return false;
+		return true;
 	}
 	public void makeSprite() {
+		sprite = Constantes.coin;
 	}
 }

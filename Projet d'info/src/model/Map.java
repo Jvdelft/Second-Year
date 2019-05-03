@@ -58,7 +58,6 @@ public class Map {
 	    	this.addObject(new Door(0,Math.round(sizeH/2)-1, Constantes.mapRock, 'E'));
 	    	this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapRock, 'N'));
 	    	this.addObject(new Door(sizeW-1,Math.round(sizeH/2)-1, Constantes.mapRock, 'W'));
-
 		}
 		else if (mapName.equals(Constantes.mapRock)) { //modifier sizeW, sizeH en fonction de la taille de la map
 	    	this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapBase, 'S'));
@@ -74,6 +73,7 @@ public class Map {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
 			this.addObject(new Toilet(Math.round(sizeW/2), 1));
 			this.addObject(new Sofa(1,Math.round(sizeH/2), 0));
+			this.addObject(new Toy(10,7));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (mapName.equals(Constantes.mapMarket)) {
@@ -107,6 +107,13 @@ public class Map {
 	}
 	public ArrayList<GameObject> getObjects(){
 		return objects;
+	}
+	public ArrayList<ActivableObject> getActivableObjects(){
+		ArrayList<ActivableObject> res = new ArrayList<ActivableObject>();
+		for (GameObject object : objects) {
+			if (object instanceof ActivableObject) { res.add((ActivableObject)object);}
+		}
+		return res;
 	}
 	public void setObjects(ArrayList<GameObject> o) {
 		if (o != null) {

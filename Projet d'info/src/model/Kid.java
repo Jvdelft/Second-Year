@@ -13,6 +13,7 @@ public class Kid extends Sums{
 		max_toilet = Constantes.max_toilet_kid;
 		max_faim = Constantes.max_faim_kid;
 		type = "PLAY";
+		ageRange = "Kid";
 		if (this.energy == 0) {
 			this.faim = max_faim;
 			this.energy = max_energy;
@@ -39,7 +40,8 @@ public class Kid extends Sums{
 		cost += jouet.getValue();
 		toys.add(jouet);
 	}
-	public void Play(Toy t) {
+	public void play(Toy t) {
+		this.happiness += t.BeHappy();
 		
 	}
 }

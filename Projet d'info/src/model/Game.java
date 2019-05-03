@@ -32,7 +32,7 @@ public class Game implements DeletableObserver, Runnable {
     private Timer timer;
     private Map currentMap;
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
-
+    private int index;
     private Game(Window window) {
     	this.window = window;
         initMaps();
@@ -90,6 +90,34 @@ public class Game implements DeletableObserver, Runnable {
 	        notifyView();
     	}
     }
+   
+   public void buttonPressed(String button) {
+   	switch (button) {
+   		case "EAT" : ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
+						 objectToEat.activate(active_player);
+						 active_player.getObjects().remove(objectToEat); break;
+   		case "INTERACT" : for (ActivableObject o : currentMap.getActivableObjects()) {
+							  		if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+							  			o.activate(active_player);
+							  		}
+							  } break;
+   		case "GIVE FLOWER" : for (ActivableObject o : currentMap.getActivableObjects()) {
+		  								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+		  									((Adult)o).receiveFlower(active_player);
+		  								}
+   							  } break;
+   		case "PLAY TOY" : for (ActivableObject o : currentMap.getActivableObjects()) {
+								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+									((Kid)active_player).play((Toy)o);
+								}
+   						  } break;
+   		case "MAKE LOVE" : for (ActivableObject o : currentMap.getActivableObjects()) {
+   								if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+   										((Adult)o).makeLove();
+   								}
+   						    } break;
+   	 }
+    }
     public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
         TimerTask repeatedTask = new TimerTask() {
             public void run() {
@@ -120,6 +148,7 @@ public class Game implements DeletableObserver, Runnable {
     	System.out.println("New baby");
     	Sums k = new Kid(1,1,h);
     	objectsOnMap.add(k);
+    	ActionPanel.getInstance().updateActivableList();
     	notifyView();
     }
     public void playerWait(long delay, Sums s, String type) {
