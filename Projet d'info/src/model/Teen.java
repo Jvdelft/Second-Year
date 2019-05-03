@@ -25,7 +25,7 @@ public class Teen extends Sums{
 		energy = 1;
 	}
 	public void smoke(Cigaret c) {
-		this.happiness += 1;
+		this.happiness += 5;
 		this.age += 1/1000;
 	}
 	public void makeSprite() {

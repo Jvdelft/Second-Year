@@ -1,6 +1,7 @@
 package model;
 
 import view.ActionPanel;
+import view.InventoryPanel;
 import view.MapDrawer;
 import view.Window;
 
@@ -33,6 +34,7 @@ public class Game implements DeletableObserver, Runnable {
     private Map currentMap;
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
+    private int indexInventory;
     private Game(Window window) {
     	this.window = window;
         initMaps();
@@ -98,24 +100,31 @@ public class Game implements DeletableObserver, Runnable {
    
    public void buttonPressed(String button) {
 	   switch (button) {
-	   	case "EAT" : ActivableObject objectToEat = (ActivableObject) active_player.getObjects().get(index);
-						 objectToEat.activate(active_player);
-						 active_player.getObjects().remove(objectToEat); break;
    		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
    		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
-   		default : getFrontObject().activate(active_player); 
+   		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
+   				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
    	   }
+	   InventoryPanel.getInstance().updateInventory();
+	   MapDrawer.getInstance().requestFocusInWindow();
+	   ActionPanel.getInstance().updateVisibleButtons();
    }
    
    public ActivableObject getFrontObject() {
+	   ActivableObject res = null;
 	   for (ActivableObject o : currentMap.getActivableObjects()) {
 			if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-				return o;
+				res = o;
 			}
 	   }
-	   return null;
+	   return res;
    }
-    public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
+   
+   public void setIndexInventory(int i) {
+	   indexInventory = i;
+   }
+   
+   public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
         TimerTask repeatedTask = new TimerTask() {
             public void run() {
             	ActionPanel.getInstance().updateActivableList();
@@ -173,21 +182,10 @@ public class Game implements DeletableObserver, Runnable {
     		}
     	}
     }
-    public void action() {
-    	ActivableObject aimedObject = null;
-        Sums owner = null;
-		for(GameObject object : objectsOnMap) {
-			if(object.isAtPosition(active_player.getFrontX(),active_player.getFrontY())){
-			    if(object instanceof ActivableObject){
-			        aimedObject = (ActivableObject) object;
-			    }
-			}
-		}
-		if(aimedObject != null){
-		    aimedObject.activate(active_player);
-		}
-        notifyView();
-		}
+    public void action() { // = appuyé sur interact ou premier bouton
+    	String button = ActionPanel.getInstance().getFirstVisibleButton();
+    	buttonPressed(button);
+    }
 
     private void notifyView() {
         window.update();
@@ -217,12 +215,9 @@ public class Game implements DeletableObserver, Runnable {
     }
 
     @Override
-    synchronized public void delete(Deletable ps, ArrayList<GameObject> loot) {
-    	Window.getInstance().getStatus().getActionPanel().updateActivableList();
+    synchronized public void delete(Deletable ps) {
         objectsOnMap.remove(ps);
-        if (loot != null) {
-            objectsOnMap.addAll(loot);
-        }
+        Window.getInstance().getStatus().getActionPanel().updateActivableList();
         notifyView();
     }
 
@@ -242,6 +237,7 @@ public class Game implements DeletableObserver, Runnable {
 			if (p instanceof Sums && x == p.getPosX() && y == p.getPosY()) {
 				active_player = (Sums) p;
 				window.setPlayer((Sums)p);
+				ActionPanel.getInstance().setPlayer(active_player);
 			}
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));

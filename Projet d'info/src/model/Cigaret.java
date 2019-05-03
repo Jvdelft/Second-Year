@@ -9,6 +9,9 @@ public class Cigaret extends DeletableObject{
 	}
 	public Cigaret() {
 		super();
+		user = "Teen";
+		type = "SMOKE";
+		LifePoint = 5;
 	}
 	public void activate (Sums s) {
 		System.out.println("Smoke");

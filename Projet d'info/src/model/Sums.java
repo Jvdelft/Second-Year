@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import view.Window;
 
-public abstract class Sums extends ActivableObject implements NeedToEat, Directable{
+public abstract class Sums extends ActivableObject implements NeedToEat, Directable, DeletableObserver{
 	protected String gender;
 	protected double age;
 	protected int faim;
@@ -52,6 +52,9 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		inventory.add(new Cigaret());
 		inventory.add(new Apple());
 		inventory.add(new Apple());
+		for (GameObject go : inventory) {
+			if (go instanceof DeletableObject) {((DeletableObject)go).attachDeletable(this); }
+		}
 	}
 	public Sums() {
 		super();
@@ -125,7 +128,11 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public String getTypeAffection() {
     	return typeAffection;
     }
-
+    
+    public void delete(Deletable d) {
+        inventory.remove(d);
+        Window.getInstance().getStatus().getActionPanel().updateActivableList();
+    }
     @Override
     public boolean isObstacle() {
         return true;

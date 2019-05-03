@@ -17,6 +17,7 @@ public class Adult extends Sums {
 		type = "GIVE FLOWER";
 		typeAffection = "MAKE LOVE";
 		ageRange = "Adult";
+		user = "Adult";
 		if (this.energy == 0) {
 			this.faim = max_faim;
 			this.energy = max_energy;

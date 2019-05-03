@@ -88,7 +88,6 @@ public class Constantes {
 			tree = ImageIO.read(new File("Images/tree.png"));
 			herb = ImageIO.read(new File("Images/ground.png"));
 			door = ImageIO.read(new File("Images/Door.png"));
-			imageList.add(door);
 			rock = ImageIO.read(new File("Images/Rock.png"));
 			house = ImageIO.read(new File("Images/House.png"));
 			market = ImageIO.read(new File("Images/market.png"));
@@ -106,6 +105,7 @@ public class Constantes {
 			apple = ImageIO.read(new File("Images/Apple.png"));
 			cigaret = ImageIO.read(new File("Images/cigaret.png"));
 			imageList.add(apple);
+			imageList.add(cigaret);
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
 			toilet = ImageIO.read(new File("Images/toilet.png"));
 			bubbleThought = ImageIO.read(new File("Images/bubbleThought.png"));

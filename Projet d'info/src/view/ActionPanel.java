@@ -82,9 +82,10 @@ public class ActionPanel extends JPanel implements ActionListener {
             }
         }
     	if (active_player.getObjects().size() >0) {
-			if (((ActivableObject) active_player.getObjects().get(index)).getType() == "EAT"){
-				typeList.add("EAT");
-			}
+    		ActivableObject object = ((ActivableObject) active_player.getObjects().get(index));
+    		if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") {
+    			typeList.add(object.getType());
+    		}
 		}
     	showButtons(typeList);
     	}
@@ -111,9 +112,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (buttonPressed.isValid() && buttonPressed.getLocationOnScreen().getX()>1470) {
 			Game.getInstance().buttonPressed(buttonPressed.getText());
 		}
-		InventoryPanel.getInstance().updateInventory();
-		MapDrawer.getInstance().requestFocusInWindow();
-		updateVisibleButtons();
 	}
 	
 	public void setPlayer(Sums s) {
@@ -155,12 +153,21 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public HashMap<String, JButton> getButtonsHashMap() {
 		return buttons;
 	}
+	public String getFirstVisibleButton() {
+		String res;
+		if (visibleButtons.contains((JButton) buttons.get("INTERACT"))) {
+			res = "INTERACT";
+		}
+		else { res = visibleButtons.get(0).getText(); }
+		return res;
+	}
 	public void setSelectedIndexInventory(int index) {
 		this.index = index;
 		if(this.index <0) {
 			this.index = 0;
 		}
 		updateVisibleButtons();
+		Game.getInstance().setIndexInventory(index);
 	}
 	public static ActionPanel getInstance() {
 		if (actionPanel_instance == null) {

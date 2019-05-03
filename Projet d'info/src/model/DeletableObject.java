@@ -22,6 +22,7 @@ public abstract class DeletableObject extends ActivableObject implements Deletab
     	if (observers.size() == 0) {
     		observers.add(po);
     	}
+    	else if (po instanceof Sums) { observers.add(po);}
     }
 
     //@Override
@@ -29,7 +30,7 @@ public abstract class DeletableObject extends ActivableObject implements Deletab
         this.LifePoint -= 1;
         if (LifePoint <= 0) {
         	for (DeletableObserver o : observers) {
-                o.delete(this, null);
+                o.delete(this);
         	}
         }
     }

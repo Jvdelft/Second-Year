@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public abstract class Food extends DeletableObject implements Deletable{
-	private ArrayList<DeletableObserver> observers = new ArrayList<DeletableObserver>();
     protected int NutritionalValue;
 	protected int EnergyValue;
 	protected Food(int X, int Y) {
@@ -29,20 +28,6 @@ public abstract class Food extends DeletableObject implements Deletable{
 
     // //////////////////////////////////////////////////////////////////////////////////////
 
-    /*@Override
-    public void attachDeletable(DeletableObserver po) {
-        observers.add(po);
-    }
-
-    @Override
-    public void notifyDeletableObserver() {
-        this.LifePoints -= 1;
-        if (LifePoints <= 0) {
-        	for (DeletableObserver o : observers) {
-                o.delete(this, null);
-        	}
-        }
-    }*/
 
     @Override
     public boolean isObstacle() {
