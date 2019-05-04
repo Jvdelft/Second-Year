@@ -36,7 +36,7 @@ public class Door extends ActivableObject{
 			case 'E' : e.teleportation(sizeW - 2 , Math.round(sizeH/2) - 1); break;
 			case 'H' : e.teleportation(e.getHouse().getDoor().getPosX(), e.getHouse().getDoor().getPosY() + 1); break;
 			case 'M' : e.teleportation(6, 6); break;
-			case 's' : Spa.getInstance().activate(e); e.teleportation (15, 25); break;
+			case 's' : Spa.getInstance().activate(e); e.teleportation (0, game.getCurrentMap().getSizeH() + 5); break;
 		}
 	}
 	
