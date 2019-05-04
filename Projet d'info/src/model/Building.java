@@ -5,7 +5,7 @@ public abstract class Building extends GameObject{
 		super(x,y);
 	}
 	protected Building() { super();}
-	public abstract int getSizeW();
+	public abstract int getSizeV();
 	public abstract int getSizeH();
 	public abstract boolean isObstacle();
 	public abstract Door getDoor();

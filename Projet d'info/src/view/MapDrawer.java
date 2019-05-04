@@ -106,18 +106,15 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
             else if(object instanceof Sums) {
             	drawSprites((Sums) object, g);
             }
-            else if (object instanceof Building) {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeW()*tileSize,((Building) object).getSizeH ()*tileSize, this);
+            else {
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeH()*tileSize,object.getSizeV()*tileSize, this);
+            }
+            /*else if (object instanceof Building) {
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV()*tileSize, this);
             }
             else{
             	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
-            // Decouper en fontions
-                
-
-                //int xCenter = x * tileSize + (tileSize-2)/2;
-                //int yCenter = y * tileSize + (tileSize-2)/2;
-                //g.drawLine(xCenter, yCenter, xCenter + deltaX, yCenter + deltaY);
-            }
+            }*/
         }
     }
 

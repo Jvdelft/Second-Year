@@ -3,15 +3,15 @@ package model;
 import view.Window;
 
 public class Spa extends Building{
-	private int sizeW = 7;
-	private int sizeH = 5;
+	private int sizeH = 7;
+	private int sizeV = 5;
 	private Door door;
 	private static Spa SpaInstance;
 	private int cleanliness;
 	public Spa(int x, int y) {
 		super(x,y);
 		cleanliness = 10;
-		door = new Door(Math.round(sizeW/2)+x-1,y+sizeH-1,Constantes.mapBase, 's');
+		door = new Door(Math.round(sizeH/2)+x-1,y+sizeV-1,Constantes.mapBase, 's');
 	}
 	public Spa() {
 		super();
@@ -19,11 +19,11 @@ public class Spa extends Building{
 	public boolean isObstacle() {
 		return true;
 	}
-	public int getSizeW() {
-		return sizeW;
-	}
 	public int getSizeH() {
 		return sizeH;
+	}
+	public int getSizeV() {
+		return sizeV;
 	}
 	public Door getDoor() {
 		return door;

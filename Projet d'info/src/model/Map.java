@@ -49,13 +49,13 @@ public class Map {
 	    	building.add(m);
 	    	building.add(spa);
 			for (Building b : building) {
-				for (int i = 0; i< b.getSizeH(); i++) {
-					this.addObject(new Border(b.getPosX(),i+b.getPosY()));
-					this.addObject(new Border (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
+				for (int i = 0; i< b.getSizeV(); i++) {
+					this.addObject(new Block(b.getPosX(),i+b.getPosY()));
+					this.addObject(new Block (b.getPosX()+b.getSizeH()-1,i+b.getPosY()));
 				}
-				for (int i = 0; i< b.getSizeW(); i++) {
-					this.addObject(new Border(i+b.getPosX(),b.getPosY()));
-					this.addObject(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
+				for (int i = 0; i< b.getSizeH(); i++) {
+					this.addObject(new Block(i+b.getPosX(),b.getPosY()));
+					this.addObject(new Block (i+b.getPosX(),b.getPosY()+b.getSizeV()-1));
 				}
 				this.addObject(b.getDoor());
 			}
@@ -88,6 +88,10 @@ public class Map {
 			Fridge f2 = new Fridge(3, 1);
 			Fridge f3 = new Fridge(1,2);
 			Fridge f4 = new Fridge(1,3);
+			MarketShelve m = new MarketShelve(10,10);
+			Block b = new Block(11, 10, "pancarte1");
+			this.addObject(b);
+			this.addObject(m);
 			this.addObject(f);
 			this.addObject(f2);
 			this.addObject(f3);
