@@ -125,6 +125,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 			this.remove(button);
 			visibleButtons.remove(button);
 		}
+		
 	}
 	public void addButton(String s) {
 		JButton button = (JButton) buttons.get(s);

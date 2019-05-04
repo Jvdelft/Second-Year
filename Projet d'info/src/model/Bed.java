@@ -18,4 +18,10 @@ public class Bed extends ActivableObject{
 
 	}
 
+	@Override
+	public void activate(Sums s) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
