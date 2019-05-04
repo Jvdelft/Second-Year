@@ -24,6 +24,6 @@ public class Toy extends ActivableObject{
 		return true;
 	}
 	public void makeSprite() {
-		sprite = Constantes.coin;
+		sprite = Constantes.toy;
 	}
 }

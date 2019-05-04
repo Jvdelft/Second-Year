@@ -27,11 +27,12 @@ public class Map {
 	public void initMap() {
 		House h = new House(20,1);
 		if (mapName.equals(Constantes.mapBase)) {
-	    	Sums p = new Adult(10, 10,h);
-	    	Sums q = new Kid(5,5,h);
+	    	Sums p = new Adult(10, 9,h);
+	    	Sums q = new Kid(5,6,h);
 	    	Sums r = new Elder(15,15,h);
 	    	Sums s = new Teen(24,6,h);
 	    	Market m = new Market(4,2);
+	    	Spa spa = new Spa(4, 10);
 	    	
 	    	this.addObject(h);
 	    	this.addObject(p);
@@ -39,18 +40,20 @@ public class Map {
 	    	this.addObject(r);
 	    	this.addObject(s);
 	    	this.addObject(m);
+	    	this.addObject(spa);
 	    	Cigaret c = new Cigaret(13,15);
 	    	this.addObject(c);
 	    	this.addObject(new Apple(7,7));
 	    	ArrayList <Building> building = new ArrayList<Building>();
 	    	building.add(h);
 	    	building.add(m);
+	    	building.add(spa);
 			for (Building b : building) {
 				for (int i = 0; i< b.getSizeH(); i++) {
 					this.addObject(new Border(b.getPosX(),i+b.getPosY()));
 					this.addObject(new Border (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
 				}
-				for (int i = 0; i< b.getSizeH(); i++) {
+				for (int i = 0; i< b.getSizeW(); i++) {
 					this.addObject(new Border(i+b.getPosX(),b.getPosY()));
 					this.addObject(new Border (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
 				}

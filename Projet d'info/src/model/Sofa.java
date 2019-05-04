@@ -42,9 +42,9 @@ public class Sofa extends ActivableObject implements Directable{
 		return 0;
 	}
 	public void activate(Sums s) {
+		Game.getInstance().playerWait(5000, s, s.getAgeRange());
 		s.teleportation(this.posX, this.posY);
 		s.setDirection(this.direction);
-		Game.getInstance().playerWait(5000, s, s.getAgeRange());
 		s.setEnergy((int) (s.getEnergy() + 10));
 	}
 

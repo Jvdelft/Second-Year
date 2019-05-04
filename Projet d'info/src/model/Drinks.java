@@ -43,7 +43,7 @@ public class Drinks extends ActivableObject implements Deletable{
         this.LifePoint -= 1;
         if (LifePoint <= 0) {
         	for (DeletableObserver o : observers) {
-                o.delete(this, null);
+                o.delete(this);
         	}
         }
     }

@@ -22,7 +22,6 @@ public class Game implements DeletableObserver, Runnable {
     private ArrayList<Sums> sums = new ArrayList<Sums>();
     private Sums active_player = null;
     private Sound sound;
-
     private Window window;
     private int sizeW;
     private int sizeH;
@@ -121,7 +120,15 @@ public class Game implements DeletableObserver, Runnable {
    }
    
    public void setIndexInventory(int i) {
-	   indexInventory = i;
+	   if (i <0) {
+		   indexInventory = 0;
+	   }
+	   else if (i<active_player.getObjects().size()) {
+		   indexInventory = i;
+	   }
+	   else {
+		   indexInventory = active_player.getObjects().size()-1;
+	   }
    }
    
    public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
@@ -160,6 +167,8 @@ public class Game implements DeletableObserver, Runnable {
     public void playerWait(long delay, Sums s, String type) {
     	setNextActivePlayer(s);
     	s.setIsPlayable(false);
+    	int x = s.getPosX();
+		int y = s.getPosY();
     	if (type == "TOILET") {
     		Thread threadSound = new Thread (new Sound("pee",Math.round(delay)));
     		threadSound.start();
@@ -167,10 +176,12 @@ public class Game implements DeletableObserver, Runnable {
     	TimerTask waitTask = new TimerTask() {
     		public void run() {
     			s.setIsPlayable(true);
+    			s.teleportation(x, y);
     		}
     	};
     	timer.schedule(waitTask, delay);
     }
+    
     public void setNextActivePlayer(Sums s) {
     	for (GameObject perso : objectsOnMap) {
     		if (perso instanceof Sums) {

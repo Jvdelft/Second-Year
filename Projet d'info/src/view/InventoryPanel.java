@@ -32,6 +32,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 	private JButton down;
 	private Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
 	private static InventoryPanel inventoryPanel_instance;
+	private int lastSelectedIndex;
 	private InventoryPanel() {
 		Constantes.makeList();
 		limits.weightx = 1;
@@ -118,9 +119,14 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		}
 	}
 	public void valueChanged(ListSelectionEvent e) {
-		ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
-		MapDrawer.getInstance().requestFocusInWindow();
-		ActionPanel.getInstance().updateVisibleButtons();
+		if (list.getSelectedIndex() == lastSelectedIndex) {
+			ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
+			MapDrawer.getInstance().requestFocusInWindow();
+			ActionPanel.getInstance().updateVisibleButtons();
+		}
+		else {
+			lastSelectedIndex = list.getSelectedIndex();
+		}
 	}
 	public static InventoryPanel getInstance() {
 		if (inventoryPanel_instance == null) {
