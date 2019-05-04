@@ -81,7 +81,7 @@ public class ActionPanel extends JPanel implements ActionListener {
                 }
             }
         }
-    	if (active_player.getObjects().size() >0) {
+    	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > index) {
     		ActivableObject object = ((ActivableObject) active_player.getObjects().get(index));
     		if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") {
     			typeList.add(object.getType());
@@ -94,13 +94,15 @@ public class ActionPanel extends JPanel implements ActionListener {
 	public void showButtons(ArrayList<String> typeList) {
 		ArrayList<JButton> mustAddButtons = new ArrayList<JButton>();
 		for (String type : typeList) {
-			this.addButton(type);
 			mustAddButtons.add((JButton) buttons.get(type));
 		}
 		for (JButton object : allButtons) {
 			if (!(mustAddButtons.contains(object))) {
 				removeButton(object);
 			}
+		}
+		for (JButton type : mustAddButtons) {
+			this.addButton(type.getText());
 		}
 	}
 	public void paintComponent(Graphics g) {
@@ -122,12 +124,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (visibleButtons.contains(button)) {
 			this.remove(button);
 			visibleButtons.remove(button);
-			x--;
-			if (x < 0) {
-				y--;
-				x +=3;
-			}
 		}
+		
 	}
 	public void addButton(String s) {
 		JButton button = (JButton) buttons.get(s);
@@ -135,6 +133,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (visibleButtons.contains(button)) {
 			notIn = false;
 		}
+		x = visibleButtons.size()%3;
+		y = visibleButtons.size()/3;
 		if (y < 3 && notIn && button != null) {
 			limits.gridx = x;
 			limits.gridy = y;
@@ -143,22 +143,19 @@ public class ActionPanel extends JPanel implements ActionListener {
 			button.setAlignmentY(Component.CENTER_ALIGNMENT);
 			this.add(button);
 			visibleButtons.add(button);
-			x++;
-			if (x>2) {
-				y ++;
-				x -= 3;
-			}
 		}
 	}
 	public HashMap<String, JButton> getButtonsHashMap() {
 		return buttons;
 	}
 	public String getFirstVisibleButton() {
-		String res;
+		String res = null;
 		if (visibleButtons.contains((JButton) buttons.get("INTERACT"))) {
 			res = "INTERACT";
 		}
-		else { res = visibleButtons.get(0).getText(); }
+		else if (!(visibleButtons.isEmpty())){
+			res = visibleButtons.get(0).getText();
+			}
 		return res;
 	}
 	public void setSelectedIndexInventory(int index) {

@@ -22,7 +22,6 @@ public class Game implements DeletableObserver, Runnable {
     private ArrayList<Sums> sums = new ArrayList<Sums>();
     private Sums active_player = null;
     private Sound sound;
-
     private Window window;
     private int sizeW;
     private int sizeH;
@@ -121,7 +120,15 @@ public class Game implements DeletableObserver, Runnable {
    }
    
    public void setIndexInventory(int i) {
-	   indexInventory = i;
+	   if (i <0) {
+		   indexInventory = 0;
+	   }
+	   else if (i<active_player.getObjects().size()) {
+		   indexInventory = i;
+	   }
+	   else {
+		   indexInventory = active_player.getObjects().size()-1;
+	   }
    }
    
    public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
