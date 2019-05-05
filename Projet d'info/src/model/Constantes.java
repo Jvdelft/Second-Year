@@ -96,6 +96,8 @@ public class Constantes {
 	public static BufferedImage spriteRTeen;
 	public static BufferedImage spriteFaceTeen;
 	public static BufferedImage bedOne;
+	public static BufferedImage arrowLeft;
+	public static BufferedImage arrowRight;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -163,6 +165,10 @@ public class Constantes {
     		spriteFaceTeen = ImageIO.read(new File("Images/Sprite Teen M Face/1.png"));
     		bedOne = ImageIO.read(new File("Images/bed1.png"));
 			wall = ImageIO.read(new File("Images/wall.jpg"));
+			arrowLeft = ImageIO.read(new File("Images/arrowleft.png"));
+			arrowRight = ImageIO.read(new File("Images/arrowright.png"));
+			imageList.add(arrowLeft);
+			imageList.add(arrowRight);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

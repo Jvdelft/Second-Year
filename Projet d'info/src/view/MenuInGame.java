@@ -25,13 +25,13 @@ import javax.swing.JPanel;
 import model.Constantes;
 
 public class MenuInGame extends JPanel{
-	private JButton Resume = new JButton("RESUME");
-	private JButton Quit = new JButton("QUIT");
-	private JButton SaveAndQuit = new JButton("SAVE AND QUIT");
-	private JButton Help = new JButton("HELP");
+	private JButton resume = new JButton("RESUME");
+	private JButton quit = new JButton("QUIT");
+	private JButton saveAndQuit = new JButton("SAVE AND QUIT");
+	private JButton help = new JButton("HELP");
 	private GridBagLayout box;
 	private GridBagConstraints limits = new GridBagConstraints();
-	private ArrayList<JButton> Buttons = new ArrayList<JButton>();
+	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	private JPanel panel = new JPanel();
 	public MenuInGame() {
 		
@@ -48,20 +48,20 @@ public class MenuInGame extends JPanel{
 		panel.setOpaque(false);
 		limits.weightx = 1;
 		limits.weighty = 1;
-		initButton(Resume);
-		initButton(Quit);
-		initButton(SaveAndQuit);
-		initButton(Help);
+		initButton(resume);
+		initButton(quit);
+		initButton(saveAndQuit);
+		initButton(help);
 		
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
 	public ArrayList<JButton> getButtons(){
-		return Buttons;
+		return buttons;
 	}
 	private void initButton(JButton b) {
-		Buttons.add(b);
+		buttons.add(b);
 		b.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
 		b.setForeground(Color.WHITE);
 		b.setBackground(Color.BLUE);

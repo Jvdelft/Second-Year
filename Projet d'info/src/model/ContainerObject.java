@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import controller.Keyboard;
 import view.MapDrawer;
 
-public class ContainerObject extends ActivableObject{
+public class ContainerObject extends Furniture{
 	private ArrayList<GameObject> objectContained = new ArrayList<GameObject>();
 	private int row;
 	public ContainerObject(int x, int y) {
@@ -51,6 +51,10 @@ public class ContainerObject extends ActivableObject{
 	@Override
 	public void makeSprite() {
 		
+	}
+	@Override
+	public int getDirection() {
+		return direction;
 	}
 
 }

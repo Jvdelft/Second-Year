@@ -1,7 +1,6 @@
 package model;
 
-public class Sofa extends ActivableObject implements Directable{
-	private int direction;
+public class Sofa extends Furniture implements Directable{
 	public Sofa(int x, int y, int direction) {
 		super(x,y);
 		this.direction = direction;
@@ -10,17 +9,6 @@ public class Sofa extends ActivableObject implements Directable{
 	public Sofa() {
 		super();
 	}
-	public void rotate(int x, int y) {
-        if(x == 0 && y == -1)
-            direction = NORTH;
-        else if(x == 0 && y == 1)
-            direction = SOUTH;
-        else if(x == 1 && y == 0)
-            direction = EAST;
-        else if(x == -1 && y == 0)
-            direction = WEST;
-        makeSprite();
-    }
 
 	@Override
 	public boolean isObstacle() {
@@ -39,7 +27,7 @@ public class Sofa extends ActivableObject implements Directable{
 
 	@Override
 	public int getDirection() {
-		return 0;
+		return direction;
 	}
 	public void activate(Sums s) {
 		Game.getInstance().playerWait(5000, s, s.getAgeRange());

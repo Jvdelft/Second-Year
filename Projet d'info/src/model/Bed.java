@@ -1,6 +1,6 @@
 package model;
 
-public class Bed extends ActivableObject{
+public class Bed extends Furniture{
 
 	@Override
 	public boolean isObstacle() {
@@ -16,6 +16,12 @@ public class Bed extends ActivableObject{
 	public void activate(Sums s) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public int getDirection() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

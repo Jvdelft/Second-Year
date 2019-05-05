@@ -62,6 +62,8 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     private int sizeW;
     private int tileSize;
     private String textToPaint;
+    private PanelToDrawArrows panelToDrawArrows = null;
+    private ButtonsForPlacingFurniture panelButtons = null;
 	
     private MapDrawer() {
         this.setFocusable(true);
@@ -106,6 +108,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
             int y = object.getPosY();
             if (x < 0 || y < 0) {
             	continue;
+            }
+            else if (object instanceof ActivableObject) {
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeH()*tileSize,object.getSizeV()*tileSize, this);
             }
             else if(object instanceof Sums) {
             	drawSprites((Sums) object, g);
@@ -289,8 +294,25 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		row = 0;
 		
 	}
-	public void drawArrowsToDirect() {
-		
+	public void removeDrawArrows() {
+		this.remove(panelToDrawArrows);
+		this.remove(panelButtons);
+	}
+	public void drawArrowsToDirect(GameObject o) {
+		if (panelToDrawArrows == null) {
+			panelToDrawArrows = new PanelToDrawArrows();
+		}
+		if (panelButtons == null) {
+			panelButtons = new ButtonsForPlacingFurniture();
+		}
+		int max = Constantes.image_size*3;
+		int min = Constantes.image_size*2;
+		int pref = Constantes.image_size*5/2;
+		String width = Integer.toString(min) + ":" + Integer.toString(pref) + ":" + Integer.toString(max);
+		String pos = "pos " + (textToPaint.length()*21) + "px " + 5 + "px," + "width " + (width) + ", height " +(width);
+		this.add(panelToDrawArrows, pos);
+		pos = "pos " + (textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);
+		this.add(panelButtons,pos);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

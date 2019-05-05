@@ -15,18 +15,21 @@ public class Map {
 	private int sizeW;
 	private int sizeH;
 	private int tileSize;
-	private boolean [][] positionTaken;
+	private boolean positionTaken[][];
 	private String mapName;
 	private ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
 	private boolean notInitHouse = true;
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
-	MapDrawer mapDrawer = MapDrawer.getInstance();
+	private MapDrawer mapDrawer = MapDrawer.getInstance();
+	private GameObject lastObjectPlaced = null;
 	public Map(String path) {
 		this.mapName = path;
-		tiles = MapReader.ReadMap(path,this);
+		MapReader.readWidth(path);
 		sizeW = MapReader.getwTile(); //problème avec pixels 
 		sizeH = (sizeW * 2)/3 ;
 		tileSize = 1440 / sizeW;
+		positionTaken = new boolean[sizeW][sizeH];
+		tiles = MapReader.ReadMap(path,this);
 		initMap();
 		
 		
@@ -64,7 +67,7 @@ public class Map {
 					this.addObject(new Block(i+b.getPosX(),b.getPosY()));
 					this.addObject(new Block (i+b.getPosX(),b.getPosY()+b.getSizeV()-1));
 				}
-				this.addObject(b.getDoor());
+				objects.add(b.getDoor());
 			}
 			
 	    	this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapRock, 'S'));
@@ -110,7 +113,7 @@ public class Map {
 	}
 	public void initHouse(int x,int y){
 		mapDrawer.removeKeyListener(Keyboard.getInstance());
-		if (objectsToPlace.size() != 0) {
+		if (objectsToPlace.size() != 0 && lastObjectPlaced != objectsToPlace.get(0)) {
 			initObjectInHouse(objectsToPlace.get(0), x, y);
 		}
 	}
@@ -118,22 +121,52 @@ public class Map {
 		if (x > 0 && y >0 && x < sizeW-1 && y < sizeH-1) {
 			o.setPosX(x);
 			o.setPosY(y);
-			x = 0;
-			y = 0;
-			objectsToPlace.remove(0);
-			objects.add(o);
-			mapDrawer.drawArrowsToDirect();
-			if (objectsToPlace.size()>0) {
-				mapDrawer.setTextToPaint("Where do you want to put the " + objectsToPlace.get(0).getClass().getSimpleName() + " ?");
-			}
-			else {
-				mapDrawer.setTextToPaint(null);
-				mapDrawer.addKeyListener(Keyboard.getInstance());
+			addObject(o);
+			if (objects.contains(o)) {
+				mapDrawer.drawArrowsToDirect(o);
 			}
 		}
 	}
+	public void placeNextObject() {
+		if (objectsToPlace.size()>0 && objectsToPlace.contains(lastObjectPlaced)) {
+			objectsToPlace.remove(0);
+	    	}
+		if (objectsToPlace.size()>0) {
+			mapDrawer.removeDrawArrows();
+			mapDrawer.setTextToPaint("Where do you want to put the " + objectsToPlace.get(0).getClass().getSimpleName() + " ?");
+		}
+		else {
+			mapDrawer.setTextToPaint(null);
+			mapDrawer.addKeyListener(Keyboard.getInstance());
+			mapDrawer.removeDrawArrows();
+			mapDrawer.requestFocusInWindow();
+			notInitHouse = false;
+		}
+		
+	}
 	public void addObject(GameObject o) {
-		objects.add(o);
+		lastObjectPlaced = o;
+		if (o != null) {
+			if (o instanceof Sums) {
+				objects.add(o);
+			}
+			else if (!(positionTaken[o.getPosX()][o.getPosY()])) {
+		    	objects.add(o);
+		    	positionTaken[o.getPosX()][o.getPosY()] = true;
+		    }
+			else {
+				lastObjectPlaced = null;
+			}
+		   /* else {
+		    	for (int i = 0;i< sizeW-o.getPosX(); i++) {
+		    		if (!(positionTaken[i+o.getPosX()][o.getPosY()])) {
+		    			o.setPosX(i+o.getPosX());
+		    	    	objects.add(o);
+		    	    	positionTaken[o.getPosX()][o.getPosY()] = true;
+		    	    }
+		    	}
+		    }*/
+	    }
 	}
 	public int getSizeW() {
 		return sizeW;
@@ -157,9 +190,23 @@ public class Map {
 		}
 		return res;
 	}
-	public void setObjects(ArrayList<GameObject> o) {
-		if (o != null) {
-			objects = o;
+	public void setObjects(ArrayList<GameObject> objectCreated) {
+		if (objects != null) {
+			for (GameObject o : objectCreated) {
+				if (!(positionTaken[o.getPosX()][o.getPosY()])) {
+			    	objects.add(o);
+			    	positionTaken[o.getPosX()][o.getPosY()] = true;
+				}
+			    /*else {
+			    	for (int i = 0;i< sizeW - o.getPosX(); i++) {
+			    		if (!(positionTaken[i][o.getPosY()])) {
+			    			o.setPosX(i);
+			    	    	objects.add(o);
+			    	    	positionTaken[i][o.getPosY()] = true;
+			    	    }
+			    	}
+			    }*/
+		    }
 		}
 	}
 	public boolean isNotInitHouse() {
@@ -170,5 +217,11 @@ public class Map {
 	}
 	public ArrayList<GameObject> getObjectsToPlace(){
 		return objectsToPlace;
+	}
+	public GameObject getLastObjectPlace() {
+		return lastObjectPlaced;
+	}
+	public void setLastObjectPlace(GameObject o) {
+		lastObjectPlaced = o;
 	}
 }

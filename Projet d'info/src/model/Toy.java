@@ -1,6 +1,6 @@
 package model;
 import java.util.Random;
-public class Toy extends ActivableObject{
+public class Toy extends Furniture{
 	private int value;
 	private int BringHappiness;
 	public Toy(int x, int y) {
@@ -25,5 +25,9 @@ public class Toy extends ActivableObject{
 	}
 	public void makeSprite() {
 		sprite = Constantes.toy;
+	}
+	@Override
+	public int getDirection() {
+		return 0;
 	}
 }
