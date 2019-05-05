@@ -7,6 +7,7 @@ import view.Window;
 
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -34,6 +35,7 @@ public class Game implements DeletableObserver, Runnable {
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
     private int indexInventory;
+    private ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
     private Game(Window window) {
     	this.window = window;
         initMaps();
@@ -54,6 +56,7 @@ public class Game implements DeletableObserver, Runnable {
     	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
     	currentMap = maps.get(Constantes.mapBase);
     	objectsOnMap = currentMap.getObjects();
+    	System.out.println(objectsOnMap);
     	MapDrawer.getInstance().changeMap(currentMap);
     	for(GameObject o : objectsOnMap) {
     		if (o instanceof Sums) {
@@ -70,10 +73,13 @@ public class Game implements DeletableObserver, Runnable {
     	}
     }
 
-    public void movePlayer(int x, int y) {
-    	if (active_player.isPlayable()) {
-	        int nextX = active_player.getPosX() + x;
-	        int nextY = active_player.getPosY() + y;
+    public void movePlayer(int x, int y, Sums p) {
+    	if (p == null) {
+    		p = active_player;
+    	}
+    	if (p.isPlayable()) {
+	        int nextX = p.getPosX() + x;
+	        int nextY = p.getPosY() + y;
 	
 	        boolean obstacle = false;
 	        for (GameObject object : objectsOnMap) {
@@ -84,12 +90,12 @@ public class Game implements DeletableObserver, Runnable {
 	                break;
 	            }
 	        }
-	        active_player.rotate(x, y);
+	        p.rotate(x, y);
 	        if (obstacle == false) {
-	            active_player.move(x, y);
-	            active_player.tire();
+	            p.move(x, y);
+	            p.tire();
 	        }
-	        if (active_player instanceof Adult) {
+	        if (p instanceof Adult) {
 	        	
 	        }
 	        ActionPanel.getInstance().updateVisibleButtons();
@@ -147,15 +153,58 @@ public class Game implements DeletableObserver, Runnable {
         		//sound.play("Never_Surrender");
         	}
         };
+        TimerTask moveTask = new TimerTask() {
+        	public void run() {
+        		Sums s = getRandomSums();
+        		int posX;
+        		int posY;
+        		Door closestDoor = getClosestDoor(s);
+        		threads.add(0, new AStarThread(Game.getInstance(), s, closestDoor.getPosX(), closestDoor.getPosY()));
+        		((AStarThread) threads.get(0)).run();
+        	}
+        };
         timer = new Timer("Timer");
         timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
+        timer.scheduleAtFixedRate(moveTask, 10000L, 10000L);
         //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
     }
 
     public void tirePlayer() {
     	active_player.tire();
     	notifyView();
+    }
+    private Door getClosestDoor(Sums s) {
+    	Door closestDoor = null;
+    	int distanceMin = 50000;
+    	for (GameObject o : objectsOnMap) {
+    		if (o instanceof Door) {
+    			System.out.println(o);
+    			if ((o.getPosX()+s.getPosX())*(o.getPosX()+s.getPosX()) + (o.getPosY()+s.getPosY())*(o.getPosY()+s.getPosY()) < distanceMin){
+    				closestDoor = (Door) o;
+    				distanceMin = (o.getPosX()+s.getPosX())*(o.getPosX()+s.getPosX()) + (o.getPosY()+s.getPosY())*(o.getPosY()+s.getPosY());
+    			}
+    		}
+    	}
+    	return closestDoor;
+    }
+    private Sums getRandomSums() {
+    	Sums res = null;
+    	Collections.shuffle(objectsOnMap);
+    	for (GameObject o : objectsOnMap) {
+        	boolean isAlreadyMoving = false;
+    		if (o instanceof Sums && o != active_player) {
+    			for (AStarThread t : threads) {
+    				if (t.getSums() == o) {
+    					isAlreadyMoving = true;
+    				}
+    			}
+    			if (!(isAlreadyMoving)) {
+        			res = (Sums) o;
+        		}
+    		}
+    	}
+    	return res;
     }
     public void makeBaby(House h) {
     	System.out.println("New baby");

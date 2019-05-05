@@ -110,13 +110,13 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
             	continue;
             }
             else if (object instanceof ActivableObject) {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeH()*tileSize,object.getSizeV()*tileSize, this);
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
             }
             else if(object instanceof Sums) {
             	drawSprites((Sums) object, g);
             }
             else {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeH()*tileSize,object.getSizeV()*tileSize, this);
+            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
             }
             if (textToPaint != null) {
             	g.setColor(Color.WHITE);

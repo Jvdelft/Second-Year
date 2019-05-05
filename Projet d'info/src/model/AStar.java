@@ -17,8 +17,8 @@ import view.MapDrawer;
 
 public class AStar {
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
-	private int mapSizeW = mapDrawer.getDimension().width;
-	private int mapSizeH = mapDrawer.getDimension().height;
+	private int mapSizeW = mapDrawer.getCurrentMap().getSizeW();
+	private int mapSizeH = mapDrawer.getCurrentMap().getSizeH();
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;
@@ -33,6 +33,7 @@ public class AStar {
 		endI = xf;
 		endJ = yf;
 		grid = new Cell[mapSizeH][mapSizeW];
+		System.out.println(("xi :" + xi + "yi :" + yi + "xf :" + xf + "yf :" + yf));
 
 
         closed = new boolean[mapSizeH][mapSizeW];

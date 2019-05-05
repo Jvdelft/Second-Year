@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 public abstract class GameObject {
     protected int posX;
     protected int posY;
+    protected int sizeW = 1;
     protected int sizeH = 1;
-    protected int sizeV = 1;
     @JsonIgnore
     protected BufferedImage sprite;
 
@@ -28,20 +28,20 @@ public abstract class GameObject {
         return this.posY;
     }
     
+    public int getSizeW() {
+    	return this.sizeW;
+    }
+    
     public int getSizeH() {
     	return this.sizeH;
     }
     
-    public int getSizeV() {
-    	return this.sizeV;
+    public void setSizeW(int i) {
+    	sizeW = i;
     }
     
     public void setSizeH(int i) {
     	sizeH = i;
-    }
-    
-    public void setSizeV(int i) {
-    	sizeV = i;
     }
  
     public boolean isAtPosition(int x, int y) {

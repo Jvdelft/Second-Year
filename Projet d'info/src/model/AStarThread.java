@@ -21,10 +21,10 @@ public class AStarThread implements Runnable{
 		while(direction != -1) {
 			direction = (new AStar(p.getPosX(), p.getPosY(), x, y, g.getGameObjects())).getNextStep();
 			switch (direction) {
-				case 0 : g.movePlayer(1,0); break;
-				case 1 : g.movePlayer(0,-1); break;
-				case 2 : g.movePlayer(-1,0); break;
-				case 3 : g.movePlayer(0,1); break;
+				case 0 : g.movePlayer(1,0,p); break;
+				case 1 : g.movePlayer(0,-1,p); break;
+				case 2 : g.movePlayer(-1,0,p); break;
+				case 3 : g.movePlayer(0,1,p); break;
 			}
 			try {
 				Thread.sleep(500);
@@ -34,6 +34,9 @@ public class AStarThread implements Runnable{
 			}
 		}
 		}
+	}
+	public Sums getSums() {
+		return p;
 	}
 		
 

@@ -1,12 +1,12 @@
 package model;
 
 public class Market extends Building{
-	private int sizeH = 5;
-	private int sizeV = 4;
+	private int sizeW = 5;
+	private int sizeH = 4;
 	private Door door;
 	public Market(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeH/2)+x,y+sizeV-1,Constantes.mapMarket, 'S');
+		door = new Door(Math.round(sizeH/2)+x,y+sizeH-1,Constantes.mapMarket, 'S');
 	}
 	public Market() {
 		super();
@@ -14,11 +14,11 @@ public class Market extends Building{
 	public boolean isObstacle() {
 		return true;
 	}
+	public int getSizeW() {
+		return sizeW;
+	}
 	public int getSizeH() {
 		return sizeH;
-	}
-	public int getSizeV() {
-		return sizeV;
 	}
 	public Door getDoor() {
 		return door;

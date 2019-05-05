@@ -59,13 +59,13 @@ public class Map {
 	    	building.add(m);
 	    	building.add(spa);
 			for (Building b : building) {
-				for (int i = 0; i< b.getSizeV(); i++) {
-					this.addObject(new Block(b.getPosX(),i+b.getPosY()));
-					this.addObject(new Block (b.getPosX()+b.getSizeH()-1,i+b.getPosY()));
-				}
 				for (int i = 0; i< b.getSizeH(); i++) {
+					this.addObject(new Block(b.getPosX(),i+b.getPosY()));
+					this.addObject(new Block (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
+				}
+				for (int i = 0; i< b.getSizeW(); i++) {
 					this.addObject(new Block(i+b.getPosX(),b.getPosY()));
-					this.addObject(new Block (i+b.getPosX(),b.getPosY()+b.getSizeV()-1));
+					this.addObject(new Block (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
 				}
 				objects.add(b.getDoor());
 			}
