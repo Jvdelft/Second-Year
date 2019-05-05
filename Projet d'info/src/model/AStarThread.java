@@ -5,12 +5,14 @@ public class AStarThread implements Runnable{
 	private Sums p;
 	private int x;
 	private int y;
+	private Door door;
 
-	public AStarThread(Game g, Sums p, int x, int y) {
+	public AStarThread(Game g, Sums p, int x, int y, Door door) {
 		this.g= g;
 		this.p = p;
 		this.x = x;
 		this.y = y;
+		this.door = door;
 		
 	}
 	
@@ -25,9 +27,10 @@ public class AStarThread implements Runnable{
 				case 1 : g.movePlayer(0,-1,p); break;
 				case 2 : g.movePlayer(-1,0,p); break;
 				case 3 : g.movePlayer(0,1,p); break;
+				default : door.activate(p); break;
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import controller.Keyboard;
 import model.Constantes;
 
 public class MenuInGame extends JPanel{

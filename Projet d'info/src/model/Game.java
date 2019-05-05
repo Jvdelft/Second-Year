@@ -18,6 +18,8 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.omg.CosNaming.IstringHelper;
 
+import controller.Keyboard;
+
 public class Game implements DeletableObserver, Runnable {
 	private HashMap<String, Map> maps= new HashMap <String, Map>();
     private ArrayList<Sums> sums = new ArrayList<Sums>();
@@ -56,7 +58,6 @@ public class Game implements DeletableObserver, Runnable {
     	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
     	currentMap = maps.get(Constantes.mapBase);
     	objectsOnMap = currentMap.getObjects();
-    	System.out.println(objectsOnMap);
     	MapDrawer.getInstance().changeMap(currentMap);
     	for(GameObject o : objectsOnMap) {
     		if (o instanceof Sums) {
@@ -73,7 +74,8 @@ public class Game implements DeletableObserver, Runnable {
     	}
     }
 
-    public void movePlayer(int x, int y, Sums p) {
+    public void movePlayer(int x, int y, Sums sums) {
+    	Sums p = sums;
     	if (p == null) {
     		p = active_player;
     	}
@@ -93,7 +95,9 @@ public class Game implements DeletableObserver, Runnable {
 	        p.rotate(x, y);
 	        if (obstacle == false) {
 	            p.move(x, y);
-	            p.tire();
+	            if (p == active_player) {
+	            	p.tire();
+	            }
 	        }
 	        if (p instanceof Adult) {
 	        	
@@ -156,17 +160,26 @@ public class Game implements DeletableObserver, Runnable {
         TimerTask moveTask = new TimerTask() {
         	public void run() {
         		Sums s = getRandomSums();
-        		int posX;
-        		int posY;
         		Door closestDoor = getClosestDoor(s);
-        		threads.add(0, new AStarThread(Game.getInstance(), s, closestDoor.getPosX(), closestDoor.getPosY()));
-        		((AStarThread) threads.get(0)).run();
+        		if (s != null) {
+	        		int posX = closestDoor.getPosX();
+	        		int posY = closestDoor.getPosY();
+	        		switch(String.valueOf(closestDoor.getChar())) {
+	        		case "E" : posX +=1;break;
+	        		case "W" : posX -= 1;break;
+	        		case "S" : posY +=1; if (closestDoor.getPosX() == sizeW && closestDoor.getPosY() == sizeH) {posY -=1;}; break;
+	        		case "N" : posY += 1; break;
+	        		default : posY += 1; break;
+	        		}
+	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, closestDoor));
+	        		((AStarThread) threads.get(0)).run();
+	        	}
         	}
         };
         timer = new Timer("Timer");
         timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
-        timer.scheduleAtFixedRate(moveTask, 10000L, 10000L);
+        timer.scheduleAtFixedRate(moveTask, 5000L, 5000L);
         //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
     }
 
@@ -178,11 +191,10 @@ public class Game implements DeletableObserver, Runnable {
     	Door closestDoor = null;
     	int distanceMin = 50000;
     	for (GameObject o : objectsOnMap) {
-    		if (o instanceof Door) {
-    			System.out.println(o);
-    			if ((o.getPosX()+s.getPosX())*(o.getPosX()+s.getPosX()) + (o.getPosY()+s.getPosY())*(o.getPosY()+s.getPosY()) < distanceMin){
+    		if (o instanceof Door && s!= null) {
+    			if ((o.getPosX()-s.getPosX())*(o.getPosX()-s.getPosX()) + (o.getPosY()-s.getPosY())*(o.getPosY()-s.getPosY()) < distanceMin){
     				closestDoor = (Door) o;
-    				distanceMin = (o.getPosX()+s.getPosX())*(o.getPosX()+s.getPosX()) + (o.getPosY()+s.getPosY())*(o.getPosY()+s.getPosY());
+    				distanceMin = (o.getPosX()-s.getPosX())*(o.getPosX()-s.getPosX()) + (o.getPosY()-s.getPosY())*(o.getPosY()-s.getPosY());
     			}
     		}
     	}
@@ -199,7 +211,7 @@ public class Game implements DeletableObserver, Runnable {
     					isAlreadyMoving = true;
     				}
     			}
-    			if (!(isAlreadyMoving)) {
+    			if (!(isAlreadyMoving) && res == null) {
         			res = (Sums) o;
         		}
     		}
@@ -298,6 +310,8 @@ public class Game implements DeletableObserver, Runnable {
 				active_player = (Sums) p;
 				window.setPlayer((Sums)p);
 				ActionPanel.getInstance().setPlayer(active_player);
+				MapDrawer.getInstance().addKeyListener(Keyboard.getInstance());
+				
 			}
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
@@ -378,5 +392,11 @@ public class Game implements DeletableObserver, Runnable {
 	}
 	public void setActivePlayer(Sums s) {
 		active_player = s;
+	}
+	public Sums getActivePlayer() {
+		return active_player;
+	}
+	public ArrayList<AStarThread> getThreads() {
+		return threads;
 	}
 }

@@ -11,7 +11,7 @@ public class Spa extends Building{
 	public Spa(int x, int y) {
 		super(x,y);
 		cleanliness = 10;
-		door = new Door(Math.round(sizeW/2)+x-1,y+sizeH-1,Constantes.mapBase, 's');
+		door = new Door(sizeW/2+x-1,y+sizeH-1,Constantes.mapBase, 's');
 	}
 	public Spa() {
 		super();

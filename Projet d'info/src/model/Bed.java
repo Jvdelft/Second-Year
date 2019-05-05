@@ -14,13 +14,14 @@ public class Bed extends Furniture{
 	}
 	@Override
 	public void activate(Sums s) {
-		// TODO Auto-generated method stub
-
+		Game.getInstance().playerWait(50000, s, s.getAgeRange());
+		s.teleportation(this.posX, this.posY);
+		s.setDirection(this.direction);
+		s.setEnergy((int) (s.getEnergy() + 10));
 	}
 
 	@Override
 	public int getDirection() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

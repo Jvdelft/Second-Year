@@ -32,11 +32,11 @@ public class AStar {
 		startJ = yi;
 		endI = xf;
 		endJ = yf;
-		grid = new Cell[mapSizeH][mapSizeW];
+		grid = new Cell[mapSizeW][mapSizeH];
 		System.out.println(("xi :" + xi + "yi :" + yi + "xf :" + xf + "yf :" + yf));
 
 
-        closed = new boolean[mapSizeH][mapSizeW];
+        closed = new boolean[mapSizeW][mapSizeH];
         open = new PriorityQueue<Cell>((Cell c1, Cell c2) -> {
 
                 return c1.finalCost<c2.finalCost?-1:
@@ -44,8 +44,8 @@ public class AStar {
 
     	    });
         
-        for(int i=0;i<mapSizeH;++i){
-              for(int j=0;j<mapSizeW;++j){
+        for(int i=0;i<mapSizeW;++i){
+              for(int j=0;j<mapSizeH;++j){
                   grid[i][j] = new Cell(i, j);
                   grid[i][j].heuristicCost = Math.abs(i-endI)+Math.abs(j-endJ);
 //                  System.out.print(grid[i][j].heuristicCost+" ");
@@ -134,7 +134,7 @@ public class AStar {
 
 
 	private void setBlocked(int i, int j){
-		if (j < mapSizeW && i < mapSizeH) {
+		if (j < mapSizeH && i < mapSizeW) {
 			grid[i][j] = null;
 		}
 	}
@@ -158,7 +158,7 @@ public class AStar {
 			int deltaj = 0;
 		   //Trace back the path 
 			Cell current = grid[endI][endJ];
-			while(current.parent!=null){
+			while(current != null && current.parent!=null){
 				if (current.parent.i == startI && current.parent.j == startJ) {
 					deltai = current.i - startI;
 					deltaj = current.j - startJ;
