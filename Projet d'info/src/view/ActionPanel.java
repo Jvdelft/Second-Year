@@ -101,8 +101,10 @@ public class ActionPanel extends JPanel implements ActionListener {
 				removeButton(object);
 			}
 		}
-		for (JButton type : mustAddButtons) {
-			this.addButton(type.getText());
+		if (!(mustAddButtons.isEmpty())){
+			for (JButton type : mustAddButtons) {
+				this.addButton(type.getText());
+			}
 		}
 	}
 	public void paintComponent(Graphics g) {
@@ -153,9 +155,15 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (visibleButtons.contains((JButton) buttons.get("INTERACT"))) {
 			res = "INTERACT";
 		}
-		else if (!(visibleButtons.isEmpty())){
+		else if (!(visibleButtons.isEmpty()) && visibleButtons.get(0) != buttons.get("EAT")){
 			res = visibleButtons.get(0).getText();
 			}
+		else if (visibleButtons.size()-1>0){
+			res = visibleButtons.get(1).getText();
+		}
+		else if (!(visibleButtons.isEmpty())){
+			res = visibleButtons.get(0).getText();
+		}
 		return res;
 	}
 	public void setSelectedIndexInventory(int index) {

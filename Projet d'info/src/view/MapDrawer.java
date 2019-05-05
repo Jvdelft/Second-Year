@@ -61,6 +61,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     private int sizeH;
     private int sizeW;
     private int tileSize;
+    private String textToPaint;
 	
     private MapDrawer() {
         this.setFocusable(true);
@@ -77,6 +78,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 				int x = e.getX()/tileSize;
 				int y = e.getY()/tileSize;
 				mouseController.mapEvent(x, y);
+				if (currentMap.isNotInitHouse()) {
+					currentMap.initHouse(x,y);
+				}
 			}
 			public void mouseClicked(MouseEvent arg0) {}
 			public void mouseEntered(MouseEvent arg0) {}
@@ -109,6 +113,14 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
             else {
             	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeH()*tileSize,object.getSizeV()*tileSize, this);
             }
+            if (textToPaint != null) {
+            	g.setColor(Color.WHITE);
+            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+            	g.setColor(Color.BLACK);
+            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
+            	g.drawString(textToPaint, tileSize/2, tileSize/2);
+            }
             /*else if (object instanceof Building) {
             	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV()*tileSize, this);
             }
@@ -117,7 +129,6 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
             }*/
         }
     }
-
     public void setObjects(ArrayList<GameObject> objects) {
         this.objects = objects;
         this.redraw();
@@ -152,6 +163,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 
 	public void addMouse(Mouse m) {
 		this.mouseController = m;
+	}
+	public Mouse getMouse() {
+		return this.mouseController;
 	}
 	/*public void drawTimeRemaining(int time, Sums s) {
 	    posX = s.getPosX() + Constantes.image_size;
@@ -275,6 +289,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		row = 0;
 		
 	}
+	public void drawArrowsToDirect() {
+		
+	}
 
 	public void actionPerformed(ActionEvent arg0) {
 		int index = content.getSelectedIndex();
@@ -329,6 +346,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 				}
 			}
 		}
+	}
+	public void setTextToPaint(String s) {
+		textToPaint = s;
 	}
 	public Map getCurrentMap() {
 		return currentMap;

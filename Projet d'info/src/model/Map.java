@@ -2,8 +2,12 @@ package model;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 
+import javax.swing.SwingWorker;
+
+import controller.Keyboard;
+import view.HUD;
+import view.MapDrawer;
 import view.Window;
 
 public class Map {
@@ -14,6 +18,9 @@ public class Map {
 	private boolean [][] positionTaken;
 	private String mapName;
 	private ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
+	private boolean notInitHouse = true;
+	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
+	MapDrawer mapDrawer = MapDrawer.getInstance();
 	public Map(String path) {
 		this.mapName = path;
 		tiles = MapReader.ReadMap(path,this);
@@ -75,11 +82,11 @@ public class Map {
 		}
 		else if (mapName.equals(Constantes.mapMaison)) {
 			this.addObject(new Adult(10,4,h));
-			this.addObject(new Fridge(10,1));
+			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			this.addObject(new Toilet(Math.round(sizeW/2), 1));
-			this.addObject(new Sofa(1,Math.round(sizeH/2), 0));
-			this.addObject(new Toy(10,7));
+			this.addObject(new Toilet(1,1));
+			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
+			objectsToPlace.add(new Toy(10,7));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (mapName.equals(Constantes.mapMarket)) {
@@ -100,6 +107,30 @@ public class Map {
 		}
 		
 		Window.getInstance().update();
+	}
+	public void initHouse(int x,int y){
+		mapDrawer.removeKeyListener(Keyboard.getInstance());
+		if (objectsToPlace.size() != 0) {
+			initObjectInHouse(objectsToPlace.get(0), x, y);
+		}
+	}
+	private void initObjectInHouse(GameObject o,int x,int y) {
+		if (x > 0 && y >0 && x < sizeW-1 && y < sizeH-1) {
+			o.setPosX(x);
+			o.setPosY(y);
+			x = 0;
+			y = 0;
+			objectsToPlace.remove(0);
+			objects.add(o);
+			mapDrawer.drawArrowsToDirect();
+			if (objectsToPlace.size()>0) {
+				mapDrawer.setTextToPaint("Where do you want to put the " + objectsToPlace.get(0).getClass().getSimpleName() + " ?");
+			}
+			else {
+				mapDrawer.setTextToPaint(null);
+				mapDrawer.addKeyListener(Keyboard.getInstance());
+			}
+		}
 	}
 	public void addObject(GameObject o) {
 		objects.add(o);
@@ -130,5 +161,14 @@ public class Map {
 		if (o != null) {
 			objects = o;
 		}
+	}
+	public boolean isNotInitHouse() {
+		return notInitHouse;
+	}
+	public void setIsInitHouse(boolean b) {
+		notInitHouse = b;
+	}
+	public ArrayList<GameObject> getObjectsToPlace(){
+		return objectsToPlace;
 	}
 }

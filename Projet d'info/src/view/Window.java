@@ -149,8 +149,8 @@ public class Window extends JFrame implements ActionListener {
 		Game game = Game.getInstance();
 		Keyboard keyboard = Keyboard.getInstance();
         Mouse mouse = new Mouse(game);
-        Window.getInstance().setKeyListener(keyboard);
-        Window.getInstance().setMouseListener(mouse);
+        this.setKeyListener(keyboard);
+        this.setMouseListener(mouse);
 		cards.next(this.getContentPane());
 		mapDrawer.requestFocusInWindow();
 		menuInGame = new MenuInGame();

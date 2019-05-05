@@ -305,14 +305,17 @@ public class Game implements DeletableObserver, Runnable {
 		objectsOnMap = currentMap.getObjects();
 		sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
-		boolean newMap = true;
   		objectsOnMap.add(active_player);
+  		window.setGameObjects(objectsOnMap);
+  		if (s == Constantes.mapMaison && maps.get(s).isNotInitHouse()) {
+  			MapDrawer.getInstance().setTextToPaint("Where do you want to put the " + currentMap.getObjectsToPlace().get(0).getClass().getSimpleName() + " ?");
+  			currentMap.initHouse(0, 0);
+		}
   		for(GameObject o : objectsOnMap) {
     		if (o instanceof DeletableObject) {
     			((DeletableObject) o).attachDeletable(this);
     		}
     	}
-		window.setGameObjects(objectsOnMap);
 		
 	}
 	public int getTime() {
