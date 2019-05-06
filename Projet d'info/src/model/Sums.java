@@ -88,10 +88,46 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		faim -= 1;
 		toilet += 1;
 		hygiene -= 1;
+		age += 1;
 		if (energy == 0 || faim == 0) {
 			Game.getInstance().playerDied(this);
 		}
+		if (ageRange == "Kid" && age >= 12) {
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+		}
+		else if (ageRange == "Teen" && age >= 21) {
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+		}
+		else if (ageRange == "Adult" && age >= 60) {
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+		}
+		else if (ageRange == "Elder" && age >= 85) {
+			Game.getInstance().playerDied(this);
+		}
 	}
+	public Map getMap() {
+		HashMap<String, Map> maps = Game.getInstance().getMaps();
+		for (String s: maps.keySet()) {
+			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
+				if (sumsOnMap == this) { return maps.get(s); }
+			}
+		}
+		return maps.get(Constantes.mapBase);
+	}
+	public String getStringMap() {
+		String res = "";
+		HashMap<String, Map> maps = Game.getInstance().getMaps();
+		for (String s: maps.keySet()) {
+			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
+				if (sumsOnMap == this) { return s; }
+			}
+		}
+		return res;
+	}
+	public void setLoveHashMap (HashMap<Sums, Integer> hashmap) {
+		loveHashMap = hashmap;
+	}
+	
 	public void buy(GameObject object) {
 		this.getHouse().changeMoney(-(object.getPrice()) );
 		addInInventory(object);

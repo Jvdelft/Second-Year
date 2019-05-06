@@ -17,8 +17,8 @@ import view.MapDrawer;
 
 public class AStar {
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
-	private int mapSizeW = mapDrawer.getCurrentMap().getSizeW();
-	private int mapSizeH = mapDrawer.getCurrentMap().getSizeH();
+	private int mapSizeW = mapDrawer.getCurrentMap().getSizeW()-1;
+	private int mapSizeH = mapDrawer.getCurrentMap().getSizeH()-1;
 	private boolean closed[][];
 	private int startI, startJ;
 	private int endI, endJ;

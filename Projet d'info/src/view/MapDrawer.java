@@ -23,6 +23,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -100,7 +101,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		});
     }
     
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) throws ConcurrentModificationException{
     	super.paintComponent(g);
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
     	for (int i = 0; i < sizeH; i++) {

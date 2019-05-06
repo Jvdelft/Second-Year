@@ -106,7 +106,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 		if (!(mustAddButtons.isEmpty())){
 			for (JButton type : mustAddButtons) {
-				this.addButton(type.getText());
+				if (type != null) {
+					this.addButton(type.getText());
+				}
 			}
 		}
 	}

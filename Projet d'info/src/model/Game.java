@@ -203,10 +203,12 @@ public class Game implements DeletableObserver, Runnable{
        	}
        };
        TimerTask lifeTask = new TimerTask() {
-       	public void run() {
-       		timePassed();
-       	}
-       };
+          	public void run() {
+          		synchronized(sums) {
+          		timePassed();
+          		}
+          	}
+   };
        TimerTask moveTask = new TimerTask() {
        	public void run() {
        		Sums s = getRandomSums();
@@ -221,6 +223,7 @@ public class Game implements DeletableObserver, Runnable{
 	        		case "W" : posX -= 1;break;
 	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;
 	        		case "N" : posY += 1; break;
+	        		case "H" : posY-=1; break;
 	        		default : posY += 1; break;
 	        		}
 	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
@@ -253,7 +256,7 @@ public class Game implements DeletableObserver, Runnable{
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
        addList(comingTask, timerTasks,5000,5000);
-       addList(lifeTask, timerTasks, 3000,3000);
+       addList(lifeTask, timerTasks, 1000,1000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());
        	TimerTask timerTask = (TimerTask) timerTasks.get(i);
@@ -286,7 +289,7 @@ public class Game implements DeletableObserver, Runnable{
 						res = (Sums) o;
 					}
 				}
-				if (o instanceof Door) {
+				if (o instanceof Door && maps.get(((Door) o).getDestination()) == currentMap) {
 					door = (Door) o;
 				}
 				if (res != null && door != null) {
@@ -383,13 +386,14 @@ public class Game implements DeletableObserver, Runnable{
     		Thread threadSound = new Thread (new Sound("pee",Math.round(delay)));
     		threadSound.start();
 		}
+    	Timer timer = new Timer();
     	TimerTask waitTask = new TimerTask() {
     		public void run() {
     			s.setIsPlayable(true);
     			s.teleportation(x, y);
+    			timers.remove(timer);
     		}
     	};
-    	Timer timer = new Timer();
     	timer.schedule(waitTask, delay);
     	timers.add(timer);
     }
@@ -475,23 +479,45 @@ public class Game implements DeletableObserver, Runnable{
 		}
 	}
 	public void timePassed() {
-		for (Sums e: sums) {
-			synchronized(e){
+		ArrayList<Sums> newList = new ArrayList<Sums>(sums);
+		for (Sums e: newList) {
 				e.timePassed();
-			}
 		}
 		notifyView();
 	}
-	
+	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {
+		System.out.println("evolution "+ s.getAgeRange()+time);
+		Sums newSums = s;
+		switch (s.getAgeRange()) {
+		case "Kid" : newSums = new Teen(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		case "Teen" : newSums = new Adult(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		case "Adult" : newSums = new Elder(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		}
+		sums.remove(s); 
+		s.getMap().getObjects().remove(s);
+		newSums.setLoveHashMap(loveHasMap);
+		sums.add(newSums);
+		s.getMap().getObjects().add(newSums);
+		if (s == active_player) { active_player = newSums; ActionPanel.getInstance().setPlayer(active_player); window.setPlayer(active_player);}
+		window.setGameObjects(objectsOnMap);
+		ActionPanel.getInstance().updateActivableList();
+	}
 	public void playerDied(Sums e) {
+		System.out.println("player died");
 		sums.remove(e);
-		objectsOnMap.remove(e);
+		e.getMap().getObjects().remove(e);
 		if (e == active_player) {
 			Random r = new Random();
 			int index = r.nextInt(sums.size()) + 1;
 			active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
+			if (active_player.getMap() != currentMap ) {
+				changeMap(active_player.getStringMap());
+			}
+			ActionPanel.getInstance().setPlayer(active_player);
+			window.setPlayer(active_player);
 		}
-		notifyView();
+		window.setGameObjects(objectsOnMap);
+		ActionPanel.getInstance().updateActivableList();
 	}
 
 	public void setObjects(ArrayList<GameObject> g) {
