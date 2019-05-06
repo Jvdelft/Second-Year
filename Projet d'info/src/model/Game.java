@@ -204,7 +204,9 @@ public class Game implements DeletableObserver, Runnable{
        };
        TimerTask lifeTask = new TimerTask() {
        	public void run() {
+       		synchronized(sums) {
        		timePassed();
+       		}
        	}
        };
        TimerTask moveTask = new TimerTask() {
@@ -253,7 +255,7 @@ public class Game implements DeletableObserver, Runnable{
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
        addList(comingTask, timerTasks,5000,5000);
-       addList(lifeTask, timerTasks, 3000,3000);
+       addList(lifeTask, timerTasks, 1000,1000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());
        	TimerTask timerTask = (TimerTask) timerTasks.get(i);
@@ -475,23 +477,45 @@ public class Game implements DeletableObserver, Runnable{
 		}
 	}
 	public void timePassed() {
-		for (Sums e: sums) {
-			synchronized(e){
+		ArrayList<Sums> newList = new ArrayList<Sums>(sums);
+		for (Sums e: newList) {
 				e.timePassed();
-			}
 		}
 		notifyView();
 	}
-	
+	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {
+		System.out.println("evolution "+ s.getAgeRange()+time);
+		Sums newSums = s;
+		switch (s.getAgeRange()) {
+		case "Kid" : newSums = new Teen(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		case "Teen" : newSums = new Adult(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		case "Adult" : newSums = new Elder(s.getPosX(), s.getPosY(), s.getHouse()); break;
+		}
+		sums.remove(s); 
+		s.getMap().getObjects().remove(s);
+		newSums.setLoveHashMap(loveHasMap);
+		sums.add(newSums);
+		s.getMap().getObjects().add(newSums);
+		if (s == active_player) { active_player = newSums; ActionPanel.getInstance().setPlayer(active_player); window.setPlayer(active_player);}
+		window.setGameObjects(objectsOnMap);
+		ActionPanel.getInstance().updateActivableList();
+	}
 	public void playerDied(Sums e) {
+		System.out.println("player died");
 		sums.remove(e);
-		objectsOnMap.remove(e);
+		e.getMap().getObjects().remove(e);
 		if (e == active_player) {
 			Random r = new Random();
 			int index = r.nextInt(sums.size()) + 1;
 			active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
+			if (active_player.getMap() != currentMap ) {
+				changeMap(active_player.getStringMap());
+			}
+			ActionPanel.getInstance().setPlayer(active_player);
+			window.setPlayer(active_player);
 		}
-		notifyView();
+		window.setGameObjects(objectsOnMap);
+		ActionPanel.getInstance().updateActivableList();
 	}
 
 	public void setObjects(ArrayList<GameObject> g) {

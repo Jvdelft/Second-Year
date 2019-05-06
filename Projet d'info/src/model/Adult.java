@@ -23,6 +23,7 @@ public class Adult extends Sums {
 			this.energy = max_energy;
 			this.happiness = max_happiness;
 			this.toilet = 10;
+			age = 21;
 		}
 	}
 	public Adult() {

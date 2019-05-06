@@ -17,6 +17,7 @@ public class Elder extends Sums{
 			this.energy = max_energy;
 			this.happiness = max_happiness;
 			this.toilet = 10;
+			age = 60;
 		}
 	}
 	public Elder() {
