@@ -6,6 +6,8 @@ import view.MapDrawer;
 import view.Window;
 
 import java.awt.event.WindowEvent;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -38,6 +40,7 @@ public class Game implements DeletableObserver, Runnable{
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
     private int indexInventory;
+    LocalDateTime localDateTime = LocalDateTime.of(2019, Month.JANUARY, 01, 00 , 00,00);
     private ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
     private Game(Window window) {
     	this.window = window;
@@ -190,7 +193,8 @@ public class Game implements DeletableObserver, Runnable{
        };
        TimerTask timeTask = new TimerTask() {
        	public void run() {
-       		time+=1;
+       		localDateTime = localDateTime.plusSeconds(1);
+       		MapDrawer.getInstance().updateTime();
        	}
        };
        TimerTask musicTask = new TimerTask() {
@@ -245,7 +249,7 @@ public class Game implements DeletableObserver, Runnable{
        	}
        };
        addList(repeatedTask, timerTasks, 1000,1000);
-       addList(timeTask, timerTasks,1000,1000);
+       addList(timeTask, timerTasks,2,2);
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
        addList(comingTask, timerTasks,5000,5000);
@@ -530,8 +534,8 @@ public class Game implements DeletableObserver, Runnable{
     	}
 		
 	}
-	public int getTime() {
-		return time;
+	public LocalDateTime getTime() {
+		return localDateTime;
 	}
 	public HashMap<String,Map> getMaps(){
 		return maps;

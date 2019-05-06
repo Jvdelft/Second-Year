@@ -16,7 +16,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.swing.AbstractButton;
@@ -65,6 +72,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     private String textToPaint;
     private PanelToDrawArrows panelToDrawArrows = null;
     private ButtonsForPlacingFurniture panelButtons = null;
+    private LocalDateTime localDateTime;
 	
     private MapDrawer() {
         this.setFocusable(true);
@@ -93,6 +101,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     }
     
     public void paintComponent(Graphics g) {
+    	super.paintComponent(g);
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
     	for (int i = 0; i < sizeH; i++) {
         	int lines = i;
@@ -103,6 +112,16 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
                 g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
             }
         }
+        g.setColor(Color.BLUE.darker());
+        g.drawRect(0,975,400,50);
+        g.fillRect(0,975,400,50);
+        g.setColor(Color.BLUE);
+        g.drawRect(10, 985, 380, 30);
+		g.fillRect(10, 985, 380, 30);
+		g.setFont(new Font("Monotype Corsiva", Font.BOLD, 30));
+		g.setColor(Color.ORANGE);
+		
+		g.drawString(localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), 50, 1010);
     	
         for (GameObject object : this.objects) {
             int x = object.getPosX();
@@ -329,6 +348,10 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		this.add(panelToDrawArrows, pos);
 		pos = "pos " + (textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);
 		this.add(panelButtons,pos);
+	}
+	public void updateTime() {
+		localDateTime = Game.getInstance().getTime();
+		redraw();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
