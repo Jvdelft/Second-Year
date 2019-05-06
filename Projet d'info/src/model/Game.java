@@ -203,12 +203,12 @@ public class Game implements DeletableObserver, Runnable{
        	}
        };
        TimerTask lifeTask = new TimerTask() {
-          	public void run() {
-          		synchronized(sums) {
-          		timePassed();
-          		}
-          	}
-   };
+       	public void run() {
+       		synchronized(sums) {
+       		timePassed();
+       		}
+       	}
+       };
        TimerTask moveTask = new TimerTask() {
        	public void run() {
        		Sums s = getRandomSums();
