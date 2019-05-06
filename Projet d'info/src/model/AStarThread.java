@@ -6,6 +6,7 @@ public class AStarThread implements Runnable{
 	private int x;
 	private int y;
 	private Door door;
+	private boolean exit = false;
 
 	public AStarThread(Game g, Sums p, int x, int y, Door door) {
 		this.g= g;
@@ -17,17 +18,21 @@ public class AStarThread implements Runnable{
 	}
 	
 	@Override
-	public void run() {
+	public void run(){
 		int direction = 0;
 		synchronized(p) {
-		while(direction != -1) {
+		while(direction != -1 && !(exit)) {
 			direction = (new AStar(p.getPosX(), p.getPosY(), x, y, g.getGameObjects())).getNextStep();
 			switch (direction) {
 				case 0 : g.movePlayer(1,0,p); break;
 				case 1 : g.movePlayer(0,-1,p); break;
 				case 2 : g.movePlayer(-1,0,p); break;
 				case 3 : g.movePlayer(0,1,p); break;
-				default : door.activate(p); break;
+				default : 
+					if (door != null) {
+						door.activate(p);
+					}
+					break;
 			}
 			try {
 				Thread.sleep(1000);
@@ -41,6 +46,10 @@ public class AStarThread implements Runnable{
 	public Sums getSums() {
 		return p;
 	}
-		
-
+	public void stopThread() {
+		this.exit = true;
+		if (door != null) {
+			door.activate(p);
+		}
+	}
 }

@@ -11,6 +11,13 @@ public class Toy extends Furniture{
 		user = "Kid";
 		type = "PLAY TOY";
 	}
+	public Toy() {
+		Random r = new Random();
+		value = r.nextInt(20-10+1)+1;
+		BringHappiness = r.nextInt(10-5+1)+1;
+		user = "Kid";
+		type = "PLAY TOY";
+	}
 	public void activate(Sums s) {
 		((Kid)s).play(this);
 	}

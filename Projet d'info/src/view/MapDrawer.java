@@ -187,17 +187,19 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		graphe = combined.getGraphics();
 	}
 	public void updateContent(){
-		ArrayList<GameObject> listToDraw = container.switchRow(row);
-		for (int i = 0; i < Constantes.itemsNumber;i++) {
-			removeImage();
-			graphe.drawImage(inventoryCase, 0, 0, null);
-			if (i < listToDraw.size()) {
-				Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).getSprite());
-				graphe.drawImage(img, 5, 5, null);
+		if (container != null) {
+			ArrayList<GameObject> listToDraw = container.switchRow(row);
+			for (int i = 0; i < Constantes.itemsNumber;i++) {
+				removeImage();
+				graphe.drawImage(inventoryCase, 0, 0, null);
+				if (i < listToDraw.size()) {
+					Image img = (Image) Constantes.imageHashMap.get(listToDraw.get(i).getSprite());
+					graphe.drawImage(img, 5, 5, null);
+				}
+				items.setElementAt(new ImageIcon(combined), i);
 			}
-			items.setElementAt(new ImageIcon(combined), i);
+			content.setModel(items);
 		}
-		content.setModel(items);
 	}
 	public void drawContent(ContainerObject container) {
 		this.container = container;
@@ -302,6 +304,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		
 		this.remove(up);
 		this.remove(down);
+		container.close();
 		this.requestFocusInWindow();
 		row = 0;
 		

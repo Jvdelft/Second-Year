@@ -21,13 +21,14 @@ public class ContainerObject extends Furniture{
 	}
 	public ContainerObject() {
 		super();
-		type = "STOCK";
+		type = "OPEN";
 	}
 	public void activate(Sums s) {
 		this.open();
 		s.setIsPlayable(false);
 	}
 	public void open(ContainerObject this) {
+		this.type = "STOCK";
 		MapDrawer.getInstance().drawContent(this);
 	}
 	public ArrayList<GameObject> switchRow(int row) {
@@ -55,6 +56,9 @@ public class ContainerObject extends Furniture{
 	@Override
 	public int getDirection() {
 		return direction;
+	}
+	public void close() {
+		this.type = "OPEN";
 	}
 
 }

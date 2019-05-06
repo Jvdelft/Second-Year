@@ -27,7 +27,7 @@ public class AStar {
 	private int V_H_COST = 1;
 	private int DIAGONAL_COST = 100000;
 
-	public AStar(int xi, int yi, int xf, int yf, ArrayList<GameObject> objects) {
+	public AStar(int xi, int yi, int xf, int yf, ArrayList<GameObject> objects){
 		startI = xi;
 		startJ = yi;
 		endI = xf;

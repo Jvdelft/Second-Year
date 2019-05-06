@@ -50,7 +50,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		for (int i = 0; i < items.size();i++) {
 			removeImage();
 			g.drawImage(inventoryCase, 0, 0, null);
-			if (p.getObjects().size() > i+row*4) {
+			if (p != null && p.getObjects().size() > i+row*4) {
 				Image img = (Image) Constantes.imageHashMap.get(p.getObjects().get(i+row*4).getSprite());
 				g.drawImage(img, 5, 5, null);
 			}

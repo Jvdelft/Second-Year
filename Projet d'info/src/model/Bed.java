@@ -17,7 +17,9 @@ public class Bed extends Furniture{
 		Game.getInstance().playerWait(50000, s, s.getAgeRange());
 		s.teleportation(this.posX, this.posY);
 		s.setDirection(this.direction);
-		s.setEnergy((int) (s.getEnergy() + 10));
+		s.setEnergy(s.getMaxEnergy());
+		s.setFaim(20);
+		s.setToilet(s.getMaxToilet()-20);
 	}
 
 	@Override
