@@ -20,7 +20,7 @@ import org.omg.CosNaming.IstringHelper;
 
 import controller.Keyboard;
 
-public class Game implements DeletableObserver, Runnable {
+public class Game implements DeletableObserver, Runnable{
 	private HashMap<String, Map> maps= new HashMap <String, Map>();
     private ArrayList<Sums> sums = new ArrayList<Sums>();
     private Sums active_player = null;
@@ -56,6 +56,11 @@ public class Game implements DeletableObserver, Runnable {
     	maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
     	maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
     	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
+    	for (String s: maps.keySet()) {
+    		for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
+    			sums.add(sumsOnMap);
+    		}
+    	}
     	currentMap = maps.get(Constantes.mapBase);
     	objectsOnMap = currentMap.getObjects();
     	MapDrawer.getInstance().changeMap(currentMap);
@@ -72,6 +77,9 @@ public class Game implements DeletableObserver, Runnable {
     			((DeletableObject) o).attachDeletable(this);
     		}
     	}
+    }
+    public ArrayList<Sums> getSums() {
+    	return sums;
     }
 
     public void movePlayer(int x, int y, Sums sums) {
@@ -114,7 +122,6 @@ public class Game implements DeletableObserver, Runnable {
    		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
    				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
    	   }
-	   InventoryPanel.getInstance().updateInventory();
 	   MapDrawer.getInstance().requestFocusInWindow();
 	   ActionPanel.getInstance().updateVisibleButtons();
    }
@@ -149,7 +156,12 @@ public class Game implements DeletableObserver, Runnable {
         };
         TimerTask timeTask = new TimerTask() {
         	public void run() {
-        		time+=1;
+        		time+=1;	
+        	}
+        };
+        TimerTask lifeTask = new TimerTask() {
+        	public void run() {
+        		timePassed();
         	}
         };
         TimerTask musicTask = new TimerTask() {
@@ -180,6 +192,7 @@ public class Game implements DeletableObserver, Runnable {
         timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
         timer.scheduleAtFixedRate(moveTask, 5000L, 5000L);
+        timer.scheduleAtFixedRate(lifeTask, 3000L, 3000L);
         //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
     }
 
@@ -221,6 +234,7 @@ public class Game implements DeletableObserver, Runnable {
     public void makeBaby(House h) {
     	System.out.println("New baby");
     	Sums k = new Kid(1,1,h);
+    	sums.add(k);
     	objectsOnMap.add(k);
     	ActionPanel.getInstance().updateActivableList();
     	notifyView();
@@ -246,8 +260,8 @@ public class Game implements DeletableObserver, Runnable {
     public void setNextActivePlayer(Sums s) {
     	for (GameObject perso : objectsOnMap) {
     		if (perso instanceof Sums) {
-    			if (perso != s && ((Sums) perso).isPlayable()) {
-    				active_player = (Sums) perso;
+    			if ((Sums)perso != s && ((Sums) perso).isPlayable()) {
+    				active_player = (Sums)perso;
     				window.setPlayer(active_player);
     				break;
     			}
@@ -274,13 +288,7 @@ public class Game implements DeletableObserver, Runnable {
         return this.objectsOnMap;
     }
     public ArrayList<ActivableObject> getActivableObjects(){
-    	ArrayList<ActivableObject> list = new ArrayList<ActivableObject>();
-    	for (GameObject object : objectsOnMap) {
-    		if (object instanceof ActivableObject) {
-    			list.add((ActivableObject) object);
-    		}
-    	}
-    	return list;
+    	return currentMap.getActivableObjects();
     }
     public void setGameObject(ArrayList<GameObject> o){
     	this.objectsOnMap = o;
@@ -289,7 +297,8 @@ public class Game implements DeletableObserver, Runnable {
     @Override
     synchronized public void delete(Deletable ps) {
         objectsOnMap.remove(ps);
-        Window.getInstance().getStatus().getActionPanel().updateActivableList();
+        if (ps instanceof Sums) {sums.remove(ps);}
+        ActionPanel.getInstance().updateActivableList();
         notifyView();
     }
 
@@ -319,15 +328,6 @@ public class Game implements DeletableObserver, Runnable {
 	}
 	public void run() {
 		while (true) {
-			/*for (Sums e: sums) {
-				if (e instanceof Sums) {
-					e.energy -=1;
-					((Sums) e).faim -= 1;
-					((Sums) e).toilet += 1;
-					((Sums) e).hygiene -= 1;
-					player_died((Sums) e);
-			}
-		}*/
 			notifyView();
 			try {
 				Thread.sleep(500);
@@ -336,21 +336,32 @@ public class Game implements DeletableObserver, Runnable {
 				e.printStackTrace();
 			}
 		}
-}
-	public void player_died(Sums e) {
-		if (e.energy == 0 || ((Sums) e).faim == 0) {
-			sums.remove(e);
-			objectsOnMap.remove(e);
-			if (e == active_player) {
-				Random r = new Random();
-				int index = r.nextInt(sums.size()) + 1;
-				active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
+	}
+	public void timePassed() {
+		for (Sums e: sums) {
+			synchronized(e){
+				e.timePassed();
 			}
-			notifyView();
-				}
-			}
+		}
+		notifyView();
+	}
+	
+	public void playerDied(Sums e) {
+		sums.remove(e);
+		objectsOnMap.remove(e);
+		if (e == active_player) {
+			Random r = new Random();
+			int index = r.nextInt(sums.size()) + 1;
+			active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
+		}
+		notifyView();
+	}
+
 	public void setObjects(ArrayList<GameObject> g) {
 		this.objectsOnMap = g;
+		for (GameObject go : objectsOnMap) {
+			if (go instanceof Sums) {sums.add((Sums)go);}
+		}
 		int i = 0;
 		while (!(objectsOnMap.get(i) instanceof Sums)) {
 			i+= 1;

@@ -22,6 +22,7 @@ public class Map {
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
 	private GameObject lastObjectPlaced = null;
+	private ArrayList<Sums> sums = new ArrayList<Sums>();
 	public Map(String path) {
 		this.mapName = path;
 		MapReader.readWidth(path);
@@ -43,7 +44,6 @@ public class Map {
 	    	Sums s = new Teen(24,6,h);
 	    	Market m = new Market(4,2);
 	    	Spa spa = new Spa(4, 10);
-	    	
 	    	this.addObject(h);
 	    	this.addObject(p);
 	    	this.addObject(q);
@@ -106,7 +106,6 @@ public class Map {
 			this.addObject(new Block(14, 5, "pancarte10"));
 			System.out.println("Chargement MapMarket"); 
 		}
-		
 		Window.getInstance().update();
 	}
 	public void initHouse(int x,int y){
@@ -188,6 +187,14 @@ public class Map {
 		}
 		return res;
 	}
+	public ArrayList<Sums> getSumsOnMap(){
+		ArrayList<Sums> res = new ArrayList<Sums>();
+		for (GameObject object : objects) {
+			if (object instanceof Sums) { res.add((Sums)object);}
+		}
+		return res;
+	}
+	
 	public void setObjects(ArrayList<GameObject> objectCreated) {
 		if (objects != null) {
 			for (GameObject o : objectCreated) {

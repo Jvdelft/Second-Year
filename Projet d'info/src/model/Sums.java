@@ -82,7 +82,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		int energie = this.energy + 20;
 		this.energy = Math.min(energie, this.max_energy);
 	}
-	
+	public void timePassed() {
+		energy -=1;
+		faim -= 1;
+		toilet += 1;
+		hygiene -= 1;
+		if (energy == 0 || faim == 0) {
+			Game.getInstance().playerDied(this);
+		}
+	}
 	public void buy(GameObject object) {
 		this.getHouse().changeMoney(-(object.getPrice()) );
 		addInInventory(object);
