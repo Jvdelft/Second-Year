@@ -253,6 +253,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public void setEnergy(int e) {
     	this.energy = e;
     }
+    public int getMaxEnergy() {
+    	return this.max_energy;
+    }
+    public int getMaxToilet() {
+    	return this.max_toilet;
+    }
+    public int getMaxFaim() {
+    	return this.max_faim;
+    }
 
 
 }
