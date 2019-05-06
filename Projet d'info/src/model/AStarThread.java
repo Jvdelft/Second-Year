@@ -1,6 +1,6 @@
 package model;
 
-public class AStarThread implements Runnable{
+public class AStarThread extends Thread{
 	private Game g;
 	private Sums p;
 	private int x;

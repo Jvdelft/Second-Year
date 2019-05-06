@@ -48,6 +48,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		}
 		h.AddHabitant(this);
 		this.maison = h;
+		inventory.add(new Dish(12));
 		inventory.add(new Apple());
 		inventory.add(new Apple());
 		inventory.add(new Cigaret());

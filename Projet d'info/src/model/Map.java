@@ -89,7 +89,9 @@ public class Map {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
 			this.addObject(new Toilet(1,1));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
-			objectsToPlace.add(new Toy(10,7));
+			objectsToPlace.add(new Toy());
+			objectsToPlace.add(new Bed());
+			this.addObject(new Kitchen(sizeW-4,1,this));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (mapName.equals(Constantes.mapMarket)) {
@@ -228,5 +230,8 @@ public class Map {
 	}
 	public void setLastObjectPlace(GameObject o) {
 		lastObjectPlaced = o;
+	}
+	public boolean[][] getPositionTaken(){
+		return positionTaken;
 	}
 }

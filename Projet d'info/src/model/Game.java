@@ -32,7 +32,8 @@ public class Game implements DeletableObserver, Runnable{
     private Thread t2= new Thread(this);
     private static Game GameInstance;
     private int time;
-    private Timer timer;
+    private ArrayList<Timer> timers = new ArrayList<Timer>();
+    private ArrayList<Object> timerTasks = new ArrayList<Object>();
     private Map currentMap;
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
@@ -48,7 +49,7 @@ public class Game implements DeletableObserver, Runnable{
     	t2.start();
     	//sound = new Sound();
     	//sound.play("Never_Surrender");
-    	givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect();
+    	makeAllTimerTask();
         
     }
     private void initMaps() {
@@ -83,13 +84,33 @@ public class Game implements DeletableObserver, Runnable{
     }
 
     public void movePlayer(int x, int y, Sums sums) {
+    	int moveX;
+    	int moveY;
+    	if (x>1) {
+    		moveX = 1;
+    	}
+    	else if (x<-1) {
+    		moveX = -1;
+    	}
+    	else {
+    		moveX = x;
+    	}
+    	if (y>1) {
+    		moveY = 1;
+    	}
+    	else if (y<-1) {
+    		moveY = -1;
+    	}
+    	else {
+    		moveY = y;
+    	}
     	Sums p = sums;
     	if (p == null) {
     		p = active_player;
     	}
     	if (p.isPlayable()) {
-	        int nextX = p.getPosX() + x;
-	        int nextY = p.getPosY() + y;
+	        int nextX = p.getPosX() + moveX;
+	        int nextY = p.getPosY() + moveY;
 	
 	        boolean obstacle = false;
 	        for (GameObject object : objectsOnMap) {
@@ -100,9 +121,9 @@ public class Game implements DeletableObserver, Runnable{
 	                break;
 	            }
 	        }
-	        p.rotate(x, y);
+	        p.rotate(moveX, moveY);
 	        if (obstacle == false) {
-	            p.move(x, y);
+	            p.move(moveX, moveY);
 	            if (p == active_player) {
 	            	p.tire();
 	            }
@@ -119,11 +140,24 @@ public class Game implements DeletableObserver, Runnable{
 	   switch (button) {
    		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
    		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
+   		case "STOCK" : GameObject o = active_player.getObjects().get(indexInventory); active_player.getObjects().remove(o); ((ContainerObject) getFrontObject()).getObjectsContained().add(o);break;
+   		case "COOK" :
+   			GameObject object = active_player.getObjects().get(indexInventory);
+   			if (object instanceof Food) {
+   				active_player.getObjects().remove(object); 
+   				((Kitchen) getFrontObject()).getObjectsContained().add(object);
+   				if (((Kitchen) getFrontObject()).getObjectsContained().size()>1) {
+   					((Kitchen) getFrontObject()).cook(active_player);
+   				}
+   			}
+   			break;
    		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
    				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
    	   }
+	   MapDrawer.getInstance().updateContent();
 	   MapDrawer.getInstance().requestFocusInWindow();
 	   ActionPanel.getInstance().updateVisibleButtons();
+	   InventoryPanel.getInstance().updateInventory();
    }
    
    public ActivableObject getFrontObject() {
@@ -148,54 +182,148 @@ public class Game implements DeletableObserver, Runnable{
 	   }
    }
    
-   public void givenUsingTimer_whenSchedulingRepeatedTask_thenCorrect(){
-        TimerTask repeatedTask = new TimerTask() {
-            public void run() {
-            	ActionPanel.getInstance().updateActivableList();
-            }
-        };
-        TimerTask timeTask = new TimerTask() {
-        	public void run() {
-        		time+=1;	
-        	}
-        };
-        TimerTask lifeTask = new TimerTask() {
-        	public void run() {
-        		timePassed();
-        	}
-        };
-        TimerTask musicTask = new TimerTask() {
-        	public void run() {
-        		//sound.play("Never_Surrender");
-        	}
-        };
-        TimerTask moveTask = new TimerTask() {
-        	public void run() {
-        		Sums s = getRandomSums();
-        		Door closestDoor = getClosestDoor(s);
-        		if (s != null) {
-	        		int posX = closestDoor.getPosX();
-	        		int posY = closestDoor.getPosY();
-	        		switch(String.valueOf(closestDoor.getChar())) {
+   public void makeAllTimerTask(){
+       TimerTask repeatedTask = new TimerTask() {
+           public void run() {
+           	ActionPanel.getInstance().updateActivableList();
+           }
+       };
+       TimerTask timeTask = new TimerTask() {
+       	public void run() {
+       		time+=1;
+       	}
+       };
+       TimerTask musicTask = new TimerTask() {
+       	public void run() {
+       		//sound.play("Never_Surrender");
+       	}
+       };
+       TimerTask lifeTask = new TimerTask() {
+       	public void run() {
+       		timePassed();
+       	}
+       };
+       TimerTask moveTask = new TimerTask() {
+       	public void run() {
+       		Sums s = getRandomSums();
+       		Door randomDoor = getRandomDoor();
+       		Random rand = new Random();
+       		int choice = rand.nextInt(2);
+       		if (s != null && choice == 1) {
+	        		int posX = randomDoor.getPosX();
+	        		int posY = randomDoor.getPosY();
+	        		switch(String.valueOf(randomDoor.getChar())) {
 	        		case "E" : posX +=1;break;
 	        		case "W" : posX -= 1;break;
-	        		case "S" : posY +=1; if (closestDoor.getPosX() == sizeW && closestDoor.getPosY() == sizeH) {posY -=1;}; break;
+	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;
 	        		case "N" : posY += 1; break;
 	        		default : posY += 1; break;
 	        		}
-	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, closestDoor));
+	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
 	        		((AStarThread) threads.get(0)).run();
 	        	}
-        	}
-        };
-        timer = new Timer("Timer");
-        timer.scheduleAtFixedRate(timeTask, 1000L, 1000L);
-        timer.scheduleAtFixedRate(repeatedTask, 1000L, 1000L);
-        timer.scheduleAtFixedRate(moveTask, 5000L, 5000L);
-        timer.scheduleAtFixedRate(lifeTask, 3000L, 3000L);
-        //timer.scheduleAtFixedRate(musicTask, 36000L, 36000L);
-    }
-
+       		else if (s!= null) {
+       			ArrayList<Integer> list = getRandomPosition(currentMap);
+       			threads.add(0, new AStarThread(Game.getInstance(), s, list.get(0), list.get(1), null));
+	        		((AStarThread) threads.get(0)).run();
+       		}
+       	}
+       };
+       TimerTask comingTask = new TimerTask() {
+       	public void run() {
+       		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());
+       		if (list.size()>0) {
+	        		Sums s = (Sums) list.get(0);
+	        		Door door = (Door) list.get(1);
+	        		if (s != null) {
+	        			door.activate(s);
+	        			ArrayList<Integer> position = getRandomPosition(maps.get(door.getDestination()));
+	        			threads.add(0, new AStarThread(Game.getInstance(), s, position.get(0), position.get(1), null));
+	        			((AStarThread) threads.get(0)).run();
+	        		}
+       		}
+       	}
+       };
+       addList(repeatedTask, timerTasks, 1000,1000);
+       addList(timeTask, timerTasks,1000,1000);
+       addList(musicTask, timerTasks, 36000,36000);
+       addList(moveTask, timerTasks,2500,2500);
+       addList(comingTask, timerTasks,5000,5000);
+       addList(lifeTask, timerTasks, 3000,3000);
+       for (int i = 0; i < timerTasks.size(); i+=3) {
+       	timers.add(new Timer());
+       	TimerTask timerTask = (TimerTask) timerTasks.get(i);
+       	long first = (long) timerTasks.get(i+1);
+       	long delay = (long) timerTasks.get(i+2);
+       	timers.get(i/3).scheduleAtFixedRate(timerTask, first, delay);
+       }
+   }
+  private void addList(TimerTask timerTask, ArrayList<Object> timerTasksList, long first, long delay) {
+	   timerTasksList.add(timerTask);
+	   timerTasksList.add(first);
+	   timerTasksList.add(delay);
+  }
+  private ArrayList<GameObject> getRandomSumsAndDoor(){
+ 		ArrayList<Map> mapList = new ArrayList<Map>(maps.values());
+		Collections.shuffle(mapList);
+		Sums res = null;
+		Door door = null;
+		ArrayList<GameObject> resList = new ArrayList<GameObject>();
+		boolean isAlreadyMoving = false;
+		for (Map map: mapList) {
+			for (GameObject o : map.getObjects()) {
+				if (o instanceof Sums && res == null && o != active_player) {
+					for (AStarThread t : threads) {
+						if (t.getSums() == o){
+							isAlreadyMoving = true;
+						}
+					}
+					if (!(isAlreadyMoving) && ((Sums) o).isPlayable()) {
+						res = (Sums) o;
+					}
+				}
+				if (o instanceof Door) {
+					door = (Door) o;
+				}
+				if (res != null && door != null) {
+					resList.add(res);
+					resList.add(door);
+					break;
+				}
+			}
+		}
+		return resList;
+ 	}
+ 	private Door getRandomDoor() {
+ 		ArrayList<GameObject> lookingForDoors = new ArrayList<GameObject>(objectsOnMap);
+ 		Collections.shuffle(lookingForDoors);
+ 		Door door = null;
+ 		for (GameObject o : lookingForDoors) {
+ 			if (o instanceof Door) {
+ 				door = (Door) o;
+ 				break;
+ 			}
+ 		}
+ 		return door;
+ 	}
+ 	private ArrayList<Integer> getRandomPosition(Map map) {
+ 		Random rand = new Random();
+ 		int randX = rand.nextInt(map.getSizeW());
+ 		int randY = rand.nextInt(map.getSizeH());
+ 		ArrayList<Integer> position = new ArrayList<Integer>();
+ 		int y;
+ 		int x;
+ 		boolean [][] positionTaken = map.getPositionTaken();
+ 		if (positionTaken[randX][randY]){
+ 			while (positionTaken[randX][randY]) {
+ 				randX = rand.nextInt(map.getSizeW());
+ 				randY = rand.nextInt(map.getSizeH());
+ 			}
+ 		}
+		position.add(randX);
+		position.add(randY);
+		return position;
+ 	}
     public void tirePlayer() {
     	active_player.tire();
     	notifyView();
@@ -224,8 +352,9 @@ public class Game implements DeletableObserver, Runnable{
     					isAlreadyMoving = true;
     				}
     			}
-    			if (!(isAlreadyMoving) && res == null) {
+    			if (!(isAlreadyMoving) && ((Sums) o).isPlayable()) {
         			res = (Sums) o;
+        			break;
         		}
     		}
     	}
@@ -240,7 +369,9 @@ public class Game implements DeletableObserver, Runnable{
     	notifyView();
     }
     public void playerWait(long delay, Sums s, String type) {
-    	setNextActivePlayer(s);
+    	if (s == active_player) {
+    		setNextActivePlayer(s);
+    	}
     	s.setIsPlayable(false);
     	int x = s.getPosX();
 		int y = s.getPosY();
@@ -254,7 +385,9 @@ public class Game implements DeletableObserver, Runnable{
     			s.teleportation(x, y);
     		}
     	};
+    	Timer timer = new Timer();
     	timer.schedule(waitTask, delay);
+    	timers.add(timer);
     }
     
     public void setNextActivePlayer(Sums s) {
@@ -373,12 +506,17 @@ public class Game implements DeletableObserver, Runnable{
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
+		for (AStarThread  t : threads) {
+			if (t != null) {
+				t.stopThread();
+			}
+		}
 		objectsOnMap.remove(active_player);
 		currentMap = maps.get(s);
 		MapDrawer.getInstance().changeMap(currentMap);
 		objectsOnMap = currentMap.getObjects();
-		sizeW = window.getMapSizeW();
-        sizeH = window.getMapSizeH();
+		sizeW = currentMap.getSizeW();
+        sizeH = currentMap.getSizeH();
   		objectsOnMap.add(active_player);
   		window.setGameObjects(objectsOnMap);
   		if (s == Constantes.mapMaison && maps.get(s).isNotInitHouse()) {

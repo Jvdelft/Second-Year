@@ -98,6 +98,8 @@ public class Constantes {
 	public static BufferedImage bedOne;
 	public static BufferedImage arrowLeft;
 	public static BufferedImage arrowRight;
+	public static BufferedImage kitchen;
+	public static BufferedImage dish;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -131,8 +133,6 @@ public class Constantes {
 			pancarte200 = ImageIO.read(new File("Images/Pancarte/Pancarte 200 gold.png"));
 			pancarte500 = ImageIO.read(new File("Images/Pancarte/Pancarte 500 gold.png"));
 			pancarte1000 = ImageIO.read(new File("Images/Pancarte/Pancarte 1000 gold.png"));
-			imageList.add(apple);
-			imageList.add(cigaret);
 			toy = ImageIO.read(new File("Images/toy.png"));
 			toy = ImageIO.read(new File("Images/étagère.png"));
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
@@ -169,6 +169,8 @@ public class Constantes {
 			arrowRight = ImageIO.read(new File("Images/arrowright.png"));
 			imageList.add(arrowLeft);
 			imageList.add(arrowRight);
+			kitchen = ImageIO.read(new File("Images/kitchen.png"));
+			dish = ImageIO.read(new File("Images/bento.png"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

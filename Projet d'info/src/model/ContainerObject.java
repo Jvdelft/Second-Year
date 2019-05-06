@@ -11,13 +11,6 @@ public class ContainerObject extends Furniture{
 	public ContainerObject(int x, int y) {
 		super(x,y);
 		type = "OPEN";
-		for (int i = 0; i<6; i++) {
-			if (i== 3) {
-				objectContained.add(new Cigaret());
-				continue;
-			}
-			objectContained.add(new Apple());
-		}
 	}
 	public ContainerObject() {
 		super();
