@@ -94,18 +94,16 @@ public class Map {
 		}
 		else if (mapName.equals(Constantes.mapMarket)) {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'M'));
-			Fridge f = new Fridge(2, 1);
-			Fridge f2 = new Fridge(3, 1);
-			Fridge f3 = new Fridge(1,2);
-			Fridge f4 = new Fridge(1,3);
-			MarketShelve m = new MarketShelve(10,10);
-			Block b = new Block(11, 10, "pancarte1");
-			this.addObject(b);
-			this.addObject(m);
-			this.addObject(f);
-			this.addObject(f2);
-			this.addObject(f3);
-			this.addObject(f4);
+			for (int i = 4 ; i<14;  i++) {
+				this.addObject(new MarketShelve(i, 2, "Apple"));
+			}
+			this.addObject(new Block(3, 2, "pancarte1"));
+			this.addObject(new Block(14, 2, "pancarte1"));
+			for (int i = 4 ; i<14;  i++) {
+				this.addObject(new MarketShelve(i, 5, "Cigaret"));
+			}
+			this.addObject(new Block(3, 5, "pancarte10"));
+			this.addObject(new Block(14, 5, "pancarte10"));
 			System.out.println("Chargement MapMarket"); 
 		}
 		

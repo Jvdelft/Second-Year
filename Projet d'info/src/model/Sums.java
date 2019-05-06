@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import view.InventoryPanel;
 import view.Window;
 
 public abstract class Sums extends ActivableObject implements NeedToEat, Directable, DeletableObserver{
@@ -81,6 +82,11 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		int energie = this.energy + 20;
 		this.energy = Math.min(energie, this.max_energy);
 	}
+	
+	public void buy(GameObject object) {
+		this.getHouse().changeMoney(-(object.getPrice()) );
+		addInInventory(object);
+	}
 
     public void rotate(int x, int y) {
         if(x == 0 && y == -1)
@@ -132,6 +138,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public void delete(Deletable d) {
         inventory.remove(d);
         Window.getInstance().getStatus().getActionPanel().updateActivableList();
+        InventoryPanel.getInstance().updateInventory();
+    }
+    
+    public void addInInventory (GameObject object) {
+    	inventory.add(object);
+    	if (object instanceof DeletableObject) {
+    		((DeletableObject) object).attachDeletable(this);
+    	}
+    	InventoryPanel.getInstance().updateInventory();
     }
     @Override
     public boolean isObstacle() {

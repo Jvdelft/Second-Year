@@ -11,9 +11,11 @@ public class Apple extends Food{
 		NutritionalValue = 30;
 		EnergyValue = 10;
 		LifePoints = 1;
+		price = 1;
 	}
 	public Apple() {
 		super();
+		price = 1;
 	}
 	public void makeSprite() {
 		sprite = Constantes.apple;

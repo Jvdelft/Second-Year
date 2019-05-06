@@ -8,6 +8,7 @@ public abstract class GameObject {
     protected int posY;
     protected int sizeW = 1;
     protected int sizeH = 1;
+    protected int price = 0;
     @JsonIgnore
     protected BufferedImage sprite;
 
@@ -42,6 +43,10 @@ public abstract class GameObject {
     
     public void setSizeH(int i) {
     	sizeH = i;
+    }
+    
+    public int getPrice() {
+    	return price;
     }
  
     public boolean isAtPosition(int x, int y) {

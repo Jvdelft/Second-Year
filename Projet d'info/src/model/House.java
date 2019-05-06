@@ -1,6 +1,8 @@
 package model;
 import java.util.ArrayList;
 
+import view.Window;
+
 public class House extends Building{
 	private int money;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
@@ -20,6 +22,7 @@ public class House extends Building{
 	}
 	public void changeMoney(int i) {
 		money += i;
+		Window.getInstance().update();
 	}
 
 	public boolean isObstacle() {

@@ -6,7 +6,7 @@ import controller.Keyboard;
 import view.MapDrawer;
 
 public class ContainerObject extends Furniture{
-	private ArrayList<GameObject> objectContained = new ArrayList<GameObject>();
+	protected ArrayList<GameObject> objectContained = new ArrayList<GameObject>();
 	private int row;
 	public ContainerObject(int x, int y) {
 		super(x,y);

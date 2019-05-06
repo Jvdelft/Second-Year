@@ -57,6 +57,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     private JButton buttonEAT;
     private JButton buttonTAKE;
     private JButton buttonCLOSE;
+    private JButton buttonBUY;
     private Map currentMap;
     private int sizeH;
     private int sizeW;
@@ -251,17 +252,23 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		buttonEAT = (JButton) buttons.get("EAT IT");
 		buttonTAKE = (JButton) buttons.get("TAKE");
 		buttonCLOSE = (JButton) buttons.get("CLOSE");
+		buttonBUY = (JButton) buttons.get("BUY");
 		int widthButton = width/4;
 		int heightButton = height/3;
 		posButton1 =  "pos " + (posX) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
 		posButton2 = "pos " + (posX+widthButton*2) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
 		posButton3 = "pos " + (posX+widthButton*4) + "px " + (posY+height+heightButton) + "px," + "width " + widthButton + ", height " +heightButton;
-		this.add(buttonTAKE, posButton2);
+		if (container instanceof Fridge) {
+			this.add(buttonTAKE, posButton2);
+		}
+		else if (container instanceof MarketShelve) {
+			this.add(buttonBUY, posButton2);
+		}
 		this.add(buttonCLOSE, posButton1);
 		buttonTAKE.addActionListener(this);
 		buttonEAT.addActionListener(this);
 		buttonCLOSE.addActionListener(this);
-		
+		buttonBUY.addActionListener(this);
 	}
 	private void initJList(int nLabels) {
 		ArrayList<GameObject> listToDraw = container.switchRow(row);
@@ -280,10 +287,15 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 	public void removeDrawContent() {
 		items.removeAllElements();
 		this.remove(content);
-		this.remove(buttonTAKE);
+		buttonCLOSE.removeActionListener(this);
 		this.remove(buttonCLOSE);
 		try {
+			buttonEAT.removeActionListener(this);
 			this.remove(buttonEAT);
+			buttonTAKE.removeActionListener(this);
+			this.remove(buttonTAKE);
+			buttonBUY.removeActionListener(this);
+			this.remove(buttonBUY);
 		}
 		finally {
 		}
@@ -332,6 +344,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			}
 			if (arg0.getActionCommand() == "CLOSE") {
 				removeDrawContent();
+				if (container instanceof MarketShelve) {
+					((MarketShelve)container).initObjectContained(((MarketShelve) container).getShelveType());
+				}
 				active_player.setIsPlayable(true);
 			}
 			else if (arg0.getActionCommand() == "EAT IT") {
@@ -343,7 +358,13 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			else if (arg0.getActionCommand() == "TAKE") {
 				GameObject object = container.getObjectsContained().get(index);
 				container.getObjectsContained().remove(object);
-				active_player.getObjects().add(object);
+				active_player.addInInventory(object);
+				updateContent();
+			}
+			else if (arg0.getActionCommand() == "BUY") {
+				GameObject object = container.getObjectsContained().get(index);
+				container.getObjectsContained().remove(object);
+				active_player.buy(object);
 				updateContent();
 			}
 		}
@@ -356,15 +377,16 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			index = 0;
 		}
 		if (index <= objects.size()-1) {
-			if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
-				this.add(buttonEAT, posButton3);
-		
-			}
-			else {
-				try {
-					this.remove(buttonEAT);
+			if (container instanceof Fridge) {
+				if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
+					this.add(buttonEAT, posButton3);
 				}
-				finally {
+				else {
+					try {
+						this.remove(buttonEAT);
+					}
+					finally {
+					}
 				}
 			}
 		}
@@ -375,4 +397,4 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 	public Map getCurrentMap() {
 		return currentMap;
 	}
-}
+	}
