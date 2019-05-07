@@ -5,16 +5,19 @@ import java.util.ArrayList;
 public abstract class DeletableObject extends ActivableObject implements Deletable{
 
     private ArrayList<DeletableObserver> observers = new ArrayList<DeletableObserver>();
-    protected int LifePoint = 1;
     protected DeletableObject (int X, int Y) {
         super(X, Y); 
+        lifePoints = 1;
     }
     public DeletableObject() {
     	super();
     }
-    public int getLifePoint() {
-    	return LifePoint;
-    }
+	public int getLifePoints() {
+		return this.lifePoints;
+	}
+	public void setLifePoints(int l) {
+		this.lifePoints = l;
+	}
     // //////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -27,8 +30,8 @@ public abstract class DeletableObject extends ActivableObject implements Deletab
 
     //@Override
     public void notifyDeletableObserver() {
-        this.LifePoint -= 1;
-        if (LifePoint <= 0) {
+        this.lifePoints -= 1;
+        if (lifePoints <= 0) {
         	for (DeletableObserver o : observers) {
                 o.delete(this);
         	}

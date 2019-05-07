@@ -1,7 +1,7 @@
 package model;
 
 public abstract class ActivableObject extends GameObject implements Activable {
-	protected int LifePoints;
+	protected int lifePoints;
 	protected String type = "INTERACT";
 	protected String user = "All";
 	

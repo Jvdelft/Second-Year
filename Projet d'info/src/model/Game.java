@@ -155,6 +155,7 @@ public class Game implements DeletableObserver, Runnable{
    				}
    			}
    			break;
+   		case "GO TO WORK" : sendPlayerToWork();
    		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
    				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
    	   }
@@ -163,7 +164,27 @@ public class Game implements DeletableObserver, Runnable{
 	   ActionPanel.getInstance().updateVisibleButtons();
 	   InventoryPanel.getInstance().updateInventory();
    }
-   
+   private void sendPlayerToWork() {
+	   Door closestDoor = getClosestDoor(active_player);
+	   Sums p = active_player;
+	   Timer timer = new Timer();
+	   TimerTask workTask = new TimerTask() {
+		   public void run() {
+			   	threads.add(0, new AStarThread(Game.getInstance(), active_player, closestDoor.getPosX(), closestDoor.getPosY(), "WORK"));
+       			((AStarThread) threads.get(0)).run();
+		   }
+	   };
+	   TimerTask backFromWorkTask = new TimerTask(){
+		 public void run() {
+			 p.teleportation(closestDoor.getPosX(), closestDoor.getPosY());
+			 timers.remove(timer);
+		 }
+	   };
+	   timers.add(timer);
+	   timer.schedule(workTask, 500);
+	   timer.schedule(backFromWorkTask, 50000);
+	   setNextActivePlayer(active_player);
+   }
    public ActivableObject getFrontObject() {
 	   ActivableObject res = null;
 	   for (ActivableObject o : currentMap.getActivableObjects()) {
@@ -253,10 +274,10 @@ public class Game implements DeletableObserver, Runnable{
        	}
        };
        addList(repeatedTask, timerTasks, 1000,1000);
-       addList(timeTask, timerTasks,2,2);
+       addList(timeTask, timerTasks,5,5);
        addList(musicTask, timerTasks, 36000,36000);
-       addList(moveTask, timerTasks,2500,2500);
-       addList(comingTask, timerTasks,5000,5000);
+       //addList(moveTask, timerTasks,2500,2500);
+       //addList(comingTask, timerTasks,5000,5000);
        addList(lifeTask, timerTasks, 1000,1000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());

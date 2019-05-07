@@ -63,7 +63,7 @@ public class Window extends JFrame implements ActionListener {
                      "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                      JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == 0) {
-                	Window.Exit();
+                	//Window.Exit();
                    System.exit(0);
                 }
             }

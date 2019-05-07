@@ -5,14 +5,14 @@ public class Cigaret extends DeletableObject{
 		super(X, Y);
 		user = "Teen";
 		type = "SMOKE";
-		LifePoint = 5;
+		lifePoints = 5;
 		price = 10;
 	}
 	public Cigaret() {
 		super();
 		user = "Teen";
 		type = "SMOKE";
-		LifePoint = 5;
+		lifePoints = 5;
 		price = 10;
 	}
 	public void activate (Sums s) {

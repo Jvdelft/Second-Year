@@ -18,13 +18,6 @@ public abstract class Food extends DeletableObject implements Deletable{
 		super();
 		type = "EAT";
 	}
-    public int getLifePoint() {
-    	return LifePoints;
-    }
-    public void setLifePoint(int l) {
-    	this.LifePoints = l;
-    }
-    
 
     // //////////////////////////////////////////////////////////////////////////////////////
 

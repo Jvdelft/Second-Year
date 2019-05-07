@@ -10,7 +10,7 @@ public class Apple extends Food{
 		super(X, Y);
 		NutritionalValue = 30;
 		EnergyValue = 10;
-		LifePoints = 1;
+		lifePoints = 1;
 		price = 1;
 	}
 	public Apple() {

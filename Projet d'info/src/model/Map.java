@@ -41,14 +41,14 @@ public class Map {
 	    	Sums p = new Adult(10, 9,h);
 	    	Sums q = new Kid(5,6,h);
 	    	Sums r = new Elder(15,15,h);
-	    	Sums s = new Teen(24,6,h);
+	    	//Sums s = new Teen(24,6,h);
 	    	Market m = new Market(4,2);
 	    	Spa spa = new Spa(4, 10);
 	    	this.addObject(h);
 	    	this.addObject(p);
 	    	this.addObject(q);
 	    	this.addObject(r);
-	    	this.addObject(s);
+	    	//this.addObject(s);
 	    	this.addObject(m);
 	    	this.addObject(spa);
 	    	Cigaret c = new Cigaret(13,15);

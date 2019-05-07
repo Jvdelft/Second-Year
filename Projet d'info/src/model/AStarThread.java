@@ -6,14 +6,20 @@ public class AStarThread extends Thread{
 	private int x;
 	private int y;
 	private Door door;
+	private String string;
 	private boolean exit = false;
 
-	public AStarThread(Game g, Sums p, int x, int y, Door door) {
+	public AStarThread(Game g, Sums p, int x, int y, Object object) {
 		this.g= g;
 		this.p = p;
 		this.x = x;
 		this.y = y;
-		this.door = door;
+		if (object instanceof Door) {
+			this.door = (Door) object;
+		}
+		else if (object instanceof String) {
+			this.string = (String) object;
+		}
 		
 	}
 	
@@ -50,6 +56,10 @@ public class AStarThread extends Thread{
 		this.exit = true;
 		if (door != null) {
 			door.activate(p);
+		}
+		if (string == "WORK") {
+			p.teleportation(-1, -1);
+			((Adult) p).work();
 		}
 	}
 }

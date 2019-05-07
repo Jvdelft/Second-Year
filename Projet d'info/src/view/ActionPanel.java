@@ -57,6 +57,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("BUY"));
 		initButton(new JButton("COOK"));
 		initButton(new JButton("START COOKING"));
+		initButton(new JButton("GO TO WORK"));
 		this.setLayout(this.box);
 		
 	}
@@ -73,17 +74,20 @@ public class ActionPanel extends JPanel implements ActionListener {
 	}
 	public void updateVisibleButtons() {
     	ArrayList <String> typeList = new ArrayList <String>();
+    	if (active_player != null && active_player.getAgeRange() == "Adult") {
+    		typeList.add("GO TO WORK");
+    	}
     	if (activableObjects != null) {
-    	for (ActivableObject object : activableObjects) {
-            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
-                if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") { // = Si l'objet peut etre utilisé par active_player
-                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
-                		typeList.add(((Sums)object).getTypeAffection());
-                	}
-                	else { typeList.add(object.getType());}
-                }
-            }
-        }
+	    	for (ActivableObject object : activableObjects) {
+	            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
+	                if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") { // = Si l'objet peut etre utilisé par active_player
+	                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
+	                		typeList.add(((Sums)object).getTypeAffection());
+	                	}
+	                	else { typeList.add(object.getType());}
+	                }
+	            }
+	        }
     	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > index) {
     		ActivableObject object = ((ActivableObject) active_player.getObjects().get(index));
     		if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") {
