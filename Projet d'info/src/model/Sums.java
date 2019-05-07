@@ -27,15 +27,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected String typeAffection = type;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
-	protected BufferedImage sprite_l;
+	protected transient BufferedImage sprite_l;
 	@JsonIgnore
-	protected BufferedImage sprite_r;
+	protected transient BufferedImage sprite_r;
 	@JsonIgnore
-	protected BufferedImage sprite_u;
+	protected transient BufferedImage sprite_u;
 	@JsonIgnore
-	protected BufferedImage sprite_d;
+	protected transient BufferedImage sprite_d;
 	@JsonIgnore
-	protected BufferedImage sprite_face;
+	protected transient BufferedImage sprite_face;
 	private ArrayList<GameObject> inventory = new ArrayList<GameObject>();
 	protected boolean playable = true;
 	public Sums(int x, int y, House h) {
@@ -279,6 +279,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public void setIsPlayable(boolean ip) {
     	this.playable = ip;
     }
+    @JsonIgnore
     public BufferedImage getSprite() {
     	BufferedImage sprite = null;
     	switch(this.getDirection()) {

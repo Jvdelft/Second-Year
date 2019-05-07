@@ -4,17 +4,17 @@ import java.awt.image.BufferedImage;
 
 public class Block extends GameObject{
 	private String type = "";
-	protected BufferedImage sprite1;
-	protected BufferedImage sprite2;
-	protected BufferedImage sprite5;
-	protected BufferedImage sprite10;
-	protected BufferedImage sprite20;
-	protected BufferedImage sprite50;
-	protected BufferedImage sprite100;
-	protected BufferedImage sprite200;
-	protected BufferedImage sprite500;
-	protected BufferedImage sprite1000;
-	protected BufferedImage spriteTable;
+	protected transient BufferedImage sprite1;
+	protected transient BufferedImage sprite2;
+	protected transient BufferedImage sprite5;
+	protected transient BufferedImage sprite10;
+	protected transient BufferedImage sprite20;
+	protected transient BufferedImage sprite50;
+	protected transient BufferedImage sprite100;
+	protected transient BufferedImage sprite200;
+	protected transient BufferedImage sprite500;
+	protected transient BufferedImage sprite1000;
+	protected transient BufferedImage spriteTable;
 	public Block(int x, int y, String type) {
 		super(x,y);
 		this.type = type;

@@ -43,16 +43,16 @@ import net.miginfocom.swing.MigLayout;
 import controller.Keyboard;
 
 public class MapDrawer extends JPanel implements ActionListener, ListSelectionListener{
-    private ArrayList<GameObject> objects = null;
+    private ArrayList<GameObject> objects = new ArrayList<GameObject>();
     public final int MAP_SIZE = 30;
     private boolean firstMap = true;
     private Mouse mouseController = null;
     private static MapDrawer instance_mapDrawer = null;
-    private JList content = new JList();
+    private transient JList content = new JList();
 	private DefaultListModel items = new DefaultListModel();
-	private Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
-	private BufferedImage combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
-	private Graphics graphe = combined.getGraphics();
+	private transient Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
+	private transient BufferedImage combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
+	private transient Graphics graphe = combined.getGraphics();
 	private JButton up;
 	private JButton down;
 	private HashMap buttons = new HashMap();
@@ -104,15 +104,17 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     public void paintComponent(Graphics g) throws ConcurrentModificationException{
     	super.paintComponent(g);
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
-    	for (int i = 0; i < sizeH; i++) {
-        	int lines = i;
-            for (int j = 0; j < sizeW; j++) {
-                int Tileposx = j * tileSize;
-                int Tileposy = i * tileSize;
- 
-                g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
-            }
-        }
+    	if (currentMap.getTiles() != null) {
+	    	for (int i = 0; i < sizeH; i++) {
+	        	int lines = i;
+	            for (int j = 0; j < sizeW; j++) {
+	                int Tileposx = j * tileSize;
+	                int Tileposy = i * tileSize;
+	 
+	                g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
+	            }
+	        }
+    	}
         g.setColor(Color.BLUE.darker());
         g.drawRect(0,975,400,50);
         g.fillRect(0,975,400,50);
@@ -124,29 +126,31 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		
 		g.drawString(localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), 50, 1010);
     	
-        for (GameObject object : this.objects) {
-            int x = object.getPosX();
-            int y = object.getPosY();
-            if (x < 0 || y < 0) {
-            	continue;
-            }
-            else if (object instanceof ActivableObject) {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-            }
-            else if(object instanceof Sums) {
-            	drawSprites((Sums) object, g);
-            }
-            else {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-            }
-            if (textToPaint != null) {
-            	g.setColor(Color.WHITE);
-            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-            	g.setColor(Color.BLACK);
-            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
-            	g.drawString(textToPaint, tileSize/2, tileSize/2);
-            }
+        if (!(objects.isEmpty())) {
+        	for (GameObject object : this.objects) {
+	            int x = object.getPosX();
+	            int y = object.getPosY();
+	            if (x < 0 || y < 0) {
+	            	continue;
+	            }
+	            else if (object instanceof ActivableObject) {
+	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
+	            }
+	            else if(object instanceof Sums) {
+	            	drawSprites((Sums) object, g);
+	            }
+	            else {
+	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
+	            }
+	            if (textToPaint != null) {
+	            	g.setColor(Color.WHITE);
+	            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.setColor(Color.BLACK);
+	            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
+	            	g.drawString(textToPaint, tileSize/2, tileSize/2);
+	            }
+        	}
             /*else if (object instanceof Building) {
             	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV()*tileSize, this);
             }
@@ -335,6 +339,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		this.remove(panelButtons);
 	}
 	public void drawArrowsToDirect(GameObject o) {
+		System.out.println(o);
 		if (panelToDrawArrows == null) {
 			panelToDrawArrows = new PanelToDrawArrows();
 		}
@@ -345,6 +350,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		int min = Constantes.image_size*2;
 		int pref = Constantes.image_size*5/2;
 		String width = Integer.toString(min) + ":" + Integer.toString(pref) + ":" + Integer.toString(max);
+		System.out.println(textToPaint);
 		String pos = "pos " + (textToPaint.length()*21) + "px " + 5 + "px," + "width " + (width) + ", height " +(width);
 		this.add(panelToDrawArrows, pos);
 		pos = "pos " + (textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);

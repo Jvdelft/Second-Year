@@ -6,6 +6,7 @@ import view.MapDrawer;
 import view.Window;
 
 import java.awt.event.WindowEvent;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -22,29 +23,30 @@ import org.omg.CosNaming.IstringHelper;
 
 import controller.Keyboard;
 
-public class Game implements DeletableObserver, Runnable{
+public class Game implements DeletableObserver, Runnable, Serializable{
+	private static final long serialVersionUID = 8769447140160551649L;
 	private HashMap<String, Map> maps= new HashMap <String, Map>();
     private ArrayList<Sums> sums = new ArrayList<Sums>();
     private Sums active_player = null;
-    private Sound sound;
+    private transient Sound sound;
     private Window window;
     private int sizeW;
     private int sizeH;
     private int numberOfBreakableBlocks = 40;
-    private Thread t2= new Thread(this);
+    private transient Thread t2= new Thread(this);
     private static Game GameInstance;
     private int time;
-    private ArrayList<Timer> timers = new ArrayList<Timer>();
-    private ArrayList<Object> timerTasks = new ArrayList<Object>();
+    private transient ArrayList<Timer> timers = new ArrayList<Timer>();
+    private transient ArrayList<Object> timerTasks = new ArrayList<Object>();
     private Map currentMap;
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
     private int indexInventory;
     LocalDateTime localDateTime = LocalDateTime.of(2019, Month.JANUARY, 01, 00 , 00,00);
-    private ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
+    private transient ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
     private Game(Window window) {
     	this.window = window;
-        initMaps();
+    	initMaps();
         sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
         // Creating one Player at position (1,1)
@@ -53,29 +55,30 @@ public class Game implements DeletableObserver, Runnable{
     	//sound = new Sound();
     	//sound.play("Never_Surrender");
     	makeAllTimerTask();
-        
     }
     private void initMaps() {
-    	maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
-    	maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
-    	maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
-    	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
-    	maps.put(Constantes.mapMaison2, new Map(Constantes.mapMaison2));
-    	maps.put(Constantes.mapAttic, new Map(Constantes.mapAttic));
-    	for (String s: maps.keySet()) {
-    		for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
-    			sums.add(sumsOnMap);
-    		}
-    	}
-    	currentMap = maps.get(Constantes.mapBase);
-    	objectsOnMap = currentMap.getObjects();
-    	MapDrawer.getInstance().changeMap(currentMap);
-    	for(GameObject o : objectsOnMap) {
-    		if (o instanceof Sums) {
-    			active_player = (Sums) o;
-    			changeMap(Constantes.mapBase);
-    			window.setPlayer(active_player);
-    			break;
+    	if (!(Load.load)) {
+    		maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
+    		maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
+    		maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
+    		maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
+    		maps.put(Constantes.mapMaison2, new Map(Constantes.mapMaison2));
+    		maps.put(Constantes.mapAttic, new Map(Constantes.mapAttic));
+    		for (String s: maps.keySet()) {
+    			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
+    				sums.add(sumsOnMap);
+	    		}
+	    	}
+	    	currentMap = maps.get(Constantes.mapBase);
+	    	objectsOnMap = currentMap.getObjects();
+	    	MapDrawer.getInstance().changeMap(currentMap);
+	    	for(GameObject o : objectsOnMap) {
+	    		if (o instanceof Sums) {
+	    			active_player = (Sums) o;
+    				changeMap(Constantes.mapBase);
+    				window.setPlayer(active_player);
+    				break;
+    			}
     		}
     	}
     	for(GameObject o : objectsOnMap) {
@@ -142,24 +145,31 @@ public class Game implements DeletableObserver, Runnable{
     }
    
    public void buttonPressed(String button) {
-	   switch (button) {
-   		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
-   		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
-   		case "STOCK" : GameObject o = active_player.getObjects().get(indexInventory); active_player.getObjects().remove(o); ((ContainerObject) getFrontObject()).getObjectsContained().add(o);break;
-   		case "COOK" :
-   			GameObject object = active_player.getObjects().get(indexInventory);
-   			if (object instanceof Food) {
-   				active_player.getObjects().remove(object); 
-   				((Kitchen) getFrontObject()).getObjectsContained().add(object);
-   				if (((Kitchen) getFrontObject()).getObjectsContained().size()>1) {
-   					((Kitchen) getFrontObject()).cook(active_player);
-   				}
-   			}
-   			break;
-   		case "GO TO WORK" : sendPlayerToWork();
-   		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
-   				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
-   	   }
+	   if (button != null) {
+		   switch (button) {
+	   		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
+	   		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
+	   		case "STOCK" : GameObject o = active_player.getObjects().get(indexInventory); active_player.getObjects().remove(o); ((ContainerObject) getFrontObject()).getObjectsContained().add(o);break;
+	   		case "COOK" :
+	   			GameObject object = active_player.getObjects().get(indexInventory);
+	   			if (object instanceof Food) {
+	   				active_player.getObjects().remove(object); 
+	   				((Kitchen) getFrontObject()).getObjectsContained().add(object);
+	   				if (((Kitchen) getFrontObject()).getObjectsContained().size()>1) {
+	   					((Kitchen) getFrontObject()).cook(active_player);
+	   				}
+	   			}
+	   			break;
+	   		case "GO TO WORK" : sendPlayerToWork();
+	   		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
+	   				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
+	   	   }
+	   }
+	   else {
+		   if (getFrontObject() != null && getFrontObject() instanceof ActivableObject) {
+			   getFrontObject().activate(active_player);
+		   }
+	   }
 	   MapDrawer.getInstance().updateContent();
 	   MapDrawer.getInstance().requestFocusInWindow();
 	   ActionPanel.getInstance().updateVisibleButtons();
@@ -571,6 +581,9 @@ public class Game implements DeletableObserver, Runnable{
 		active_player = (Sums)objectsOnMap.get(i);
 		window.setGameObjects(g);
 	}
+	public ArrayList<GameObject> getObjects(){
+		return this.objectsOnMap;
+	}
 	public void AddObject(GameObject o) {
 		objectsOnMap.add(o);
 	}
@@ -616,5 +629,23 @@ public class Game implements DeletableObserver, Runnable{
 	}
 	public ArrayList<AStarThread> getThreads() {
 		return threads;
+	}
+	public void setMaps(HashMap<String,Map> hm) {
+		this.maps = hm;
+	}
+	public void setGameInstance(Game gI) {
+		synchronized(this) {
+			this.GameInstance = gI;
+		}
+	}
+	public void setCurrentMap(Map m) {
+		this.currentMap = m;
+	}
+	public void setSums(ArrayList<Sums> s) {
+		this.sums = s;
+	}
+	public void setTime(LocalDateTime time2) {
+		this.localDateTime = time2; 
+		
 	}
 }

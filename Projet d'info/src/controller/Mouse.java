@@ -1,8 +1,10 @@
 package controller;
 
+import java.io.Serializable;
+
 import model.Game;
 
-public class Mouse {
+public class Mouse implements Serializable{
     private Game game;
 
     public Mouse(Game game) {

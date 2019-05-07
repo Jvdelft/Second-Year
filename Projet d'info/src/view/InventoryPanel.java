@@ -26,11 +26,11 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 	private DefaultListModel items = new DefaultListModel();
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
-	private BufferedImage combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
-	private Graphics g = combined.getGraphics();
+	private transient BufferedImage combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
+	private transient Graphics g = combined.getGraphics();
 	private JButton up;
 	private JButton down;
-	private Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
+	private transient Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
 	private static InventoryPanel inventoryPanel_instance;
 	private int lastSelectedIndex;
 	private InventoryPanel() {

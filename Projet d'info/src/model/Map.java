@@ -1,23 +1,28 @@
 package model;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.SwingWorker;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import controller.Keyboard;
 import view.HUD;
 import view.MapDrawer;
 import view.Window;
 
-public class Map {
+public class Map implements Serializable{
+	
+	private static final long serialVersionUID = -2773641562525856530L;
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private int sizeW;
 	private int sizeH;
 	private int tileSize;
 	private boolean positionTaken[][];
 	private String mapName;
-	private ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
+	private transient ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
 	private boolean notInitHouse = true;
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
@@ -35,6 +40,7 @@ public class Map {
 		
 		
     }
+	
 	public void initMap() {
 		House h = new House(20,1);
 		if (mapName.equals(Constantes.mapBase)) {
@@ -132,12 +138,14 @@ public class Map {
 		}
 		Window.getInstance().update();
 	}
+	
 	public void initHouse(int x,int y){
 		mapDrawer.removeKeyListener(Keyboard.getInstance());
 		if (objectsToPlace.size() != 0 && lastObjectPlaced != objectsToPlace.get(0)) {
 			initObjectInHouse(objectsToPlace.get(0), x, y);
 		}
 	}
+	
 	private void initObjectInHouse(GameObject o,int x,int y) {
 		if (x > 0 && y >0 && x < sizeW-1 && y < sizeH-1) {
 			o.setPosX(x);
@@ -148,6 +156,7 @@ public class Map {
 			}
 		}
 	}
+	
 	public void newDoor(House h, Door d) {
 		ArrayList<GameObject> liste = new ArrayList<GameObject>(objects);
 		for (GameObject go : liste) {
@@ -158,6 +167,7 @@ public class Map {
 		System.out.println("porte maison "+d.getPosY());
 		objects.add(d);
 	}
+	
 	public void placeNextObject() {
 		if (objectsToPlace.size()>0 && objectsToPlace.contains(lastObjectPlaced)) {
 			objectsToPlace.remove(0);
@@ -175,6 +185,7 @@ public class Map {
 		}
 		
 	}
+	
 	public void addObject(GameObject o) {
 		lastObjectPlaced = o;
 		if (o != null) {
@@ -202,18 +213,24 @@ public class Map {
 	public int getSizeW() {
 		return sizeW;
 	}
+	public void setSizeW(int i) {
+		this.sizeW = i;
+	}
 	public int getSizeH() {
 		return sizeH;
 	}
 	public int getTileSize() {
 		return tileSize;
 	}
+	
 	public ArrayList<BufferedImage> getTiles(){
 		return tiles;
 	}
+	
 	public ArrayList<GameObject> getObjects(){
 		return objects;
 	}
+	
 	public ArrayList<ActivableObject> getActivableObjects(){
 		ArrayList<ActivableObject> res = new ArrayList<ActivableObject>();
 		for (GameObject object : objects) {
@@ -221,6 +238,7 @@ public class Map {
 		}
 		return res;
 	}
+	
 	public ArrayList<Sums> getSumsOnMap(){
 		ArrayList<Sums> res = new ArrayList<Sums>();
 		for (GameObject object : objects) {
@@ -229,7 +247,7 @@ public class Map {
 		return res;
 	}
 	
-	public void setObjects(ArrayList<GameObject> objectCreated) {
+	public void setObjectsOnMap(ArrayList<GameObject> objectCreated) {
 		if (objects != null) {
 			for (GameObject o : objectCreated) {
 				if (!(positionTaken[o.getPosX()][o.getPosY()])) {
@@ -248,22 +266,40 @@ public class Map {
 		    }
 		}
 	}
+	
 	public boolean isNotInitHouse() {
 		return notInitHouse;
 	}
+	
 	public void setIsInitHouse(boolean b) {
 		notInitHouse = b;
 	}
+	public ArrayList<Sums> getSums() {
+		return sums;
+	}
+	public void setSums(ArrayList<Sums> s) {
+		sums = s;
+	}
+	
 	public ArrayList<GameObject> getObjectsToPlace(){
 		return objectsToPlace;
 	}
+	
 	public GameObject getLastObjectPlace() {
 		return lastObjectPlaced;
 	}
+	
 	public void setLastObjectPlace(GameObject o) {
 		lastObjectPlaced = o;
 	}
+	
 	public boolean[][] getPositionTaken(){
 		return positionTaken;
+	}
+	public void setTiles(ArrayList<BufferedImage> o) {
+		this.tiles = o;
+	}
+	public String getMapName() {
+		return mapName;
 	}
 }

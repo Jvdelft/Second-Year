@@ -1,16 +1,21 @@
 package model;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 
-public abstract class GameObject {
+public abstract class GameObject implements Serializable{
     protected int posX;
     protected int posY;
+    @JsonIgnore
     protected int sizeW = 1;
+    @JsonIgnore
     protected int sizeH = 1;
+    @JsonIgnore
     protected int price = 0;
     @JsonIgnore
-    protected BufferedImage sprite;
+    protected transient BufferedImage sprite;
 
     public GameObject(int X, int Y) {
         this.posX = X;
@@ -58,7 +63,9 @@ public abstract class GameObject {
     }
     @JsonIgnore
     public abstract boolean isObstacle();
+    @JsonIgnore
     public abstract void makeSprite();
+    @JsonIgnore
     public BufferedImage getSprite() {
     	return sprite;
     }

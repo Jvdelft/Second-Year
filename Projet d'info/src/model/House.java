@@ -1,17 +1,22 @@
 package model;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import view.Window;
 
-public class House extends Building{
+public class House extends Building implements Serializable{
 	private int money;
 	private ArrayList<Sums> habitants = new ArrayList<Sums>();
 	private int sizeW = 6;
 	private int sizeH = 5;
 	private Door door;
-	protected BufferedImage spriteHouse1;
-	protected BufferedImage spriteHouse2;
+	@JsonIgnore
+	protected transient BufferedImage spriteHouse1;
+	@JsonIgnore
+	protected transient BufferedImage spriteHouse2;
 	private int category = 1;
 	public House(int x, int y) {
 		super(x,y);

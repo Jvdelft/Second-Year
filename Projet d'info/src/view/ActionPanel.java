@@ -29,7 +29,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private GridBagConstraints limits = new GridBagConstraints();
 	private int x;
 	private int y;
-	private Image background = Toolkit.getDefaultToolkit().createImage("Images/background.jpg");
+	private transient Image background = Toolkit.getDefaultToolkit().createImage("Images/background.jpg");
 	private Font font = new Font("Monotype Corsiva", Font.BOLD, 20);
 	private Sums active_player;
 	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
@@ -129,6 +129,8 @@ public class ActionPanel extends JPanel implements ActionListener {
 	
 	public void setPlayer(Sums s) {
 		active_player = s;
+		System.out.println(s);
+		System.out.println(buttons);
 	}
 	
 	public void removeButton(JButton button) {

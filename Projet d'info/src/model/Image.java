@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 
 public class Image extends GameObject{
 	String image;
-	protected BufferedImage spriteHouse2;
-	protected BufferedImage spriteCarpet;
-	protected BufferedImage spriteStairsDownPart;
-	protected BufferedImage spriteStairsMiddlePart;
-	protected BufferedImage spriteStairsUpPart;
+	protected transient BufferedImage spriteHouse2;
+	protected transient BufferedImage spriteCarpet;
+	protected transient BufferedImage spriteStairsDownPart;
+	protected transient BufferedImage spriteStairsMiddlePart;
+	protected transient BufferedImage spriteStairsUpPart;
 	public Image(String s) {
 		image = s;
 		configureImage();

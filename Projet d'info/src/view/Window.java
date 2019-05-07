@@ -2,6 +2,7 @@ package view;
 
 import model.GameObject;
 import model.Load;
+import model.Save;
 import model.Sums;
 import model.Constantes;
 import model.Game;
@@ -89,10 +90,16 @@ public class Window extends JFrame implements ActionListener {
     }
 
 	public int getMapSizeW() {
-		return mapDrawer.getCurrentMap().getSizeW();
+		if (mapDrawer.getCurrentMap() != null) {
+			return mapDrawer.getCurrentMap().getSizeW();
+		}
+		return 0;
 	}
 	public int getMapSizeH() {
-		return mapDrawer.getCurrentMap().getSizeH();
+		if (mapDrawer.getCurrentMap() != null) {
+			return mapDrawer.getCurrentMap().getSizeH();
+		}
+		return 0;
 	}
 	public void escapePressed() {
 		if (groupPanel.isVisible()) {
@@ -119,7 +126,6 @@ public class Window extends JFrame implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "EXIT") {
-			Window.Exit();
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		else if (e.getActionCommand() == "NEW GAME") {
@@ -127,14 +133,14 @@ public class Window extends JFrame implements ActionListener {
 		}
 		else if (e.getActionCommand() == "CONTINUE") {
 			this.setPlayer(active_player);
-			initGame();
-			//Load load = new Load();
+			Load load = new Load();
 		}
 		else if (e.getActionCommand() == "RESUME") {
 			cards.previous(this.getContentPane());
 			mapDrawer.requestFocusInWindow();
 		}
 		else if (e.getActionCommand() == "QUIT") {
+			Window.Exit();
 			System.exit(0);
 		}
 		else if (e.getActionCommand() == "HELP") {
@@ -142,9 +148,9 @@ public class Window extends JFrame implements ActionListener {
 		}
 	}
 	public static void Exit() {
-		//Save save = new Save();
+		Save save = new Save();
 	}
-	private void initGame() {
+	public void initGame() {
 		this.setPlayer(active_player);
 		Game game = Game.getInstance();
 		Keyboard keyboard = Keyboard.getInstance();

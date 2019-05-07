@@ -57,7 +57,7 @@ public class MapReader {
 				objects.add(factory.getInstance("Border", posX , posY));
 			}
 		}
-			mapBeingRead.setObjects(objects);
+			mapBeingRead.setObjectsOnMap(objects);
 	}
 	public static ArrayList<BufferedImage> ReadMap(String s, Map map) {
 		mapBeingRead = map;

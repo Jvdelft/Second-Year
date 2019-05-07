@@ -1,8 +1,12 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class ActivableObject extends GameObject implements Activable {
 	protected int lifePoints;
+	@JsonIgnore
 	protected String type = "INTERACT";
+	@JsonIgnore
 	protected String user = "All";
 	
 	public ActivableObject(int x, int y) {
