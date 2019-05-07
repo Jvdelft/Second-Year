@@ -165,19 +165,31 @@ public class Game implements DeletableObserver, Runnable{
 	   InventoryPanel.getInstance().updateInventory();
    }
    private void sendPlayerToWork() {
-	   Door closestDoor = getClosestDoor(active_player);
-	   Sums p = active_player;
-	   Timer timer = new Timer();
-	   TimerTask workTask = new TimerTask() {
+	   	Door closestDoor = getClosestDoor(active_player, true);
+	   	Sums p = active_player;
+	   	Timer timer = new Timer();
+	   	TimerTask workTask = new TimerTask() {
 		   public void run() {
-			   	threads.add(0, new AStarThread(Game.getInstance(), active_player, closestDoor.getPosX(), closestDoor.getPosY(), "WORK"));
+			   	int posX = closestDoor.getPosX();
+			   	int posY = closestDoor.getPosY();
+       			switch(String.valueOf(closestDoor.getChar())) {
+       			case "E" : posX +=1;break;
+       			case "W" : posX -= 1;break;
+       			case "S" : posY +=1; if (closestDoor.getPosX() == sizeW && closestDoor.getPosY() == sizeH) {posY -=1;}; break;
+       			case "N" : posY += 1; break;
+       			case "H" : posY-=1; break;
+       			default : posY += 1; break;
+       		}
+			   	threads.add(0, new AStarThread(Game.getInstance(), p, posX, posY, "WORK"));
        			((AStarThread) threads.get(0)).run();
 		   }
-	   };
-	   TimerTask backFromWorkTask = new TimerTask(){
-		 public void run() {
-			 p.teleportation(closestDoor.getPosX(), closestDoor.getPosY());
-			 timers.remove(timer);
+	   	};
+	   	TimerTask backFromWorkTask = new TimerTask(){
+	   		public void run() {
+	   			p.teleportation(Math.abs(closestDoor.getPosX()-1), Math.abs(closestDoor.getPosY()-1));
+	   			timers.remove(timer);
+	   			((Adult) p).work();
+			 	p.setIsPlayable(true);
 		 }
 	   };
 	   timers.add(timer);
@@ -357,14 +369,16 @@ public class Game implements DeletableObserver, Runnable{
     	active_player.tire();
     	notifyView();
     }
-    private Door getClosestDoor(Sums s) {
+    private Door getClosestDoor(Sums s, boolean onlyMapDoors) {
     	Door closestDoor = null;
     	int distanceMin = 50000;
     	for (GameObject o : objectsOnMap) {
     		if (o instanceof Door && s!= null) {
     			if ((o.getPosX()-s.getPosX())*(o.getPosX()-s.getPosX()) + (o.getPosY()-s.getPosY())*(o.getPosY()-s.getPosY()) < distanceMin){
-    				closestDoor = (Door) o;
-    				distanceMin = (o.getPosX()-s.getPosX())*(o.getPosX()-s.getPosX()) + (o.getPosY()-s.getPosY())*(o.getPosY()-s.getPosY());
+    				if (onlyMapDoors && o.getPosX() == sizeW || o .getPosX() == 0 || o.getPosX() == sizeW/2) {
+    					closestDoor = (Door) o;
+    					distanceMin = (o.getPosX()-s.getPosX())*(o.getPosX()-s.getPosX()) + (o.getPosY()-s.getPosY())*(o.getPosY()-s.getPosY());
+    				}
     			}
     		}
     	}
@@ -503,7 +517,9 @@ public class Game implements DeletableObserver, Runnable{
 	public void timePassed() {
 		ArrayList<Sums> newList = new ArrayList<Sums>(sums);
 		for (Sums e: newList) {
+			if (e.isPlayable()) {
 				e.timePassed();
+			}
 		}
 		notifyView();
 	}

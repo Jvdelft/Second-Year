@@ -35,9 +35,7 @@ public class AStarThread extends Thread{
 				case 2 : g.movePlayer(-1,0,p); break;
 				case 3 : g.movePlayer(0,1,p); break;
 				default : 
-					if (door != null) {
-						door.activate(p);
-					}
+					stopThread();
 					break;
 			}
 			try {
@@ -59,7 +57,7 @@ public class AStarThread extends Thread{
 		}
 		if (string == "WORK") {
 			p.teleportation(-1, -1);
-			((Adult) p).work();
+		   	p.setIsPlayable(false);
 		}
 	}
 }
