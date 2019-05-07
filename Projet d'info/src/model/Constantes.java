@@ -16,6 +16,7 @@ public class Constantes {
 	public static final String mapMaison = "Maps/MapMaison.txt";
 	public static final String mapMaison2 = "Maps/MapMaison2.txt";
 	public static final String mapMarket = "Maps/MapMarket.txt";
+	public static final String mapAttic = "Maps/MapAttic.txt";
 	public static final int image_size = 70;
 	public static BufferedImage tree;
 	public static BufferedImage herb;

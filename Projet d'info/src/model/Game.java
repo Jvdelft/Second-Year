@@ -61,6 +61,7 @@ public class Game implements DeletableObserver, Runnable{
     	maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
     	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
     	maps.put(Constantes.mapMaison2, new Map(Constantes.mapMaison2));
+    	maps.put(Constantes.mapAttic, new Map(Constantes.mapAttic));
     	for (String s: maps.keySet()) {
     		for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
     			sums.add(sumsOnMap);

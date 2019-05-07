@@ -104,13 +104,16 @@ public class Map {
 			this.addObject(new Image(1,3, "stairsDownPart"));
 			this.addObject(new Image(1,2, "stairsMiddlePart"));
 			this.addObject(new Image(1,1, "stairsUpPart"));
-			this.addObject(new Door(1,0, Constantes.mapBase, 'N'));
+			this.addObject(new Door(1,0, Constantes.mapAttic, 'N'));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
 			//objectsToPlace.add(new)
 			this.addObject(new Kitchen(sizeW-4,1,this));
 			System.out.println("Chargement MapMaison2"); 
+		}
+		else if (mapName.equals(Constantes.mapAttic)) {
+			this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapMaison2, 'A'));
 		}
 		else if (mapName.equals(Constantes.mapMarket)) {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'M'));
