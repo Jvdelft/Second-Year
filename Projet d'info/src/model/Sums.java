@@ -93,13 +93,13 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 			Game.getInstance().playerDied(this);
 		}
 		if (ageRange == "Kid" && age >= 12) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
 		}
 		else if (ageRange == "Teen" && age >= 21) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
 		}
 		else if (ageRange == "Adult" && age >= 60) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
 		}
 		else if (ageRange == "Elder" && age >= 85) {
 			Game.getInstance().playerDied(this);
@@ -130,6 +130,9 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	
 	public void buy(GameObject object) {
 		this.getHouse().changeMoney(-(object.getPrice()) );
+		if (object instanceof Image) {
+			this.getHouse().setCategory(2);
+		}
 		addInInventory(object);
 	}
 
@@ -191,6 +194,12 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     	if (object instanceof DeletableObject) {
     		((DeletableObject) object).attachDeletable(this);
     	}
+    	InventoryPanel.getInstance().updateInventory();
+    }
+    
+    public void setInventory(ArrayList<GameObject> go) {
+    	inventory.clear();
+    	inventory = go;
     	InventoryPanel.getInstance().updateInventory();
     }
     @Override

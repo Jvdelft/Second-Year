@@ -60,6 +60,7 @@ public class Game implements DeletableObserver, Runnable{
     	maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
     	maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
     	maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
+    	maps.put(Constantes.mapMaison2, new Map(Constantes.mapMaison2));
     	for (String s: maps.keySet()) {
     		for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
     			sums.add(sumsOnMap);
@@ -485,8 +486,7 @@ public class Game implements DeletableObserver, Runnable{
 		}
 		notifyView();
 	}
-	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {
-		System.out.println("evolution "+ s.getAgeRange()+time);
+	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap, ArrayList<GameObject> inventory) {
 		Sums newSums = s;
 		switch (s.getAgeRange()) {
 		case "Kid" : newSums = new Teen(s.getPosX(), s.getPosY(), s.getHouse()); break;
@@ -496,6 +496,7 @@ public class Game implements DeletableObserver, Runnable{
 		sums.remove(s); 
 		s.getMap().getObjects().remove(s);
 		newSums.setLoveHashMap(loveHasMap);
+		newSums.setInventory(inventory);
 		sums.add(newSums);
 		s.getMap().getObjects().add(newSums);
 		if (s == active_player) { active_player = newSums; ActionPanel.getInstance().setPlayer(active_player); window.setPlayer(active_player);}
@@ -549,7 +550,7 @@ public class Game implements DeletableObserver, Runnable{
         sizeH = currentMap.getSizeH();
   		objectsOnMap.add(active_player);
   		window.setGameObjects(objectsOnMap);
-  		if (s == Constantes.mapMaison && maps.get(s).isNotInitHouse()) {
+  		if ((s == Constantes.mapMaison || s == Constantes.mapMaison2) && maps.get(s).isNotInitHouse()) {
   			MapDrawer.getInstance().setTextToPaint("Where do you want to put the " + currentMap.getObjectsToPlace().get(0).getClass().getSimpleName() + " ?");
   			currentMap.initHouse(0, 0);
 		}

@@ -94,6 +94,17 @@ public class Map {
 			this.addObject(new Kitchen(sizeW-4,1,this));
 			System.out.println("Chargement MapMaison"); 
 		}
+		else if (mapName.equals(Constantes.mapMaison2)) {
+			this.addObject(new Adult(10,4,h));
+			objectsToPlace.add(new Fridge());
+			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
+			this.addObject(new Toilet(1,1));
+			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
+			objectsToPlace.add(new Toy());
+			objectsToPlace.add(new Bed());
+			this.addObject(new Kitchen(sizeW-4,1,this));
+			System.out.println("Chargement MapMaison2"); 
+		}
 		else if (mapName.equals(Constantes.mapMarket)) {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'M'));
 			for (int i = 4 ; i<14;  i++) {
@@ -104,6 +115,7 @@ public class Map {
 			for (int i = 4 ; i<14;  i++) {
 				this.addObject(new MarketShelve(i, 5, "Cigaret"));
 			}
+			this.addObject(new MarketShelve(4,8,"House2"));
 			this.addObject(new Block(3, 5, "pancarte10"));
 			this.addObject(new Block(14, 5, "pancarte10"));
 			System.out.println("Chargement MapMarket"); 
@@ -125,6 +137,16 @@ public class Map {
 				mapDrawer.drawArrowsToDirect(o);
 			}
 		}
+	}
+	public void newDoor(House h, Door d) {
+		ArrayList<GameObject> liste = new ArrayList<GameObject>(objects);
+		for (GameObject go : liste) {
+			if(go instanceof Door) {
+				if ((Door)go == h.getDoor()) {objects.remove(go);}
+			}
+		}
+		System.out.println("porte maison "+d.getPosY());
+		objects.add(d);
 	}
 	public void placeNextObject() {
 		if (objectsToPlace.size()>0 && objectsToPlace.contains(lastObjectPlaced)) {

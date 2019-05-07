@@ -1,4 +1,5 @@
 package model;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import view.Window;
@@ -9,6 +10,9 @@ public class House extends Building{
 	private int sizeW = 6;
 	private int sizeH = 5;
 	private Door door;
+	protected BufferedImage spriteHouse1;
+	protected BufferedImage spriteHouse2;
+	private int category = 1;
 	public House(int x, int y) {
 		super(x,y);
 		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, Constantes.mapMaison, 'S');
@@ -24,7 +28,16 @@ public class House extends Building{
 		money += i;
 		Window.getInstance().update();
 	}
-
+	public void setCategory(int i) {
+		category = i;
+		if (category == 2) {
+			sizeW=6;
+			sizeH=5;
+		}
+		Door d = new Door(Math.round(sizeW/2)+this.getPosX(),this.getPosY()+sizeH-1, Constantes.mapMaison2, 'S');
+		Game.getInstance().getMaps().get(Constantes.mapBase).newDoor(this, d);
+		door = d;
+	}
 	public boolean isObstacle() {
 		return true;
 	}
@@ -40,7 +53,17 @@ public class House extends Building{
 	public Door getDoor() {
 		return door;
 	}
+	public BufferedImage getSprite() {
+		BufferedImage sprite = null;
+		switch (category) {
+		case 1 : sprite = spriteHouse1; break;
+		case 2 : sprite = spriteHouse2; break;
+
+		}
+		return sprite;
+	}
 	public void makeSprite() {
-		sprite = Constantes.house;
+		spriteHouse1 = Constantes.house;
+		spriteHouse2 = Constantes.house2;
 	}
 }

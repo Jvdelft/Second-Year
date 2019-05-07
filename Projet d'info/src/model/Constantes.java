@@ -14,6 +14,7 @@ public class Constantes {
 	public static final String mapBase = "Maps/MapBase.txt";
 	public static final String mapRock = "Maps/MapRock.txt";
 	public static final String mapMaison = "Maps/MapMaison.txt";
+	public static final String mapMaison2 = "Maps/MapMaison2.txt";
 	public static final String mapMarket = "Maps/MapMarket.txt";
 	public static final int image_size = 70;
 	public static BufferedImage tree;
@@ -21,6 +22,7 @@ public class Constantes {
 	public static BufferedImage door;
 	public static BufferedImage rock;
 	public static BufferedImage house;
+	public static BufferedImage house2;
 	public static BufferedImage market;
 	public static BufferedImage sol;
 	public static BufferedImage wall;
@@ -107,6 +109,7 @@ public class Constantes {
 			door = ImageIO.read(new File("Images/Door.png"));
 			rock = ImageIO.read(new File("Images/Rock.png"));
 			house = ImageIO.read(new File("Images/House.png"));
+			house2 = ImageIO.read(new File("Images/House2.png"));
 			market = ImageIO.read(new File("Images/market.png"));
 			sol = ImageIO.read(new File("Images/sol.png"));
 			path = ImageIO.read(new File("Images/Stone_Floor.png"));
@@ -134,7 +137,6 @@ public class Constantes {
 			pancarte500 = ImageIO.read(new File("Images/Pancarte/Pancarte 500 gold.png"));
 			pancarte1000 = ImageIO.read(new File("Images/Pancarte/Pancarte 1000 gold.png"));
 			toy = ImageIO.read(new File("Images/toy.png"));
-			toy = ImageIO.read(new File("Images/étagère.png"));
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
 			toilet = ImageIO.read(new File("Images/toilet.png"));
 			bubbleThought = ImageIO.read(new File("Images/bubbleThought.png"));
