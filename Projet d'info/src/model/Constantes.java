@@ -43,6 +43,9 @@ public class Constantes {
 	public static BufferedImage toy;
 	public static BufferedImage étagère;
 	public static BufferedImage spa;
+	public static BufferedImage stairsDownPart;
+	public static BufferedImage stairsMiddlePart;
+	public static BufferedImage stairsUpPart;
 	public static BufferedImage pancarte1;
 	public static BufferedImage pancarte2;
 	public static BufferedImage pancarte5;
@@ -142,6 +145,9 @@ public class Constantes {
 			pancarte500 = ImageIO.read(new File("Images/Pancarte/Pancarte 500 gold.png"));
 			pancarte1000 = ImageIO.read(new File("Images/Pancarte/Pancarte 1000 gold.png"));
 			toy = ImageIO.read(new File("Images/toy.png"));
+			stairsDownPart = ImageIO.read(new File("Images/stairsDownPart.png"));
+			stairsMiddlePart = ImageIO.read(new File("Images/stairsMiddlePart.png"));
+			stairsUpPart = ImageIO.read(new File("Images/stairsUpPart.png"));
 			fridge = ImageIO.read(new File("Images/Fridge.png"));
 			toilet = ImageIO.read(new File("Images/toilet.png"));
 			bubbleThought = ImageIO.read(new File("Images/bubbleThought.png"));

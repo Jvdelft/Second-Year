@@ -164,6 +164,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		if (visibleButtons.contains((JButton) buttons.get("INTERACT"))) {
 			res = "INTERACT";
 		}
+		else if (visibleButtons.contains((JButton) buttons.get("OPEN"))) {
+			res = "OPEN";
+		}
 		else if (!(visibleButtons.isEmpty()) && visibleButtons.get(0) != buttons.get("EAT")){
 			res = visibleButtons.get(0).getText();
 			}

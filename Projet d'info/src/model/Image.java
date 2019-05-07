@@ -6,6 +6,9 @@ public class Image extends GameObject{
 	String image;
 	protected BufferedImage spriteHouse2;
 	protected BufferedImage spriteCarpet;
+	protected BufferedImage spriteStairsDownPart;
+	protected BufferedImage spriteStairsMiddlePart;
+	protected BufferedImage spriteStairsUpPart;
 	public Image(String s) {
 		image = s;
 		configureImage();
@@ -28,12 +31,18 @@ public class Image extends GameObject{
 	public void makeSprite() {
 		spriteHouse2=Constantes.house2;
 		spriteCarpet=Constantes.carpet;
+		spriteStairsDownPart = Constantes.stairsDownPart;
+		spriteStairsMiddlePart = Constantes.stairsMiddlePart;
+		spriteStairsUpPart = Constantes.stairsUpPart;
 	}
 	public BufferedImage getSprite() {
 		BufferedImage sprite = null;
 		switch(image) {
 		case "house2" : sprite = spriteHouse2; break;
 		case "carpet" : sprite = spriteCarpet; break;
+		case "stairsDownPart" : sprite = spriteStairsDownPart; break;
+		case "stairsMiddlePart" : sprite = spriteStairsMiddlePart; break;
+		case "stairsUpPart" : sprite = spriteStairsUpPart; break;
 		}
 		return sprite;
 	}

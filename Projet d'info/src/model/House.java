@@ -35,6 +35,7 @@ public class House extends Building{
 			sizeH=5;
 		}
 		Door d = new Door(Math.round(sizeW/2)+this.getPosX(),this.getPosY()+sizeH-1, Constantes.mapMaison2, 'S');
+		this.setPosX(this.getPosX()+1);
 		Game.getInstance().getMaps().get(Constantes.mapBase).newDoor(this, d);
 		door = d;
 	}

@@ -98,9 +98,13 @@ public class Map {
 			this.addObject(new Adult(10,4,h));
 			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			this.addObject(new Toilet(1,1));
+			this.addObject(new Toilet(1,8));
 			this.addObject(new Image(11,6, "carpet"));
 			this.addObject(new Block(11,4, "table"));
+			this.addObject(new Image(1,3, "stairsDownPart"));
+			this.addObject(new Image(1,2, "stairsMiddlePart"));
+			this.addObject(new Image(1,1, "stairsUpPart"));
+			this.addObject(new Door(1,0, Constantes.mapBase, 'N'));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
