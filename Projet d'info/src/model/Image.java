@@ -4,21 +4,37 @@ import java.awt.image.BufferedImage;
 
 public class Image extends GameObject{
 	String image;
-	protected BufferedImage sprite1;
-	protected BufferedImage sprite2;
+	protected BufferedImage spriteHouse2;
+	protected BufferedImage spriteCarpet;
 	public Image(String s) {
 		image = s;
-		if (image=="House2") {price=50;}
+		configureImage();
 	}
-	
+	public Image(int x, int y, String s) {
+		super(x,y);
+		image = s;
+		configureImage();
+	}
+	private void configureImage() {
+		switch (image) {
+		case "house2" :
+			price = 50; break;
+		case "carpet" : 
+			sizeH = 3;
+			sizeW = 4; break;
+		}
+		
+	}
 	public void makeSprite() {
-		sprite1=Constantes.house2;
-		//sprite2=Constantes.house3;
+		spriteHouse2=Constantes.house2;
+		spriteCarpet=Constantes.carpet;
 	}
 	public BufferedImage getSprite() {
 		BufferedImage sprite = null;
-		if (image=="House2") {sprite=sprite1;}
-		else if (image=="House3") {sprite=sprite2;}
+		switch(image) {
+		case "house2" : sprite = spriteHouse2; break;
+		case "carpet" : sprite = spriteCarpet; break;
+		}
 		return sprite;
 	}
 	@Override

@@ -99,9 +99,12 @@ public class Map {
 			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
 			this.addObject(new Toilet(1,1));
+			this.addObject(new Image(11,6, "carpet"));
+			this.addObject(new Block(11,4, "table"));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
+			//objectsToPlace.add(new)
 			this.addObject(new Kitchen(sizeW-4,1,this));
 			System.out.println("Chargement MapMaison2"); 
 		}

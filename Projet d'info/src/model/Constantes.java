@@ -25,7 +25,11 @@ public class Constantes {
 	public static BufferedImage house2;
 	public static BufferedImage market;
 	public static BufferedImage sol;
+	public static BufferedImage sol2;
 	public static BufferedImage wall;
+	public static BufferedImage wall2;
+	public static BufferedImage carpet;
+	public static BufferedImage table;
 	public static BufferedImage path;
 	public static BufferedImage chemin;
 	public static BufferedImage background;
@@ -112,6 +116,7 @@ public class Constantes {
 			house2 = ImageIO.read(new File("Images/House2.png"));
 			market = ImageIO.read(new File("Images/market.png"));
 			sol = ImageIO.read(new File("Images/sol.png"));
+			sol2 = ImageIO.read(new File("Images/Sol2.png"));
 			path = ImageIO.read(new File("Images/Stone_Floor.png"));
 			chemin = ImageIO.read(new File("Images/Dirt_Path.jpg"));
 			background = ImageIO.read(new File("Images/background.jpg"));
@@ -167,6 +172,9 @@ public class Constantes {
     		spriteFaceTeen = ImageIO.read(new File("Images/Sprite Teen M Face/1.png"));
     		bedOne = ImageIO.read(new File("Images/bed1.png"));
 			wall = ImageIO.read(new File("Images/wall.jpg"));
+			wall2 = ImageIO.read(new File("Images/Wall2.png"));
+			table = ImageIO.read(new File("Images/Table.png"));
+			carpet = ImageIO.read(new File("Images/carpet.png"));
 			arrowLeft = ImageIO.read(new File("Images/arrowleft.png"));
 			arrowRight = ImageIO.read(new File("Images/arrowright.png"));
 			imageList.add(arrowLeft);

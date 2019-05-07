@@ -14,6 +14,7 @@ public class Block extends GameObject{
 	protected BufferedImage sprite200;
 	protected BufferedImage sprite500;
 	protected BufferedImage sprite1000;
+	protected BufferedImage spriteTable;
 	public Block(int x, int y, String type) {
 		super(x,y);
 		this.type = type;
@@ -37,6 +38,7 @@ public class Block extends GameObject{
 		case "pancarte200" : sprite = sprite200; break;
 		case "pancarte500" : sprite = sprite500; break;
 		case "pancarte1000" : sprite = sprite1000; break;
+		case "table" : sprite = spriteTable; break;
 		}
 		return sprite;
 	}
@@ -51,6 +53,7 @@ public class Block extends GameObject{
 		sprite200 = Constantes.pancarte200;
 		sprite500 = Constantes.pancarte500;
 		sprite1000 = Constantes.pancarte1000;
+		spriteTable=Constantes.table;
 	}
 	public boolean isObstacle() {
 		return true;

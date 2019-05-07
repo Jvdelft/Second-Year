@@ -531,11 +531,11 @@ public class Game implements DeletableObserver, Runnable{
 		case "Adult" : newSums = new Elder(s.getPosX(), s.getPosY(), s.getHouse()); break;
 		}
 		sums.remove(s); 
-		s.getMap().getObjects().remove(s);
 		newSums.setLoveHashMap(loveHasMap);
 		newSums.setInventory(inventory);
 		sums.add(newSums);
 		s.getMap().getObjects().add(newSums);
+		s.getMap().getObjects().remove(s);
 		if (s == active_player) { active_player = newSums; ActionPanel.getInstance().setPlayer(active_player); window.setPlayer(active_player);}
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();

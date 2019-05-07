@@ -49,6 +49,13 @@ public class MapReader {
 				tiles.add(Constantes.wall);
 				objects.add(factory.getInstance("Border", posX , posY));
 			}
+			else if (Maps.get(i) == 's') {
+				tiles.add(Constantes.sol2);
+			}
+			else if (Maps.get(i) == 'w') {
+				tiles.add(Constantes.wall2);
+				objects.add(factory.getInstance("Border", posX , posY));
+			}
 		}
 			mapBeingRead.setObjects(objects);
 	}
