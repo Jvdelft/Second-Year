@@ -46,9 +46,9 @@ public class Map implements Serializable{
 	
 	public void initMap() {
 		if (mapName.equals(Constantes.mapBase)) {
-	    	this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapRock, 'S'));
+	    	this.addObject(new Door(Math.round(sizeW/2)-1,0, Constantes.mapRock, 'S'));
 	    	this.addObject(new Door(0,Math.round(sizeH/2)-1, Constantes.mapRock, 'E'));
-	    	this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapRock, 'N'));
+	    	this.addObject(new Door(Math.round(sizeW/2)-1,sizeH-1, Constantes.mapRock, 'N'));
 	    	this.addObject(new Door(sizeW-1,Math.round(sizeH/2)-1, Constantes.mapRock, 'W'));
 		}
 		else if (mapName.equals(Constantes.mapRock)) { 
