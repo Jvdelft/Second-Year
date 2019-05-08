@@ -136,9 +136,6 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	            	p.tire();
 	            }
 	        }
-	        if (p instanceof Adult) {
-	        	
-	        }
 	        ActionPanel.getInstance().updateVisibleButtons();
 	        notifyView();
     	}
@@ -146,7 +143,33 @@ public class Game implements DeletableObserver, Runnable, Serializable{
    
    public void buttonPressed(String button) {
 	   if (button != null) {
-		   switch (button) {
+		   if (button.contentEquals("GIVE FLOWER")) { ((Adult) getFrontObject()).receiveFlower(active_player);}
+		   else if (button.contentEquals("MAKE LOVE")) { ((Adult) getFrontObject()).makeLove();}
+		   else if (button.contentEquals("GO TO WORK")) { sendPlayerToWork();}
+		   else if (button.contentEquals("STOCK")) { 
+			   GameObject o = active_player.getObjects().get(indexInventory);
+			   active_player.getObjects().remove(o);
+			   ((ContainerObject) getFrontObject()).getObjectsContained().add(o);
+		   }
+		   else if (button.contentEquals("COOK")) {
+			   GameObject object = active_player.getObjects().get(indexInventory);
+	   			if (object instanceof Food) {
+	   				active_player.getObjects().remove(object); 
+	   				((Kitchen) getFrontObject()).getObjectsContained().add(object);
+	   				if (((Kitchen) getFrontObject()).getObjectsContained().size()>1) {
+	   					((Kitchen) getFrontObject()).cook(active_player);
+	   				}
+	   			}
+		   }
+		   else {
+			   if (getFrontObject() != null && getFrontObject().getType().contentEquals(button)) {
+				   getFrontObject().activate(active_player);
+			   }
+			   else {
+				   ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player);
+			   }
+		   }
+		   /*switch (button) {
 	   		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
 	   		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
 	   		case "STOCK" : GameObject o = active_player.getObjects().get(indexInventory); active_player.getObjects().remove(o); ((ContainerObject) getFrontObject()).getObjectsContained().add(o);break;
@@ -163,7 +186,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	   		case "GO TO WORK" : sendPlayerToWork();
 	   		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
 	   				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
-	   	   }
+	   	   }*/
 	   }
 	   else {
 		   if (getFrontObject() != null && getFrontObject() instanceof ActivableObject) {

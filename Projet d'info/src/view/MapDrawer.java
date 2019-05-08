@@ -376,26 +376,26 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 				row --;
 				updateContent();
 			}
-			if (arg0.getActionCommand() == "CLOSE") {
+			if (arg0.getActionCommand().contentEquals("CLOSE")) {
 				removeDrawContent();
 				if (container instanceof MarketShelve) {
 					((MarketShelve)container).initObjectContained(((MarketShelve) container).getShelveType());
 				}
 				active_player.setIsPlayable(true);
 			}
-			else if (arg0.getActionCommand() == "EAT IT") {
+			else if (arg0.getActionCommand().contentEquals("EAT IT")) {
 				ActivableObject object = (ActivableObject) container.getObjectsContained().get(index);
 				object.activate(active_player);
 				container.getObjectsContained().remove(object);
 				updateContent();
 			}
-			else if (arg0.getActionCommand() == "TAKE") {
+			else if (arg0.getActionCommand().contentEquals("TAKE")) {
 				GameObject object = container.getObjectsContained().get(index);
 				container.getObjectsContained().remove(object);
 				active_player.addInInventory(object);
 				updateContent();
 			}
-			else if (arg0.getActionCommand() == "BUY") {
+			else if (arg0.getActionCommand().contentEquals("BUY")) {
 				GameObject object = container.getObjectsContained().get(index);
 				container.getObjectsContained().remove(object);
 				active_player.buy(object);
@@ -412,7 +412,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		}
 		if (index <= objects.size()-1) {
 			if (container instanceof Fridge) {
-				if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType() == "EAT"){
+				if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType().contentEquals("EAT")){
 					this.add(buttonEAT, posButton3);
 				}
 				else {

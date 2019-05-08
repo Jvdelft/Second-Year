@@ -6,11 +6,11 @@ import javax.imageio.ImageIO;
 
 import view.Window;
 import view.MapDrawer;
-
+import java.lang.*;
 public class Door extends ActivableObject{
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
 	private String destination;
-	private char character;
+	private Character character;
 
 	public Door(int X, int Y, String s, char c) {
 		super(X, Y);
@@ -35,6 +35,7 @@ public class Door extends ActivableObject{
 			game.getCurrentMap().getObjects().remove(e); 
 			game.getMaps().get(this.getDestination()).addObject(e);
 		}
+
 		switch (character) {
 			case 'N' : e.teleportation(Math.round(sizeW/2) , 1); break;
 			case 'S' : e.teleportation(Math.round(sizeW/2) ,sizeH - 2); break;

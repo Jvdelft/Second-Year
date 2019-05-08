@@ -74,13 +74,13 @@ public class ActionPanel extends JPanel implements ActionListener {
 	}
 	public void updateVisibleButtons() {
     	ArrayList <String> typeList = new ArrayList <String>();
-    	if (active_player != null && active_player.getAgeRange() == "Adult") {
+    	if (active_player != null && active_player.getAgeRange().contentEquals("Adult")) {
     		typeList.add("GO TO WORK");
     	}
     	if (activableObjects != null) {
 	    	for (ActivableObject object : activableObjects) {
 	            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
-	                if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") { // = Si l'objet peut etre utilisé par active_player
+	                if (object.getUser().contentEquals(active_player.getAgeRange()) || object.getUser().contentEquals("All")) { // = Si l'objet peut etre utilisé par active_player
 	                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
 	                		typeList.add(((Sums)object).getTypeAffection());
 	                	}
@@ -90,7 +90,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 	        }
     	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > index) {
     		ActivableObject object = ((ActivableObject) active_player.getObjects().get(index));
-    		if (object.getUser() == active_player.getAgeRange() || object.getUser() == "All") {
+    		if (object.getUser().contentEquals(active_player.getAgeRange()) || object.getUser().contentEquals("All")) {
     			typeList.add(object.getType());
     		}
 		}
