@@ -64,7 +64,7 @@ public class Load {
 					}
 				}
 				for (int j = 0; j<map.getObjectsToPlace().size(); j++) {
-					map.getObjectsToPlace().get(i).makeSprite();
+					map.getObjectsToPlace().get(j).makeSprite();
 				}
 				map.setTiles(MapReader.ReadMap(map.getMapName(),map));
 				MapDrawer.getInstance().updateContent();

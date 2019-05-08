@@ -58,6 +58,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     }
     private void initMaps() {
     	if (!(Load.load)) {
+    		System.out.println("Hey");
     		maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
     		maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
     		maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
@@ -530,8 +531,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 				active_player = (Sums) p;
 				window.setPlayer((Sums)p);
 				ActionPanel.getInstance().setPlayer(active_player);
-				MapDrawer.getInstance().addKeyListener(Keyboard.getInstance());
-				
+				MapDrawer.getInstance().requestFocusInWindow();
 			}
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
@@ -580,7 +580,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		e.getMap().getObjects().remove(e);
 		if (e == active_player) {
 			Random r = new Random();
-			int index = r.nextInt(sums.size()) + 1;
+			int index = r.nextInt(sums.size());
 			active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
 			if (active_player.getMap() != currentMap ) {
 				changeMap(active_player.getStringMap());

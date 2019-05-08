@@ -339,21 +339,15 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		this.remove(panelButtons);
 	}
 	public void drawArrowsToDirect(GameObject o) {
-		System.out.println(o);
-		if (panelToDrawArrows == null) {
-			panelToDrawArrows = new PanelToDrawArrows();
-		}
-		if (panelButtons == null) {
-			panelButtons = new ButtonsForPlacingFurniture();
-		}
+		panelToDrawArrows = new PanelToDrawArrows();
+		panelButtons = new ButtonsForPlacingFurniture();
 		int max = Constantes.image_size*3;
 		int min = Constantes.image_size*2;
 		int pref = Constantes.image_size*5/2;
 		String width = Integer.toString(min) + ":" + Integer.toString(pref) + ":" + Integer.toString(max);
-		System.out.println(textToPaint);
 		String pos = "pos " + (textToPaint.length()*21) + "px " + 5 + "px," + "width " + (width) + ", height " +(width);
 		this.add(panelToDrawArrows, pos);
-		pos = "pos " + (textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);
+		pos = "pos " + (this.textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);
 		this.add(panelButtons,pos);
 	}
 	public void updateTime() {

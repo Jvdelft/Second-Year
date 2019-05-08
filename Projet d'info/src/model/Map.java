@@ -25,10 +25,13 @@ public class Map implements Serializable{
 	private transient ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
 	private boolean notInitHouse = true;
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
-	private MapDrawer mapDrawer = MapDrawer.getInstance();
+	private MapDrawer mapDrawer;
 	private GameObject lastObjectPlaced = null;
 	private House house = new House(20,1);
 	public Map(String path) {
+		if(path != Constantes.mapMaison && path != Constantes.mapMaison2) {
+			notInitHouse = false;
+		}
 		this.mapName = path;
 		MapReader.readWidth(path);
 		sizeW = MapReader.getwTile(); //problème avec pixels 
@@ -71,6 +74,7 @@ public class Map implements Serializable{
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
 			objectsToPlace.add(new Fridge());
+			objectsToPlace.add(new Bed());
 			System.out.println("Chargement MapMaison2"); 
 		}
 		else if (mapName.equals(Constantes.mapAttic)) {
@@ -91,6 +95,7 @@ public class Map implements Serializable{
 	}
 	
 	public void initHouse(int x,int y){
+		mapDrawer = MapDrawer.getInstance();
 		mapDrawer.removeKeyListener(Keyboard.getInstance());
 		if (objectsToPlace.size() != 0 && lastObjectPlaced != objectsToPlace.get(0)) {
 			initObjectInHouse(objectsToPlace.get(0), x, y);
@@ -128,6 +133,7 @@ public class Map implements Serializable{
 			mapDrawer.setTextToPaint("Where do you want to put the " + objectsToPlace.get(0).getClass().getSimpleName() + " ?");
 		}
 		else {
+			System.out.println("Bite");
 			mapDrawer.setTextToPaint(null);
 			mapDrawer.addKeyListener(Keyboard.getInstance());
 			mapDrawer.removeDrawArrows();
