@@ -18,18 +18,12 @@ public class Adult extends Sums {
 		typeAffection = "MAKE LOVE";
 		ageRange = "Adult";
 		user = "Adult";
-		if (this.energy == 0) {
-			this.faim = max_faim;
-			this.energy = max_energy;
-			this.happiness = max_happiness;
-			this.toilet = 10;
-			age = 21;
+		this.faim = max_faim;
+		this.energy = max_energy;
+		this.happiness = max_happiness;
+		this.toilet = 10;
+		age = 21;
 		}
-	}
-	public Adult() {
-		super();
-		energy = 1;
-	}
 	public void work() {
 		this.energy -= 70;
 		maison.changeMoney(2000); 

@@ -2,6 +2,7 @@ package model;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,6 +26,8 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected int direction = EAST ;
 	protected String ageRange ;
 	protected String typeAffection = type;
+	protected final int max_hygiene = 7;
+	private transient Timer timer = new Timer();
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
 	@JsonIgnore
 	protected transient BufferedImage sprite_l;
@@ -40,12 +43,11 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected boolean playable = true;
 	public Sums(int x, int y, House h) {
 		super(x, y);
-		if (this.energy == 0) {
-			this.faim = max_faim;
-			this.energy = max_energy;
-			this.happiness = max_happiness;
-			this.toilet = 10;
-		}
+		this.faim = max_faim;
+		this.energy = max_energy;
+		this.happiness = max_happiness;
+		this.hygiene = max_hygiene;
+		this.toilet = 10;
 		h.AddHabitant(this);
 		this.maison = h;
 		inventory.add(new Dish(12));
@@ -58,11 +60,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 			if (go instanceof DeletableObject) {((DeletableObject)go).attachDeletable(this); }
 		}
 	}
-	public Sums() {
-		super();
-		this.energy = 1;
-	}
-	
 	public void Eat(Food f) {
 		int hungry = this.faim + f.getNutritionalValue();
 		this.faim = Math.min(hungry,this.max_faim);
@@ -308,6 +305,15 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     public int getMaxFaim() {
     	return this.max_faim;
+    }
+    public int getMaxHygiene() {
+    	return this.max_hygiene;
+    }
+    public int getMaxHappiness() {
+    	return this.max_happiness;
+    }
+    public Timer getTimer() {
+    	return this.timer;
     }
 
 

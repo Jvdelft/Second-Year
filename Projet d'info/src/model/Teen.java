@@ -13,17 +13,11 @@ public class Teen extends Sums{
 		max_toilet = Constantes.max_toilet_teen;
 		max_happiness = Constantes.max_happiness_teen;
 		ageRange = "Teen";
-		if (this.energy == 0) {
-			this.faim = max_faim;
-			this.energy = max_energy;
-			this.happiness = max_happiness;
-			this.toilet = 10;
-			age = 12;
-		}
-	}
-	public Teen() {
-		super();
-		energy = 1;
+		this.faim = max_faim;
+		this.energy = max_energy;
+		this.happiness = max_happiness;
+		this.toilet = 10;
+		age = 12;
 	}
 	public void smoke(Cigaret c) {
 		this.happiness += 5;

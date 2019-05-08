@@ -82,7 +82,7 @@ public class MapReader {
 						Maps.add(aChar);
 					}
 				}
-				else {
+				else if (!(Load.load)) {
 					String [] split = sCurrentLine.split(" ");
 					int x = Integer.parseInt(split[1]);
 					int y = Integer.parseInt(split[2]);

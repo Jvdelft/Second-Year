@@ -14,19 +14,13 @@ public class Kid extends Sums{
 		max_faim = Constantes.max_faim_kid;
 		type = "PLAY";
 		ageRange = "Kid";
-		if (this.energy == 0) {
-			this.faim = max_faim;
-			this.energy = max_energy;
-			this.happiness = max_happiness;
-			this.toilet = 10;
-			age = 0;
+		this.faim = max_faim;
+		this.energy = max_energy;
+		this.happiness = max_happiness;
+		this.toilet = 10;
+		age = 0;
 		}
 		
-	}
-	public Kid() {
-		super();
-		energy = 1;
-	}
 	public void makeSprite() {
 		sprite_d = Constantes.spriteDKid;
     	sprite_l = Constantes.spriteLKid;

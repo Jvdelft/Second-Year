@@ -13,18 +13,12 @@ public class Elder extends Sums{
 		max_toilet = Constantes.max_toilet_elder;
 		max_happiness = Constantes.max_happiness_elder;
 		ageRange = "Elder";
-		if (this.energy == 0) {
-			this.faim = max_faim;
-			this.energy = max_energy;
-			this.happiness = max_happiness;
-			this.toilet = 10;
-			age = 60;
+		this.faim = max_faim;
+		this.energy = max_energy;
+		this.happiness = max_happiness;
+		this.toilet = 10;
+		age = 60;
 		}
-	}
-	public Elder() {
-		super();
-		energy = 1;
-	}
 	public void WatchTV() {
 		happiness += 1;
 	}
