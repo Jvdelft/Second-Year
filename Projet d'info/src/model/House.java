@@ -35,13 +35,20 @@ public class House extends Building implements Serializable{
 	}
 	public void setCategory(int i) {
 		category = i;
+		String oldHouse = Constantes.mapMaison;
+		String newHouse = Constantes.mapMaison2;
 		if (category == 2) {
 			sizeW=6;
 			sizeH=5;
+			oldHouse = Constantes.mapMaison;
+			newHouse = Constantes.mapMaison2;
 		}
 		Door d = new Door(Math.round(sizeW/2)+this.getPosX(),this.getPosY()+sizeH-1, Constantes.mapMaison2, 'S');
 		this.setPosX(this.getPosX()+1);
 		Game.getInstance().getMaps().get(Constantes.mapBase).newDoor(this, d);
+		ArrayList<Sums> sums = Game.getInstance().getMaps().get(oldHouse).getSumsOnMap();
+		Game.getInstance().getMaps().get(newHouse).addSumsOnMap(sums);
+		Game.getInstance().getMaps().get(newHouse).setIsInitHouse(true);
 		door = d;
 	}
 	public boolean isObstacle() {

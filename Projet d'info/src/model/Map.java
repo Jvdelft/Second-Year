@@ -27,7 +27,7 @@ public class Map implements Serializable{
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
 	private GameObject lastObjectPlaced = null;
-	private ArrayList<Sums> sums = new ArrayList<Sums>();
+	private House house = new House(20,1);
 	public Map(String path) {
 		this.mapName = path;
 		MapReader.readWidth(path);
@@ -42,46 +42,13 @@ public class Map implements Serializable{
     }
 	
 	public void initMap() {
-		House h = new House(20,1);
 		if (mapName.equals(Constantes.mapBase)) {
-	    	Sums p = new Adult(10, 9,h);
-	    	Sums q = new Kid(5,6,h);
-	    	Sums r = new Elder(15,15,h);
-	    	//Sums s = new Teen(24,6,h);
-	    	Market m = new Market(4,2);
-	    	Spa spa = new Spa(4, 10);
-	    	this.addObject(h);
-	    	this.addObject(p);
-	    	this.addObject(q);
-	    	this.addObject(r);
-	    	//this.addObject(s);
-	    	this.addObject(m);
-	    	this.addObject(spa);
-	    	Cigaret c = new Cigaret(13,15);
-	    	this.addObject(c);
-	    	this.addObject(new Apple(7,7));
-	    	ArrayList <Building> building = new ArrayList<Building>();
-	    	building.add(h);
-	    	building.add(m);
-	    	building.add(spa);
-			for (Building b : building) {
-				for (int i = 0; i< b.getSizeH(); i++) {
-					this.addObject(new Block(b.getPosX(),i+b.getPosY()));
-					this.addObject(new Block (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
-				}
-				for (int i = 0; i< b.getSizeW(); i++) {
-					this.addObject(new Block(i+b.getPosX(),b.getPosY()));
-					this.addObject(new Block (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
-				}
-				objects.add(b.getDoor());
-			}
-			
 	    	this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapRock, 'S'));
 	    	this.addObject(new Door(0,Math.round(sizeH/2)-1, Constantes.mapRock, 'E'));
 	    	this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapRock, 'N'));
 	    	this.addObject(new Door(sizeW-1,Math.round(sizeH/2)-1, Constantes.mapRock, 'W'));
 		}
-		else if (mapName.equals(Constantes.mapRock)) { //modifier sizeW, sizeH en fonction de la taille de la map
+		else if (mapName.equals(Constantes.mapRock)) { 
 	    	this.addObject(new Door(Math.round(sizeW/2),0, Constantes.mapBase, 'S'));
 	    	this.addObject(new Door(0,Math.round(sizeH/2)-1, Constantes.mapBase, 'E'));
 	    	this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'N'));
@@ -90,32 +57,20 @@ public class Map implements Serializable{
 
 		}
 		else if (mapName.equals(Constantes.mapMaison)) {
-			this.addObject(new Adult(10,4,h));
 			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			this.addObject(new Toilet(1,1));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
-			this.addObject(new Kitchen(sizeW-4,1,this));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (mapName.equals(Constantes.mapMaison2)) {
-			this.addObject(new Adult(10,4,h));
-			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			this.addObject(new Toilet(1,8));
-			this.addObject(new Image(11,6, "carpet"));
-			this.addObject(new Block(11,4, "table"));
-			this.addObject(new Image(1,3, "stairsDownPart"));
-			this.addObject(new Image(1,2, "stairsMiddlePart"));
-			this.addObject(new Image(1,1, "stairsUpPart"));
 			this.addObject(new Door(1,0, Constantes.mapAttic, 'N'));
 			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
-			//objectsToPlace.add(new)
-			this.addObject(new Kitchen(sizeW-4,1,this));
+			objectsToPlace.add(new Fridge());
 			System.out.println("Chargement MapMaison2"); 
 		}
 		else if (mapName.equals(Constantes.mapAttic)) {
@@ -126,14 +81,10 @@ public class Map implements Serializable{
 			for (int i = 4 ; i<14;  i++) {
 				this.addObject(new MarketShelve(i, 2, "Apple"));
 			}
-			this.addObject(new Block(3, 2, "pancarte1"));
-			this.addObject(new Block(14, 2, "pancarte1"));
 			for (int i = 4 ; i<14;  i++) {
 				this.addObject(new MarketShelve(i, 5, "Cigaret"));
 			}
 			this.addObject(new MarketShelve(4,8,"House2"));
-			this.addObject(new Block(3, 5, "pancarte10"));
-			this.addObject(new Block(14, 5, "pancarte10"));
 			System.out.println("Chargement MapMarket"); 
 		}
 		Window.getInstance().update();
@@ -250,7 +201,7 @@ public class Map implements Serializable{
 	public void setObjectsOnMap(ArrayList<GameObject> objectCreated) {
 		if (objects != null) {
 			for (GameObject o : objectCreated) {
-				if (!(positionTaken[o.getPosX()][o.getPosY()])) {
+				if (!(positionTaken[o.getPosX()][o.getPosY()]) || o instanceof Building || o instanceof Block || o instanceof Door) {
 			    	objects.add(o);
 			    	positionTaken[o.getPosX()][o.getPosY()] = true;
 				}
@@ -265,20 +216,25 @@ public class Map implements Serializable{
 			    }*/
 		    }
 		}
+		/*if (this.mapName.contentEquals("Constantes.mapBase")) {
+			this.setHouse();
+		}*/
 	}
-	
+	public void addSumsOnMap(ArrayList<Sums> sums) {
+		for (Sums s : sums) {this.addObject((GameObject) s);}
+	}
+	public void setHouse(House h) {
+		this.house = h;
+	}
+	public House getHouse() { 
+		return house;
+	}
 	public boolean isNotInitHouse() {
 		return notInitHouse;
 	}
 	
 	public void setIsInitHouse(boolean b) {
 		notInitHouse = b;
-	}
-	public ArrayList<Sums> getSums() {
-		return sums;
-	}
-	public void setSums(ArrayList<Sums> s) {
-		sums = s;
 	}
 	
 	public ArrayList<GameObject> getObjectsToPlace(){

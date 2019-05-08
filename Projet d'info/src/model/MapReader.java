@@ -19,7 +19,6 @@ public class MapReader {
 	public MapReader() {
 		}
 	private static void makeTiles() {
-		objects = new ArrayList<GameObject>();
 		for (int i=0; i<Maps.size();i++) {
 			int posY = i/wTiles;
 			int posX = i%wTiles;
@@ -57,9 +56,11 @@ public class MapReader {
 				objects.add(factory.getInstance("Border", posX , posY));
 			}
 		}
-			mapBeingRead.setObjectsOnMap(objects);
+		mapBeingRead.setObjectsOnMap(objects);
 	}
 	public static ArrayList<BufferedImage> ReadMap(String s, Map map) {
+		objects = new ArrayList<GameObject>();
+		int line = 0;
 		mapBeingRead = map;
 		Maps = new ArrayList<Character>();
 		tiles = new ArrayList<BufferedImage>();
@@ -73,10 +74,46 @@ public class MapReader {
 			String sCurrentLine;
 			String sizeLine = br.readLine();
 			wTiles = Integer.parseInt(sizeLine);
-			while ((sCurrentLine = br.readLine()) != null) {
-				for (int i=0;i<sCurrentLine.length();i++) {
-					char aChar = sCurrentLine.charAt(i);
-					Maps.add(aChar);
+			while ((sCurrentLine = br.readLine()) != null && !(sCurrentLine.isEmpty())) {
+				line++;
+				if (line <= (2*wTiles)/3) {
+					for (int i=0;i<sCurrentLine.length();i++) {
+						char aChar = sCurrentLine.charAt(i);
+						Maps.add(aChar);
+					}
+				}
+				else {
+					String [] split = sCurrentLine.split(" ");
+					int x = Integer.parseInt(split[1]);
+					int y = Integer.parseInt(split[2]);
+					switch (split[0]) {
+					case "house" :
+						Building house = new House(x,y);
+						mapBeingRead.setHouse((House)house);
+						readBuilding(house); break;
+					case "market" : 
+						Building market = new Market(x,y); 
+						readBuilding(market); break;
+					case "spa" : 
+						Building spa = new Spa(x,y);
+						readBuilding(spa); break;
+					case "cigaret" : objects.add(new Cigaret(x,y)); break;
+					case "apple" : objects.add(new Apple(x,y)); break;
+					case "adult" : objects.add(new Adult(x,y,map.getHouse())); break;
+					case "kid" : objects.add(new Kid(x,y,map.getHouse())); break;
+					case "teen" : objects.add(new Teen(x,y,map.getHouse())); break;
+					case "elder" : objects.add(new Elder(x,y,map.getHouse())); break;
+					case "toilet" : objects.add(new Toilet(x,y)); break;
+					case "kitchen" : objects.add(new Kitchen(x,y,map)); break;
+					case "carpet" : objects.add(new Image(x,y,"carpet")); break;
+					case "stairsDownPart" : objects.add(new Image(x,y,"stairsDownPart")); break;
+					case "stairsMiddlePart" : objects.add(new Image(x,y,"stairsMiddlePart")); break;
+					case "stairsUpPart" : objects.add(new Image(x,y,"stairsUpPart")); break;
+					case "table" : objects.add(new Block(x,y,"table")); break;
+					case "pancarte1" : objects.add(new Block(x,y,"pancarte1")); break;
+					case "pancarte50" : objects.add(new Block(x,y,"pancarte50")); break;
+					case "pancarte10" : objects.add(new Block(x,y,"pancarte10")); break;
+					}
 				}
 			}
 
@@ -101,6 +138,18 @@ public class MapReader {
 		}
 		makeTiles();
 		return tiles;
+	}
+	public static void readBuilding(Building b) {
+		for (int i = 0; i< b.getSizeH(); i++) {
+			objects.add(new Block(b.getPosX(),i+b.getPosY()));
+			objects.add(new Block (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
+		}
+		for (int i = 0; i< b.getSizeW(); i++) {
+			objects.add(new Block(i+b.getPosX(),b.getPosY()));
+			objects.add(new Block (i+b.getPosX(),b.getPosY()+b.getSizeH()-1));
+		}
+		objects.add(b);
+		objects.add(b.getDoor());
 	}
 	public static int getwTile() {
 		return wTiles;
