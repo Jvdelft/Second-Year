@@ -129,8 +129,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 	
 	public void setPlayer(Sums s) {
 		active_player = s;
-		System.out.println(s);
-		System.out.println(buttons);
 	}
 	
 	public void removeButton(JButton button) {
