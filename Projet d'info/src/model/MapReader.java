@@ -113,6 +113,7 @@ public class MapReader {
 					case "pancarte1" : objects.add(new Block(x,y,"pancarte1")); break;
 					case "pancarte50" : objects.add(new Block(x,y,"pancarte50")); break;
 					case "pancarte10" : objects.add(new Block(x,y,"pancarte10")); break;
+					case "bath" : objects.add(new Bath(x,y, map)); break;
 					}
 				}
 			}

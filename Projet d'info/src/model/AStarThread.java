@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ConcurrentModificationException;
+
 public class AStarThread extends Thread{
 	private Game g;
 	private Sums p;
@@ -28,7 +30,15 @@ public class AStarThread extends Thread{
 		int direction = 0;
 		synchronized(p) {
 		while(direction != -1 && !(exit)) {
-			direction = (new AStar(p.getPosX(), p.getPosY(), x, y, g.getGameObjects())).getNextStep();
+			try {
+				direction = (new AStar(p.getPosX(), p.getPosY(), x, y, g.getGameObjects())).getNextStep();
+			}
+			catch(ConcurrentModificationException e) {
+				
+			}
+			catch(ArrayIndexOutOfBoundsException e) {
+				
+			}
 			switch (direction) {
 				case 0 : g.movePlayer(1,0,p); break;
 				case 1 : g.movePlayer(0,-1,p); break;
@@ -59,5 +69,6 @@ public class AStarThread extends Thread{
 			p.teleportation(-1, -1);
 		   	p.setIsPlayable(false);
 		}
+		Game.getInstance().getThreads().remove(this);
 	}
 }

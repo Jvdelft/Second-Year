@@ -62,7 +62,7 @@ public class Map implements Serializable{
 		else if (mapName.equals(Constantes.mapMaison)) {
 			objectsToPlace.add(new Fridge());
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
+			objectsToPlace.add(new Sofa());
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
 			System.out.println("Chargement MapMaison"); 
@@ -70,7 +70,7 @@ public class Map implements Serializable{
 		else if (mapName.equals(Constantes.mapMaison2)) {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
 			this.addObject(new Door(1,0, Constantes.mapAttic, 'N'));
-			objectsToPlace.add(new Sofa(1,Math.round(sizeH/2), 0));
+			objectsToPlace.add(new Sofa());
 			objectsToPlace.add(new Toy());
 			objectsToPlace.add(new Bed());
 			objectsToPlace.add(new Fridge());
@@ -102,10 +102,23 @@ public class Map implements Serializable{
 		}
 	}
 	
-	private void initObjectInHouse(GameObject o,int x,int y) {
+	private void initObjectInHouse(GameObject object,int x,int y) {
+		GameObject o = object;
 		if (x > 0 && y >0 && x < sizeW-1 && y < sizeH-1) {
-			o.setPosX(x);
-			o.setPosY(y);
+			if (o.getSizeW() != 1 || o.getSizeH() != 1) {
+				if (o instanceof Bed) {
+					o = new Bed(x,y,this);
+				}
+				if (o instanceof Sofa) {
+					o = new Sofa(x,y,this);
+				}
+				objectsToPlace.remove(object);
+				objectsToPlace.add(0,o);
+			}
+			else{
+				o.setPosX(x);
+				o.setPosY(y);
+			}
 			addObject(o);
 			if (objects.contains(o)) {
 				mapDrawer.drawArrowsToDirect(o);
@@ -133,7 +146,6 @@ public class Map implements Serializable{
 			mapDrawer.setTextToPaint("Where do you want to put the " + objectsToPlace.get(0).getClass().getSimpleName() + " ?");
 		}
 		else {
-			System.out.println("Bite");
 			mapDrawer.setTextToPaint(null);
 			mapDrawer.addKeyListener(Keyboard.getInstance());
 			mapDrawer.removeDrawArrows();

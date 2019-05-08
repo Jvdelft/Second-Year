@@ -1,14 +1,27 @@
 package model;
 
 public class Sofa extends Furniture implements Directable{
-	public Sofa(int x, int y, int direction) {
+	private Map map;
+	public Sofa(int x, int y, Map map) {
 		super(x,y);
-		this.direction = direction;
-		makeSprite();
+		type = "SIT";
+		this.map = map;
+		sizeH = 2;
+		sizeW = 1;
+		for (int i = 0; i < sizeH-1 ; i++) {
+			Sofa sofa = new Sofa();
+			sofa.setPosX(x);
+			sofa.setPosY(y+i+1);
+			map.addObject(sofa);
+		}
 	}
-	public Sofa() {
-		super();
-	}
+		public Sofa() {
+			super();
+			type = "SIT";
+			sprite = null;
+			sizeH = 2;
+			sizeW = 1;
+		}
 
 	@Override
 	public boolean isObstacle() {

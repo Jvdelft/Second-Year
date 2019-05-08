@@ -42,6 +42,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
     private int index;
     private int indexInventory;
+    private Sums sumsToSend;
     LocalDateTime localDateTime = LocalDateTime.of(2019, Month.JANUARY, 01, 00 , 00,00);
     private transient ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
     private Game(Window window) {
@@ -216,7 +217,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        			default : posY += 1; break;
        		}
 			   	threads.add(0, new AStarThread(Game.getInstance(), p, posX, posY, "WORK"));
-       			((AStarThread) threads.get(0)).run();
+       			((AStarThread) threads.get(0)).start();
 		   }
 	   	};
 	   	TimerTask backFromWorkTask = new TimerTask(){
@@ -279,52 +280,52 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        	}
        };
        TimerTask moveTask = new TimerTask() {
-       	public void run() {
-       		Sums s = getRandomSums();
-       		Door randomDoor = getRandomDoor();
-       		Random rand = new Random();
-       		int choice = rand.nextInt(2);
-       		if (s != null && choice == 1) {
-	        		int posX = randomDoor.getPosX();
-	        		int posY = randomDoor.getPosY();
-	        		switch(String.valueOf(randomDoor.getChar())) {
-	        		case "E" : posX +=1;break;
-	        		case "W" : posX -= 1;break;
-	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;
-	        		case "N" : posY += 1; break;
-	        		case "H" : posY-=1; break;
-	        		default : posY += 1; break;
-	        		}
-	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
-	        		((AStarThread) threads.get(0)).run();
-	        	}
-       		else if (s!= null) {
-       			ArrayList<Integer> list = getRandomPosition(currentMap);
-       			threads.add(0, new AStarThread(Game.getInstance(), s, list.get(0), list.get(1), null));
-	        		((AStarThread) threads.get(0)).run();
-       		}
-       	}
-       };
-       TimerTask comingTask = new TimerTask() {
-       	public void run() {
-       		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());
-       		if (list.size()>0) {
-	        		Sums s = (Sums) list.get(0);
-	        		Door door = (Door) list.get(1);
-	        		if (s != null) {
-	        			door.activate(s);
-	        			ArrayList<Integer> position = getRandomPosition(maps.get(door.getDestination()));
-	        			threads.add(0, new AStarThread(Game.getInstance(), s, position.get(0), position.get(1), null));
-	        			((AStarThread) threads.get(0)).run();
-	        		}
-       		}
-       	}
-       };
+          	public void run() {
+          		Sums s = getRandomSums();
+          		Door randomDoor = getRandomDoor();
+          		Random rand = new Random();
+          		int choice = rand.nextInt(2);
+          		if (s != null && choice == 1) {
+   	        		int posX = randomDoor.getPosX();
+   	        		int posY = randomDoor.getPosY();
+   	        		switch(String.valueOf(randomDoor.getChar())) {
+   	        		case "E" : posX +=1;break;
+   	        		case "W" : posX -= 1;break;
+   	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;
+   	        		case "N" : posY += 1; break;
+   	        		case "H" : posY-=1; break;
+   	        		default : posY += 1; break;
+   	        		}
+   	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
+   	        		((AStarThread) threads.get(0)).start();
+   	        	}
+          		else if (s!= null) {
+          			ArrayList<Integer> list = getRandomPosition(currentMap);
+          			threads.add(0, new AStarThread(Game.getInstance(), s, list.get(0), list.get(1), null));
+   	        		((AStarThread) threads.get(0)).start();;
+          		}
+          	}
+          };
+          TimerTask comingTask = new TimerTask() {
+          	public void run() {
+          		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());
+          		if (list.size()>0) {
+   	        		Sums s = (Sums) list.get(0);
+   	        		Door door = (Door) list.get(1);
+   	        		if (s != null) {
+   	        			door.activate(s);
+   	        			ArrayList<Integer> position = getRandomPosition(maps.get(door.getDestination()));
+   	        			threads.add(0, new AStarThread(Game.getInstance(), s, position.get(0), position.get(1), null));
+   	        			((AStarThread) threads.get(0)).start();
+   	        		}
+          		}
+          	}
+   };
        addList(repeatedTask, timerTasks, 1000,1000);
        addList(timeTask, timerTasks,5,5);
        addList(musicTask, timerTasks, 36000,36000);
-       //addList(moveTask, timerTasks,2500,2500);
-       //addList(comingTask, timerTasks,5000,5000);
+       addList(moveTask, timerTasks,2500,2500);
+       addList(comingTask, timerTasks,5000,5000);
        addList(lifeTask, timerTasks, 1000,1000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());
@@ -533,6 +534,11 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 				ActionPanel.getInstance().setPlayer(active_player);
 				MapDrawer.getInstance().requestFocusInWindow();
 			}
+			for (AStarThread t : threads) {
+				if(t.getSums() == p) {
+					t.stopThread();
+				}
+			}
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
 		//t.start();
@@ -670,5 +676,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	public void setTime(LocalDateTime time2) {
 		this.localDateTime = time2; 
 		
+	}
+	public ArrayList<Timer> getTimers() {
+		return timers;
 	}
 }

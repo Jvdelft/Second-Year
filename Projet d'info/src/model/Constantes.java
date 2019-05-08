@@ -110,6 +110,7 @@ public class Constantes {
 	public static BufferedImage arrowRight;
 	public static BufferedImage kitchen;
 	public static BufferedImage dish;
+	public static BufferedImage bath;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -188,6 +189,7 @@ public class Constantes {
 			imageList.add(arrowRight);
 			kitchen = ImageIO.read(new File("Images/kitchen.png"));
 			dish = ImageIO.read(new File("Images/bento.png"));
+			bath = ImageIO.read(new File("Images/bath.png"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

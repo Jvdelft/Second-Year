@@ -1,7 +1,27 @@
 package model;
 
 public class Bed extends Furniture{
-
+	private Map map;
+	public Bed(int x, int y, Map map) {
+		super(x,y);
+		type = "SLEEP";
+		this.map = map;
+		sizeH = 2;
+		sizeW = 1;
+		for (int i = 0; i < sizeH-1 ; i++) {
+			Bed bed = new Bed();
+			bed.setPosX(x);
+			bed.setPosY(y+i+1);
+			map.addObject(bed);
+		}
+	}
+		public Bed() {
+			super();
+			type = "SLEEP";
+			sprite = null;
+			sizeH = 2;
+			sizeW = 1;
+		}
 	@Override
 	public boolean isObstacle() {
 		return true;
