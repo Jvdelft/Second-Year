@@ -34,6 +34,7 @@ public class Load {
 			ois = new ObjectInputStream(new FileInputStream("sums.serial"));
 			Game game = (Game) ois.readObject();
 			ois.close();
+			Dog.dogInstance = game.getDog();
 			Game newGame = Game.getInstance();
 			Window.getInstance().initGame();
 			newGame.setMaps(game.getMaps());
@@ -47,7 +48,6 @@ public class Load {
 			Window.getInstance().setGameObjects(newGame.getGameObjects());
 			Window.getInstance().setPlayer(newGame.getActivePlayer());
 			ArrayList<Map> maps = new ArrayList<Map>(newGame.getMaps().values());
-			newGame.setDog(game.getDog());
 			for (int i = 0; i < maps.size(); i++) {
 				Map map = maps.get(i);
 				for (int j = 0;j< map.getObjects().size(); j++) {

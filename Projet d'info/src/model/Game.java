@@ -56,7 +56,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	t2.start();
     	new Thread(new Sound("Never_Surrender", 0.01)).start();//musique de fond
     	makeAllTimerTask();
-    	this.dog = Dog.dogInstance;
+	   	this.dog = Dog.dogInstance;
     }
     private void initMaps() {
     	if (!(Load.load)) {
@@ -516,8 +516,6 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 				MapDrawer.getInstance().requestFocusInWindow();
 			}
 		}
-		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
-		//t.start();
 	}
 	public void run() {
 		while (true) {

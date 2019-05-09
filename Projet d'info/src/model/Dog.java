@@ -3,11 +3,11 @@ package model;
 import java.awt.image.BufferedImage;
 
 public class Dog extends ActivableObject implements Directable{
-	protected transient BufferedImage sprite_l = Constantes.dogW;
-	protected transient BufferedImage sprite_r = Constantes.dogE;
-	protected transient BufferedImage sprite_u = Constantes.dogN;
-	protected transient BufferedImage sprite_d = Constantes.dogS;
-	public static Dog dogInstance;
+	protected transient BufferedImage sprite_l;
+	protected transient BufferedImage sprite_r;
+	protected transient BufferedImage sprite_u;
+	protected transient BufferedImage sprite_d;
+	public transient static Dog dogInstance;
 	protected int direction = EAST ;
 	public Dog(int x,int y) {
 		super(x,y);
@@ -67,6 +67,10 @@ public class Dog extends ActivableObject implements Directable{
 	}
 	@Override
 	public void makeSprite() {
+		sprite_l = Constantes.dogW;
+		sprite_r = Constantes.dogE;
+		sprite_u = Constantes.dogN;
+		sprite_d = Constantes.dogS;
 	}
 	@Override
 	public int getDirection() {

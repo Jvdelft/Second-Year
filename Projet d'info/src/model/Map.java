@@ -194,11 +194,9 @@ public class Map implements Serializable{
 	
 	public ArrayList<ActivableObject> getActivableObjects(){
 		ArrayList<ActivableObject> res = new ArrayList<ActivableObject>();
-		synchronized(objects) {
 			for (GameObject object : objects) {
 				if (object instanceof ActivableObject) { res.add((ActivableObject)object);}
 			}
-		}
 		return res;
 	}
 	
