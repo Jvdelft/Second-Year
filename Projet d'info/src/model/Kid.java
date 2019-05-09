@@ -19,24 +19,15 @@ public class Kid extends Sums{
 		this.happiness = max_happiness;
 		this.toilet = 10;
 		age = 0;
-		}
-		
+	}
+	public void play(Toy t) {
+		this.happiness += t.getHappiness();
+	}	
 	public void makeSprite() {
 		sprite_d = Constantes.spriteDKid;
     	sprite_l = Constantes.spriteLKid;
     	sprite_r = Constantes.spriteRKid;
     	sprite_u = Constantes.spriteUKid;
     	sprite_face = Constantes.spriteFaceKid;
-		
-	}
-	private ArrayList<Toy> toys = new ArrayList<Toy>();
-	public void BuyToy() {
-		Toy jouet = new Toy(Math.round(this.posX), Math.round(this.posY));
-		cost += jouet.getValue();
-		toys.add(jouet);
-	}
-	public void play(Toy t) {
-		this.happiness += t.BeHappy();
-		
 	}
 }

@@ -15,13 +15,13 @@ public class Sofa extends Furniture implements Directable{
 			map.addObject(sofa);
 		}
 	}
-		public Sofa() {
-			super();
-			type = "SIT";
-			sprite = null;
-			sizeH = 2;
-			sizeW = 1;
-		}
+	public Sofa() {
+		super();
+		type = "SIT";
+		sprite = null;
+		sizeH = 2;
+		sizeW = 1;
+	}
 
 	@Override
 	public boolean isObstacle() {

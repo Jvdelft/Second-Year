@@ -112,12 +112,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		}
 		updateInventory();
 	}
-	public void setPlayer(Sums p2) {
-		this.p = p2;
-		if (this.p != null) {
-			updateInventory();
-		}
-	}
+
 	public void valueChanged(ListSelectionEvent e) {
 		if (list.getSelectedIndex() == lastSelectedIndex) {
 			ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
@@ -126,6 +121,12 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		}
 		else {
 			lastSelectedIndex = list.getSelectedIndex();
+		}
+	}
+	public void setPlayer(Sums p2) {
+		this.p = p2;
+		if (this.p != null) {
+			updateInventory();
 		}
 	}
 	public static InventoryPanel getInstance() {

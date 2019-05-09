@@ -169,15 +169,6 @@ public class Map implements Serializable{
 			else {
 				lastObjectPlaced = null;
 			}
-		   /* else {
-		    	for (int i = 0;i< sizeW-o.getPosX(); i++) {
-		    		if (!(positionTaken[i+o.getPosX()][o.getPosY()])) {
-		    			o.setPosX(i+o.getPosX());
-		    	    	objects.add(o);
-		    	    	positionTaken[o.getPosX()][o.getPosY()] = true;
-		    	    }
-		    	}
-		    }*/
 	    }
 	}
 	public int getSizeW() {
@@ -224,20 +215,8 @@ public class Map implements Serializable{
 			    	objects.add(o);
 			    	positionTaken[o.getPosX()][o.getPosY()] = true;
 				}
-			    /*else {
-			    	for (int i = 0;i< sizeW - o.getPosX(); i++) {
-			    		if (!(positionTaken[i][o.getPosY()])) {
-			    			o.setPosX(i);
-			    	    	objects.add(o);
-			    	    	positionTaken[i][o.getPosY()] = true;
-			    	    }
-			    	}
-			    }*/
 		    }
 		}
-		/*if (this.mapName.contentEquals("Constantes.mapBase")) {
-			this.setHouse();
-		}*/
 	}
 	public void addSumsOnMap(ArrayList<Sums> sums) {
 		for (Sums s : sums) {this.addObject((GameObject) s);}

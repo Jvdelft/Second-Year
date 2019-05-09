@@ -24,7 +24,7 @@ public class Toy extends Furniture{
 	public int getValue(){
 		return value;
 	}
-	public int BeHappy() {
+	public int getHappiness() {
 		return BringHappiness;
 	}
 	public boolean isObstacle() {

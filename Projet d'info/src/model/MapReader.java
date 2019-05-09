@@ -105,8 +105,8 @@ public class MapReader {
 					case "elder" : objects.add(factory.getInstance("Elder", x , y, mapBeingRead)); break;
 					case "toilet" : objects.add(factory.getInstance("Toilet", x , y, mapBeingRead)); break;
 					case "kitchen" : objects.add(factory.getInstance("Kitchen", x , y, mapBeingRead)); break;
-					case "carpet" : objects.add(factory.getInstance("carpet", x , y, mapBeingRead))/*objects.add(new Image(x,y,"carpet"))*/; break;
-					case "stairsDownPart" : objects.add(factory.getInstance("stairsDownPart", x , y, mapBeingRead))/*objects.add(new Image(x,y,"stairsDownPart"))*/; break;
+					case "carpet" : objects.add(factory.getInstance("carpet", x , y, mapBeingRead)); break;
+					case "stairsDownPart" : objects.add(factory.getInstance("stairsDownPart", x , y, mapBeingRead)); break;
 					case "stairsMiddlePart" : objects.add(factory.getInstance("stairsMiddlePart", x , y, mapBeingRead)); break;
 					case "stairsUpPart" : objects.add(factory.getInstance("stairsUpPart", x , y, mapBeingRead)); break;
 					case "table" : objects.add(factory.getInstance("table", x , y, mapBeingRead)); break;
@@ -153,9 +153,6 @@ public class MapReader {
 		objects.add(b);
 		objects.add(b.getDoor());
 	}
-	public static int getwTile() {
-		return wTiles;
-	}
 	public static void readWidth(String s) {
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -187,5 +184,8 @@ public class MapReader {
 	}
 	public static ArrayList<BufferedImage> getTiles(){
 		return tiles;
+	}
+	public static int getwTile() {
+		return wTiles;
 	}
 }

@@ -13,18 +13,6 @@ public class Dog extends ActivableObject implements Directable{
 		super(x,y);
 		dogInstance = this;
 	}
-	@Override
-	public int getDirection() {
-		return direction;
-	}
-	@Override
-	public void activate(Sums s) {
-		
-	}
-	@Override
-	public boolean isObstacle() {
-		return false;
-	}
 	public void move(int X, int Y) {
         this.posX = this.posX + X;
         this.posY = this.posY + Y;
@@ -66,10 +54,23 @@ public class Dog extends ActivableObject implements Directable{
         }
         return this.posY + delta;
     }
+    public boolean isPlayable() {
+		return false;
+	}
+    @Override
+	public void activate(Sums s) {
+		
+	}
+	@Override
+	public boolean isObstacle() {
+		return false;
+	}
 	@Override
 	public void makeSprite() {
 	}
-	public boolean isPlayable() {
-		return false;
+	@Override
+	public int getDirection() {
+		return direction;
 	}
+	
 }

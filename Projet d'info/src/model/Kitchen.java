@@ -23,9 +23,6 @@ public class Kitchen extends ContainerObject{
 		type = "START COOKING";
 		sprite = null;
 	}
-	public void makeSprite() {
-		sprite = Constantes.kitchen;
-	}
 	public void cook(Sums s) {
 		System.out.println(objectContained);
 		double nutritionalValue = 0;
@@ -52,5 +49,8 @@ public class Kitchen extends ContainerObject{
 	}
 	public void close() {
 		type = "START COOKING";
+	}
+	public void makeSprite() {
+		sprite = Constantes.kitchen;
 	}
 }

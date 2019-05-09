@@ -1,10 +1,6 @@
 package model;
 
 public class Flower extends DeletableObject{
-	/*public Flower(int x, int y) {
-		super(x,y);
-		this();
-	}*/
 	public Flower() {
 		type = "GIVE FLOWER";
 		user = "Adult";

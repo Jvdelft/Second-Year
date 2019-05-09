@@ -58,9 +58,6 @@ public class MenuInGame extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
-	public ArrayList<JButton> getButtons(){
-		return buttons;
-	}
 	private void initButton(JButton b) {
 		buttons.add(b);
 		b.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
@@ -72,5 +69,8 @@ public class MenuInGame extends JPanel{
 		b.setPreferredSize(new Dimension(600,150));
 		b.setAlignmentX(Component.CENTER_ALIGNMENT);
 		b.setAlignmentY(Component.CENTER_ALIGNMENT);
+	}
+	public ArrayList<JButton> getButtons(){
+		return buttons;
 	}
 }

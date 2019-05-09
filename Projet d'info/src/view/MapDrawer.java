@@ -145,26 +145,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 	            	g.drawString(textToPaint, tileSize/2, tileSize/2);
 	            }
         	}
-            /*else if (object instanceof Building) {
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV()*tileSize, this);
-            }
-            else{
-            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
-            }*/
         }
-    }
-    public void setObjects(ArrayList<GameObject> objects) {
-        this.objects = objects;
-        this.redraw();
-    }
-    public ArrayList<GameObject> getObjects() {
-    	return objects;
-    }
-    public static MapDrawer getInstance() {
-    	if (instance_mapDrawer == null) {
-    		instance_mapDrawer = new MapDrawer();
-    	}
-    	return instance_mapDrawer;
     }
 
     public void redraw() {
@@ -414,4 +395,17 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 	public Map getCurrentMap() {
 		return currentMap;
 	}
+	public void setObjects(ArrayList<GameObject> objects) {
+        this.objects = objects;
+        this.redraw();
+    }
+    public ArrayList<GameObject> getObjects() {
+    	return objects;
+    }
+    public static MapDrawer getInstance() {
+    	if (instance_mapDrawer == null) {
+    		instance_mapDrawer = new MapDrawer();
+    	}
+    	return instance_mapDrawer;
+    }
 	}

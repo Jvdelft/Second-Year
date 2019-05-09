@@ -36,6 +36,7 @@ public class Spa extends Building{
 		s.getHouse().changeMoney(-50);
 		s.energy += s.max_energy;
 		s.happiness = s.max_happiness;
+		s.hygiene += s.max_hygiene;
 	}
 	public static Spa getInstance() {
     	if (SpaInstance == null) {
