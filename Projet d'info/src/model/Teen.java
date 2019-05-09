@@ -21,8 +21,9 @@ public class Teen extends Sums{
 	}
 	public void smoke(Cigaret c) {
 		this.happiness += 5;
-		this.age += 1/1000;
+		this.age += 1;
 	}
+	@Override
 	public void makeSprite() {
 		sprite_d = Constantes.spriteDTeen;
     	sprite_l = Constantes.spriteLTeen;

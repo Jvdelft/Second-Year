@@ -18,16 +18,6 @@ public abstract class Food extends DeletableObject implements Deletable{
 		super();
 		type = "EAT";
 	}
-
-    // //////////////////////////////////////////////////////////////////////////////////////
-
-	public void activate (Sums s) {
-		s.Eat(this);
-		new Thread(new Sound("Eat_Toast", 0.25, 2500)).start();
-		notifyDeletableObserver();
-		
-		
-	}
 	public int getEnergyValue() {
 		return EnergyValue;
 	}
@@ -39,6 +29,12 @@ public abstract class Food extends DeletableObject implements Deletable{
 	}
 	public void setNutritionalValue(int n) {
 		this.NutritionalValue = n;
+	}
+	@Override
+	public void activate (Sums s) {
+		s.Eat(this);
+		new Thread(new Sound("Eat_Toast", 0.25, 2500)).start();
+		notifyDeletableObserver();
 	}
 	@Override
 	public boolean isObstacle() {

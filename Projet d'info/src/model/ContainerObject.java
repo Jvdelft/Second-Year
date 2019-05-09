@@ -16,15 +16,16 @@ public class ContainerObject extends Furniture{
 		super();
 		type = "OPEN";
 	}
+	@Override
 	public void activate(Sums s) {
 		this.open();
-		s.setIsPlayable(false);
+		s.setIsPlayable(false);    //Le sums ne peut plus bouger tant que le container n'est pas fermé.
 	}
-	public void open(ContainerObject this) {
+	public void open(ContainerObject this) { 		//Ici, on change le type afin que le bouton change sur la fenêtre. De fait, on ne veut plus ouvrir le container car il est déjà ouvert.
 		this.type = "STOCK";
 		MapDrawer.getInstance().drawContent(this);
 	}
-	public ArrayList<GameObject> switchRow(int row) {
+	public ArrayList<GameObject> switchRow(int row) {       //Cette fonction permet de passer à la ligner suivante ou précedente pour parcourir les objets du container.
 		this.row = row;
 		ArrayList<GameObject> objectsToReturn = new ArrayList<GameObject>(4);
 		for (int i = 0; i < 4; i++) {

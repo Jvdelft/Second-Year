@@ -18,14 +18,15 @@ public class Bath extends ActivableObject{
 	public Bath() {
 		super();
 		type = "BATH";
-		sprite = null;
-	}
-	public void activate(Sums s) {
+		sprite = null;  //il est important de mettre le sprite à la valeur null car comme le sprite du bain s'étend sur 2 cases, le sprite est dessiné une fois mais les deux cases
+	}					//être activable.
+	@Override
+	public void activate(Sums s) {			//Les bains amènent propreté et bonheur :).
 		s.hygiene = s.getMaxHygiene();
-		s.setHappiness(s.getHappiness()+10);
+		s.setHappiness(s.getHappiness()+10);   //on passe par des getters et des setters pour s'assurer que les valeurs max ne sont pas dépassées.
 		Game.getInstance().playerWait(10000, s, null);
 	}
-
+	@Override
 	public boolean isObstacle() {
 		return true;
 	}

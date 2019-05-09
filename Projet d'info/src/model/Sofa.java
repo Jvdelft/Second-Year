@@ -13,10 +13,7 @@ public class Sofa extends Furniture implements Directable{
 		super();
 		type = "SIT";
 		sprite = null;
-		sizeH = 2;
-		sizeW = 1;
 	}
-
 	@Override
 	public boolean isObstacle() {
 		return true;
@@ -36,6 +33,7 @@ public class Sofa extends Furniture implements Directable{
 	public int getDirection() {
 		return direction;
 	}
+	@Override
 	public void activate(Sums s) {
 		Game.getInstance().playerWait(5000, s, s.getAgeRange());
 		s.teleportation(this.posX, this.posY);

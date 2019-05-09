@@ -19,22 +19,11 @@ public class Load {
 	public static boolean load = false;
 	public Load() {
 		load = true;
-		/*ObjectMapper mapper = new ObjectMapper();
-		mapper.enableDefaultTyping();
-			try {
-				FileInputStream file = new FileInputStream("Save/Save.json");
-				TotalObject DeserializedObject = mapper.readValue(file,TotalObject.class);
-				Game.getInstance().getMaps().get(Constantes.mapBase).setSums(DeserializedObject.getObjects());
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-			}*/
 		ObjectInputStream ois;
 		try {
-			ois = new ObjectInputStream(new FileInputStream("sums.serial"));
-			Game game = (Game) ois.readObject();
+			ois = new ObjectInputStream(new FileInputStream("sums.serial"));		//on lit le game enregistré et on initialise un nouveau game
+			Game game = (Game) ois.readObject();									// on donne à ce nouveau game toutes les variables stockées dans la sauvegarde.
 			ois.close();
-			Dog.dogInstance = game.getDog();
 			Game newGame = Game.getInstance();
 			Window.getInstance().initGame();
 			newGame.setMaps(game.getMaps());
@@ -43,6 +32,7 @@ public class Load {
 			newGame.setTime(game.getTime());
 			newGame.setCurrentMap(game.getCurrentMap());
 			newGame.setObjects(game.getObjects());
+			newGame.setDog(game.getDog());
 			MapDrawer.getInstance().changeMap(newGame.getCurrentMap());
 			newGame.changeMap(Constantes.mapBase);
 			Window.getInstance().setGameObjects(newGame.getGameObjects());
@@ -54,7 +44,7 @@ public class Load {
 					GameObject object = map.getObjects().get(j);
 					object.makeSprite();
 					if (object instanceof Sums) {
-						for (int l = 0; l<((Sums) object).getObjects().size(); l++) {
+						for (int l = 0; l<((Sums) object).getObjects().size(); l++) {		// Les images ne sont pas enregistrées, il faut donc que chaque object refasse ses sprites.
 							((Sums) object).getObjects().get(l).makeSprite();
 						}
 					}

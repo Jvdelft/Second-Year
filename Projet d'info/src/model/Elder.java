@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Elder extends Sums{
-	public Elder(int x, int y, House h) {
+	public Elder(int x, int y, House h) {		//on mets les besoins au maximum lors de la création du personnage.
 		super(x,y,h);
 		max_energy = Constantes.max_energy_elder;
 		max_faim = Constantes.max_faim_elder;
@@ -19,9 +19,7 @@ public class Elder extends Sums{
 		this.toilet = 10;
 		age = 60;
 		}
-	public void WatchTV() {
-		happiness += 1;
-	}
+	@Override
 	public void makeSprite() {
 		sprite_d = Constantes.spriteDElder;
     	sprite_l = Constantes.spriteLElder;

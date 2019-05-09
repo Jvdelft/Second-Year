@@ -8,9 +8,11 @@ public class Flower extends DeletableObject{
 		lifePoints = 1;
 		price = 10;
 	}
+	@Override
 	public void activate(Sums s) {
 		notifyDeletableObserver();
 	}
+	@Override
 	public void makeSprite() {
 		sprite = Constantes.flower;
 	}

@@ -5,7 +5,7 @@ public class Dish extends Food{
 		super();
 		this.NutritionalValue = value;
 	}
-
+	@Override
 	public void makeSprite() {
 		sprite = Constantes.dish;
 	}

@@ -2,19 +2,12 @@ package model;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-
 public abstract class GameObject implements Serializable{
     protected int posX;
     protected int posY;
-    @JsonIgnore
-    protected int sizeW = 1;
-    @JsonIgnore
+    protected int sizeW = 1;	//Les size décideront sur combien de cases le Sprite sera dessiné.
     protected int sizeH = 1;
-    @JsonIgnore
-    protected int price = 0;
-    @JsonIgnore
+    protected int price = 0;	//Le prix est fixé à 0 car dans les containers hors du marché ça ne coûte rien de stocker des objets.
     protected transient BufferedImage sprite;
 
     public GameObject(int X, int Y) {
@@ -22,7 +15,7 @@ public abstract class GameObject implements Serializable{
         this.posY = Y;
         this.makeSprite();
     }
-    protected GameObject() {
+    protected GameObject() {		//2 Constructeurs pour pouvoir définir des objets sans position fixe notamment pour les inventaires.
     	this.makeSprite();
     }
     public boolean isAtPosition(int x, int y) {
@@ -59,11 +52,8 @@ public abstract class GameObject implements Serializable{
     public int getPrice() {
     	return price;
     }
-    @JsonIgnore
     public abstract boolean isObstacle();
-    @JsonIgnore
     public abstract void makeSprite();
-    @JsonIgnore
     public BufferedImage getSprite() {
     	return sprite;
     }

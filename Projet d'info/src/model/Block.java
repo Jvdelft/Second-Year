@@ -15,16 +15,14 @@ public class Block extends GameObject{
 	protected transient BufferedImage sprite500;
 	protected transient BufferedImage sprite1000;
 	protected transient BufferedImage spriteTable;
-	public Block(int x, int y, String type) {
+	public Block(int x, int y, String type) {	//les blocks constituent tous les objets de décoration mais bloquant le passage.
 		super(x,y);
 		this.type = type;
 	}
-	public Block(int x, int y) {
-		super(x,y);
+	public Block(int x, int y) {		//2 constructeurs différents sont nécessaires car on peut instancier des block classiques formant les bords de la map ou
+		super(x,y);						//des blocks particuliers comme des tables ou des pancartes qui ont des sprites particuliers.
 	}
-	public Block() {
-		super();
-	}
+	@Override
 	public BufferedImage getSprite() {
 		BufferedImage sprite = null;
 		switch (type) {
@@ -42,6 +40,7 @@ public class Block extends GameObject{
 		}
 		return sprite;
 	}
+	@Override
 	public void makeSprite() { 
 		sprite1 = Constantes.pancarte1;
 		sprite2 = Constantes.pancarte2;
@@ -55,6 +54,7 @@ public class Block extends GameObject{
 		sprite1000 = Constantes.pancarte1000;
 		spriteTable=Constantes.table;
 	}
+	@Override
 	public boolean isObstacle() {
 		return true;
 	}

@@ -14,27 +14,26 @@ import view.MapDrawer;
 import view.Window;
 
 public class Map implements Serializable{
-	
-	private static final long serialVersionUID = -2773641562525856530L;
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private int sizeW;
 	private int sizeH;
 	private int tileSize;
-	private boolean positionTaken[][];
+	private boolean positionTaken[][];		//Les positions occupées sur la map sont représentées par un matrice de la taille de la map.
 	private String mapName;
-	private transient ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
+	private transient ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();	//les tiles sont les images constituant le sol de la map.
 	private boolean notInitHouse = true;
-	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();
+	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();		//Les objets à placer lors de la première entrée sur la map.
 	private MapDrawer mapDrawer;
 	private GameObject lastObjectPlaced = null;
 	private House house = new House(20,1);
+	private Dog dog;
 	public Map(String path) {
 		if(path != Constantes.mapMaison && path != Constantes.mapMaison2) {
 			notInitHouse = false;
 		}
 		this.mapName = path;
 		MapReader.readWidth(path);
-		sizeW = MapReader.getwTile(); //problème avec pixels 
+		sizeW = MapReader.getwTile();
 		sizeH = (sizeW * 2)/3 ;
 		tileSize = 1440 / sizeW;
 		positionTaken = new boolean[sizeW][sizeH];
@@ -46,7 +45,7 @@ public class Map implements Serializable{
 	
 	public void initMap() {
 		if (mapName.equals(Constantes.mapBase)) {
-	    	this.addObject(new Door(Math.round(sizeW/2)-1,0, Constantes.mapRock, 'S'));
+	    	this.addObject(new Door(Math.round(sizeW/2)-1,0, Constantes.mapRock, 'S'));			//On initialise chaque map avec les portes, où elles mènent et les objets à placer.
 	    	this.addObject(new Door(0,Math.round(sizeH/2)-1, Constantes.mapRock, 'E'));
 	    	this.addObject(new Door(Math.round(sizeW/2)-1,sizeH-1, Constantes.mapRock, 'N'));
 	    	this.addObject(new Door(sizeW-1,Math.round(sizeH/2)-1, Constantes.mapRock, 'W'));
@@ -97,13 +96,13 @@ public class Map implements Serializable{
 	
 	public void initHouse(int x,int y){
 		mapDrawer = MapDrawer.getInstance();
-		mapDrawer.removeKeyListener(Keyboard.getInstance());
+		mapDrawer.removeKeyListener(Keyboard.getInstance());							//Le personnage ne peut plus bouger et il doit placer les objets l'un à la suite des autres.
 		if (objectsToPlace.size() != 0 && lastObjectPlaced != objectsToPlace.get(0)) {
 			initObjectInHouse(objectsToPlace.get(0), x, y);
 		}
 	}
 	
-	private void initObjectInHouse(GameObject object,int x,int y) {
+	private void initObjectInHouse(GameObject object,int x,int y) {			//L'objet est posé et le joueur peut l'orienter comme il le souhaite.
 		GameObject o = object;
 		if (x > 0 && y >0 && x < sizeW-1 && y < sizeH-1) {
 			if (o.getSizeW() != 1 || o.getSizeH() != 1) {
@@ -128,7 +127,7 @@ public class Map implements Serializable{
 	}
 	
 	public void newDoor(House h, Door d) {
-		ArrayList<GameObject> liste = new ArrayList<GameObject>(objects);
+		ArrayList<GameObject> liste = new ArrayList<GameObject>(objects);		//Changement de porte.
 		for (GameObject go : liste) {
 			if(go instanceof Door) {
 				if ((Door)go == h.getDoor()) {objects.remove(go);}
@@ -139,8 +138,8 @@ public class Map implements Serializable{
 	}
 	
 	public void placeNextObject() {
-		if (objectsToPlace.size()>0 && objectsToPlace.contains(lastObjectPlaced)) {
-			objectsToPlace.remove(0);
+		if (objectsToPlace.size()>0 && objectsToPlace.contains(lastObjectPlaced)) {		//L'objet est placé et on passe à l'objet suivant si il y en a un, on retire le texte sinon 
+			objectsToPlace.remove(0);													// et le joueur peut se déplacer à nouveau.
 	    	}
 		if (objectsToPlace.size()>0) {
 			mapDrawer.removeDrawArrows();
@@ -156,7 +155,7 @@ public class Map implements Serializable{
 		
 	}
 	
-	public void addObject(GameObject o) {
+	public void addObject(GameObject o) {			//En ajoutant l'objet, on marque la position comme prise si l'objet est un obstacle.
 		if (o != null) {
 			if (o instanceof Sums) {
 				objects.add(o);
@@ -192,7 +191,7 @@ public class Map implements Serializable{
 		return objects;
 	}
 	
-	public ArrayList<ActivableObject> getActivableObjects(){
+	public ArrayList<ActivableObject> getActivableObjects(){				//Renvoie la liste des objets activable sur la map.
 		ArrayList<ActivableObject> res = new ArrayList<ActivableObject>();
 			for (GameObject object : objects) {
 				if (object instanceof ActivableObject) { res.add((ActivableObject)object);}
@@ -208,9 +207,12 @@ public class Map implements Serializable{
 		return res;
 	}
 	
-	public void setObjectsOnMap(ArrayList<GameObject> objectCreated) {
+	public void setObjectsOnMap(ArrayList<GameObject> objectCreated) {		//On set les objets l'un à la suite de l'autre en marquant les positions prises.
 		if (objects != null) {
 			for (GameObject o : objectCreated) {
+				if (o instanceof Dog) {
+					dog = (Dog) o;
+				}
 				if (!(positionTaken[o.getPosX()][o.getPosY()]) || o instanceof Building || o instanceof Block || o instanceof Door) {
 			    	objects.add(o);
 			    	positionTaken[o.getPosX()][o.getPosY()] = true;
@@ -255,5 +257,8 @@ public class Map implements Serializable{
 	}
 	public String getMapName() {
 		return mapName;
+	}
+	public Dog getDog() {
+		return dog;
 	}
 }

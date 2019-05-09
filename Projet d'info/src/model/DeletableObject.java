@@ -18,8 +18,6 @@ public abstract class DeletableObject extends ActivableObject implements Deletab
 	public void setLifePoints(int l) {
 		this.lifePoints = l;
 	}
-    // //////////////////////////////////////////////////////////////////////////////////////
-
     @Override
     public void attachDeletable(DeletableObserver po) {
     	if (observers.size() == 0) {

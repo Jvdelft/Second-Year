@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-public class Constantes {
-	public static final String mapBase = "Maps/MapBase.txt";
+public class Constantes {											//Cette classe regroupe toutes les constantes afin que le programme soit aisément modifiable
+	public static final String mapBase = "Maps/MapBase.txt";		//De fait, il suffit de modifier la constante ici pour que tout le programme s'adapte.
 	public static final String mapRock = "Maps/MapRock.txt";
 	public static final String mapMaison = "Maps/MapMaison.txt";
 	public static final String mapMaison2 = "Maps/MapMaison2.txt";
@@ -207,7 +207,7 @@ public class Constantes {
 			e.printStackTrace();
 		}
 	}
-	public static void makeList() {
+	public static void makeList() {						//Cette fonction est nécessaire pour mettre les images des flèches sur les bouttons à la bonne taille.
 		for (int i = 0; i < imageList.size(); i++) {
 			Image img = imageList.get(i).getScaledInstance(image_size, image_size, Image.SCALE_FAST);
 			imageHashMap.put(imageList.get(i), img);

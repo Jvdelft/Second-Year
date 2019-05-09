@@ -7,7 +7,6 @@ public class Bed extends Furniture{
 		type = "SLEEP";
 		this.map = map;
 		sizeH = 2;
-		sizeW = 1;
 		for (int i = 0; i < sizeH-1 ; i++) {
 			Bed bed = new Bed();
 			bed.setPosX(x);
@@ -17,10 +16,9 @@ public class Bed extends Furniture{
 	}
 	public Bed() {
 		super();
-		type = "SLEEP";
-		sprite = null;
 		sizeH = 2;
-		sizeW = 1;
+		type = "SLEEP";
+		sprite = null;		//on met le Sprite à null car le sprite du lit est dessiné sur deux cases et ces deux cases doivent être activables.
 	}
 	
 	@Override

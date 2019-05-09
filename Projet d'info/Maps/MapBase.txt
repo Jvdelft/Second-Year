@@ -22,7 +22,6 @@ AAAAAAAAAAAAAAPAAAAAAAAAAAAAAA
 house 20 1
 market 4 2
 spa 4 10
-cigaret 13 15
 apple 7 7
 adult 10 9
 kid 5 6

@@ -11,8 +11,8 @@ public class MarketShelve extends ContainerObject{
 	public MarketShelve() {
 		super();
 	}
-	public void initObjectContained(String ShelveType) {
-		if (objectContained.size() != 0) {
+	public void initObjectContained(String ShelveType) { 	//Les étales initialisent les objets qu'elles contiennent.
+		if (objectContained.size() != 0) {					
 			objectContained.clear();
 		}
 		if (ShelveType == "Apple") {
@@ -37,6 +37,7 @@ public class MarketShelve extends ContainerObject{
 	public String getShelveType() {
 		return shelveType;
 	}
+	@Override
 	public void makeSprite() {
 		sprite = Constantes.étagère;
 	}

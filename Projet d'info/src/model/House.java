@@ -3,8 +3,6 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import view.Window;
 
 public class House extends Building implements Serializable{
@@ -13,18 +11,13 @@ public class House extends Building implements Serializable{
 	private int sizeW = 6;
 	private int sizeH = 5;
 	private Door door;
-	@JsonIgnore
 	protected transient BufferedImage spriteHouse1;
-	@JsonIgnore
 	protected transient BufferedImage spriteHouse2;
 	private int category = 1;
 	public House(int x, int y) {
 		super(x,y);
-		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, Constantes.mapMaison, 'S');
+		door = new Door(Math.round(sizeW/2)+x,y+sizeH-1, Constantes.mapMaison, 'S');	//Les maisons possèdent une porte et l'argent de la famille.
 		money = 100;
-	}
-	public House() {
-		super();
 	}
 	public void AddHabitant(Sums s) {
 		habitants.add(s);
@@ -33,15 +26,13 @@ public class House extends Building implements Serializable{
 		money += i;
 		Window.getInstance().update();
 	}
-	public void setCategory(int i) {
+	public void setCategory(int i) {		//Changement de maison lors de l'achat d'une nouvelle.
 		category = i;
 		String oldHouse = Constantes.mapMaison;
 		String newHouse = Constantes.mapMaison2;
 		if (category == 2) {
 			sizeW=6;
 			sizeH=5;
-			oldHouse = Constantes.mapMaison;
-			newHouse = Constantes.mapMaison2;
 		}
 		Door d = new Door(Math.round(sizeW/2)+this.getPosX(),this.getPosY()+sizeH-1, Constantes.mapMaison2, 'S');
 		this.setPosX(this.getPosX()+1);
@@ -51,21 +42,26 @@ public class House extends Building implements Serializable{
 		Game.getInstance().getMaps().get(newHouse).setIsInitHouse(true);
 		door = d;
 	}
-	public boolean isObstacle() {
-		return true;
-	}
 	public int getMoney() {
 		return money;
 	}
+	@Override
+	public boolean isObstacle() {
+		return true;
+	}
+	@Override
 	public int getSizeW() {
 		return sizeW;
 	}
+	@Override
 	public int getSizeH() {
 		return sizeH;
 	}
+	@Override
 	public Door getDoor() {
 		return door;
 	}
+	@Override
 	public BufferedImage getSprite() {
 		BufferedImage sprite = null;
 		switch (category) {
@@ -75,6 +71,7 @@ public class House extends Building implements Serializable{
 		}
 		return sprite;
 	}
+	@Override
 	public void makeSprite() {
 		spriteHouse1 = Constantes.house;
 		spriteHouse2 = Constantes.house2;

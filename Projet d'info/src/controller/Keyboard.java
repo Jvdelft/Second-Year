@@ -34,12 +34,6 @@ public class Keyboard implements KeyListener {
          case KeyEvent.VK_SPACE:
              game.action();
              break;
-         case KeyEvent.VK_Q:
-             game.stop();
-             break;
-         case KeyEvent.VK_T:
-             game.tirePlayer();
-             break;
         case KeyEvent.VK_P:
              game.playerPos();
         case KeyEvent.VK_ESCAPE:
@@ -55,7 +49,7 @@ public class Keyboard implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
     }
-    public static Keyboard getInstance() {
+    public static Keyboard getInstance() { 
     	if (keyboard_instance == null) {
     		keyboard_instance = new Keyboard(Game.getInstance());
     	}

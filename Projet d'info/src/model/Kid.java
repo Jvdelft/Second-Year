@@ -9,7 +9,7 @@ public class Kid extends Sums{
 	public Kid(int x, int y, House h) {
 		super(x, y,h);
 		max_energy = Constantes.max_energy_kid;
-		max_happiness = Constantes.max_happiness_kid;
+		max_happiness = Constantes.max_happiness_kid;	//on initialise l'enfant avec ses besoins au maximum.
 		max_toilet = Constantes.max_toilet_kid;
 		max_faim = Constantes.max_faim_kid;
 		type = "PLAY";
@@ -22,7 +22,8 @@ public class Kid extends Sums{
 	}
 	public void play(Toy t) {
 		this.happiness += t.getHappiness();
-	}	
+	}
+	@Override
 	public void makeSprite() {
 		sprite_d = Constantes.spriteDKid;
     	sprite_l = Constantes.spriteLKid;

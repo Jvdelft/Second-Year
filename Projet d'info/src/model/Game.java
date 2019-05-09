@@ -24,26 +24,19 @@ import org.omg.CosNaming.IstringHelper;
 
 import controller.Keyboard;
 
-public class Game implements DeletableObserver, Runnable, Serializable{
-	private static final long serialVersionUID = 8769447140160551649L;
-	private HashMap<String, Map> maps= new HashMap <String, Map>();
-    private ArrayList<Sums> sums = new ArrayList<Sums>();
+public class Game implements DeletableObserver, Serializable{
+	private HashMap<String, Map> maps= new HashMap <String, Map>();     //Les maps sont stockées dans des hashmaps dont les clés sont les chemins 
+    private ArrayList<Sums> sums = new ArrayList<Sums>();				//vers les fichiers texte contenant les tiles des maps.
     private Sums active_player = null;
-    private transient Sound sound;
     private Window window;
     private int sizeW;
     private int sizeH;
-    private int numberOfBreakableBlocks = 40;
-    private transient Thread t2= new Thread(this);
     private static Game GameInstance;
-    private int time;
     private transient ArrayList<Timer> timers = new ArrayList<Timer>();
     private transient ArrayList<Object> timerTasks = new ArrayList<Object>();
     private Map currentMap;
     private ArrayList<GameObject> objectsOnMap = new ArrayList<GameObject>();
-    private int index;
     private int indexInventory;
-    private Sums sumsToSend;
     LocalDateTime localDateTime = LocalDateTime.of(2019, Month.JANUARY, 01, 00 , 00,00);
     private transient ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
     private Dog dog;
@@ -53,28 +46,27 @@ public class Game implements DeletableObserver, Runnable, Serializable{
         sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
     	notifyView();
-    	t2.start();
     	new Thread(new Sound("Never_Surrender", 0.01)).start();//musique de fond
     	makeAllTimerTask();
-	   	this.dog = Dog.dogInstance;
     }
     private void initMaps() {
     	if (!(Load.load)) {
     		maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
-    		maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
-    		maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
+    		maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));		//on crée le dictionnaire de map en initialisant les maps une par une.		
+    		maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));		//et on définit la map sur laquelle le jeu commence et les Objets sur cette même map.
     		maps.put(Constantes.mapRock, new Map(Constantes.mapRock));
     		maps.put(Constantes.mapMaison2, new Map(Constantes.mapMaison2));
     		maps.put(Constantes.mapAttic, new Map(Constantes.mapAttic));
     		for (String s: maps.keySet()) {
-    			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
+    			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {			//On crée une liste totale des Sums pour avoir un contrôle plus aisé même sur les Sums hors de la map.
     				sums.add(sumsOnMap);
 	    		}
 	    	}
 	    	currentMap = maps.get(Constantes.mapBase);
+	    	this.dog = currentMap.getDog();
 	    	objectsOnMap = currentMap.getObjects();
 	    	MapDrawer.getInstance().changeMap(currentMap);
-	    	for(GameObject o : objectsOnMap) {
+	    	for(GameObject o : objectsOnMap) {					//On cherche le premier personnage jouable et on le définit comme le personnage que le joueur contrôle.
 	    		if (o instanceof Sums) {
 	    			active_player = (Sums) o;
     				changeMap(Constantes.mapBase);
@@ -83,88 +75,63 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     			}
     		}
     	}
-    	for(GameObject o : objectsOnMap) {
+    	for(GameObject o : objectsOnMap) {		//On attache des Observers à tous les objets Deletable.
     		if (o instanceof DeletableObject) {
     			((DeletableObject) o).attachDeletable(this);
     		}
     	}
     }
 
-    public void movePlayer(int x, int y, Object s) {
-    	int moveX;
-    	int moveY;
-    	Sums p = null;
-    	Dog d = null;
-    	if (x>1) {
-    		moveX = 1;
-    	}
-    	else if (x<-1) {
-    		moveX = -1;
-    	}
-    	else {
-    		moveX = x;
-    	}
-    	if (y>1) {
-    		moveY = 1;
-    	}
-    	else if (y<-1) {
-    		moveY = -1;
-    	}
-    	else {
-    		moveY = y;
-    	}
-    	if (s instanceof Sums) {
-    		p = (Sums) s;
-    	}
-    	else if (s instanceof Dog) {
-    		d = (Dog) s;
-    	}
-		if (p == null && d == null) {
+    public void movePlayer(int x, int y, Sums p) {		//On fait bouger le personnage en vérifiant qu'il ne recontre pas un obstacle.
+		if (p == null) {
     		p = active_player;
     	}
     	if (p != null && p.isPlayable()) {
-	        int nextX = p.getPosX() + moveX;
-	        int nextY = p.getPosY() + moveY;
+	        int nextX = p.getPosX() + x;
+	        int nextY = p.getPosY() + y;
 	
 	        boolean obstacle = false;
 	        for (GameObject object : objectsOnMap) {
-	            if (object.isAtPosition(nextX, nextY)) {
-	                obstacle = object.isObstacle();
+	            if (object.isAtPosition(nextX, nextY)) {	//On parcourt tous les objets de la map pour voir si un objet est en face du personnage ou non.
+	                obstacle = object.isObstacle();			// et pour bloquer le Sums dans ce cas.
 	            }
 	            if (obstacle == true) {
 	                break;
 	            }
 	        }
-	        p.rotate(moveX, moveY);
+	        p.rotate(x, y);
 	        if (obstacle == false) {
-	            p.move(moveX, moveY);
-	            if (p == active_player) {
+	            p.move(x, y);
+	            if (p == active_player) {		//Le personnage joué se fatigue en marchant.
 	            	p.tire();
 	            }
-	        }
-    	}
-    	if (d != null) {
-	        int nextX = d.getPosX() + moveX;
-	        int nextY = d.getPosY() + moveY;
-	
-	        boolean obstacle = false;
-	        for (GameObject object : objectsOnMap) {
-	            if (object.isAtPosition(nextX, nextY)) {
-	                obstacle = object.isObstacle();
-	            }
-	            if (obstacle == true) {
-	                break;
-	            }
-	        }
-	        d.rotate(moveX, moveY);
-	        if (obstacle == false) {
-	            d.move(moveX, moveY);
 	        }
     	}
     		if (p == active_player) {
     			ActionPanel.getInstance().updateVisibleButtons();
     			notifyView();
     		}
+    }
+    public void moveDog(int x, int y, Dog d) {     //Idem à la fonction précédente mais pour les chiens.
+    	if (d != null) {
+	        int nextX = d.getPosX() + x;
+	        int nextY = d.getPosY() + y;
+	
+	        boolean obstacle = false;
+	        for (GameObject object : objectsOnMap) {
+	            if (object.isAtPosition(nextX, nextY)) {
+	                obstacle = object.isObstacle();
+	            }
+	            if (obstacle == true) {
+	                break;
+	            }
+	        }
+	        d.rotate(x, y);
+	        if (obstacle == false) {
+	            d.move(x, y);
+	        }
+    	}
+    	
     }
    
    public void buttonPressed(String button) {
@@ -173,11 +140,11 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 			   GameObject o = active_player.getObjects().get(indexInventory);
 			   ((ActivableObject)o).activate(active_player);
 			   ((Adult) getFrontObject()).receiveFlower(active_player);}
-		   else if (button.contentEquals("MAKE LOVE")) { ((Adult) getFrontObject()).makeLove();}
-		   else if (button.contentEquals("GO TO WORK")) { sendPlayerToWork();}
-		   else if (button.contentEquals("STOCK")) { 
-			   GameObject o = active_player.getObjects().get(indexInventory);
-			   active_player.getObjects().remove(o);
+		   else if (button.contentEquals("MAKE LOVE")) { ((Adult) getFrontObject()).makeLove();}       // Cette fonction s'occupe de gérer tous les bouttons.
+		   else if (button.contentEquals("GO TO WORK")) { sendPlayerToWork();}							//Elle regarde d'abord quel boutton a été pressé
+		   else if (button.contentEquals("STOCK")) { 													//si aucun bouttons nécessitant des actions particulières
+			   GameObject o = active_player.getObjects().get(indexInventory);							//n'a été pressé, elle active l'objet en face du personnage si il existe,
+			   active_player.getObjects().remove(o);													// et elle active l'objet pointé dans l'inventaire sinon.
 			   ((ContainerObject) getFrontObject()).getObjectsContained().add(o);
 		   }
 		   else if (button.contentEquals("COOK")) {
@@ -205,7 +172,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		   }
 	   }
 	   MapDrawer.getInstance().updateContent();
-	   MapDrawer.getInstance().requestFocusInWindow();
+	   MapDrawer.getInstance().requestFocusInWindow();			//On update tous les panels ayant changé.
 	   ActionPanel.getInstance().updateVisibleButtons();
 	   InventoryPanel.getInstance().updateInventory();
    }
@@ -213,9 +180,9 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	   	Door closestDoor = getClosestDoor(active_player, true);
 	   	Sums p = active_player;
 	   	Timer timer = new Timer();
-	   	TimerTask workTask = new TimerTask() {
-		   public void run() {
-			   	int posX = closestDoor.getPosX();
+	   	TimerTask workTask = new TimerTask() {				//le Personnage va aller vers la porte la plus proche et l'emprunter pour aller travailler
+		   public void run() {								// Il reviendra 50 secondes plus tard, fatigué et plein d'argent $.
+			   	int posX = closestDoor.getPosX();			// un timer s'occupe de compter ces 50 secondes.
 			   	int posY = closestDoor.getPosY();
        			switch(String.valueOf(closestDoor.getChar())) {
        			case "E" : posX +=1;break;
@@ -244,9 +211,11 @@ public class Game implements DeletableObserver, Runnable, Serializable{
    }
    
    public void makeAllTimerTask(){
-       TimerTask repeatedTask = new TimerTask() {
+       TimerTask repeatedTask = new TimerTask() {			//Initiation de tous les timers et de leurs tâches respectives, faire passer le temps, faire bouger des sums aléatoires, etc...
            public void run() {
            	ActionPanel.getInstance().updateActivableList();
+           	notifyView();
+           	MapDrawer.getInstance().updateContent();
            }
        };
        TimerTask timeTask = new TimerTask() {
@@ -279,10 +248,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
    	        		switch(String.valueOf(randomDoor.getChar())) {
    	        		case "E" : posX +=1;break;
    	        		case "W" : posX -= 1;break;
-   	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;
-   	        		case "N" : posY += 1; break;
-   	        		case "H" : posY-=1; break;
-   	        		default : posY += 1; break;
+   	        		case "S" : posY +=1; if (randomDoor.getPosX() == sizeW && randomDoor.getPosY() == sizeH) {posY -=1;}; break;    //On ne peut pas envoyer le personnage directement sur 
+   	        		case "N" : posY += 1; break;																					//la porte car c'est un obstacle. Il faut donc l'envoyer
+   	        		case "H" : posY-=1; break;																						//sur la case juste avant, d'où la nécessité des conditions.
+   	        		default : posY += 1; break;	
    	        		}
    	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
    	        		((AStarThread) threads.get(0)).start();
@@ -310,7 +279,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           };
           TimerTask comingTask = new TimerTask() {
           	public void run() {
-          		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());
+          		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());		//Un Sums aléatoire qui est hors de la map revient sur cette dernière.
           		if (list.size()>0) {
    	        		Sums s = (Sums) list.get(0);
    	        		Door door = (Door) list.get(1);
@@ -323,7 +292,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           		}
           	}
    };
-       addList(repeatedTask, timerTasks, 1000,1000);
+       addList(repeatedTask, timerTasks, 500,500);
        addList(timeTask, timerTasks,5,5);
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
@@ -338,13 +307,13 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        	timers.get(i/3).scheduleAtFixedRate(timerTask, first, delay);
        }
   }
-  private void addList(TimerTask timerTask, ArrayList<Object> timerTasksList, long first, long delay) {
+  private void addList(TimerTask timerTask, ArrayList<Object> timerTasksList, long first, long delay) {		//On ajoute les TimeTask et leurs délais à une liste pour les manipuler plus facilement.
 	   timerTasksList.add(timerTask);
 	   timerTasksList.add(first);
 	   timerTasksList.add(delay);
   }
-  private ArrayList<GameObject> getRandomSumsAndDoor(){
- 		ArrayList<Map> mapList = new ArrayList<Map>(maps.values());
+  private ArrayList<GameObject> getRandomSumsAndDoor(){					//Cette fonction renvoie un Sums et une porte aléatoire sur la carte.
+ 		ArrayList<Map> mapList = new ArrayList<Map>(maps.values());		//En vérifiant que ce personnage ne bouge pas déjà en suivant un thread.
 		Collections.shuffle(mapList);
 		Sums res = null;
 		Door door = null;
@@ -353,15 +322,12 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		for (Map map: mapList) {
 			for (GameObject o : map.getObjects()) {
 				if (o instanceof Sums && res == null && o != active_player) {
-					try {
+					synchronized(threads) {
 						for (AStarThread t : threads) {
 							if (t.getSums() == o && t.isNotFinished()){
 								isAlreadyMoving = true;
 							}
 						}
-					}
-					catch (ConcurrentModificationException e) {
-						e.printStackTrace();
 					}
 					if (!(isAlreadyMoving) && ((Sums) o).isPlayable()) {
 						res = (Sums) o;
@@ -380,7 +346,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		return resList;
  	}
  	private Door getRandomDoor() {
- 		ArrayList<GameObject> lookingForDoors = new ArrayList<GameObject>(objectsOnMap);
+ 		ArrayList<GameObject> lookingForDoors = new ArrayList<GameObject>(objectsOnMap);	//Cette fonction renvoie une porte aléatoire sur la map.
  		Collections.shuffle(lookingForDoors);
  		Door door = null;
  		for (GameObject o : lookingForDoors) {
@@ -391,7 +357,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
  		}
  		return door;
  	}
- 	private ArrayList<Integer> getRandomPosition(Map map) {
+ 	private ArrayList<Integer> getRandomPosition(Map map) {			//Cette fonction renvoie une position libre aléatoire sur la map.
  		Random rand = new Random();
  		int randX = rand.nextInt(map.getSizeW());
  		int randY = rand.nextInt(map.getSizeH());
@@ -399,7 +365,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
  		int y;
  		int x;
  		boolean [][] positionTaken = map.getPositionTaken();
- 		if (positionTaken[randX][randY]){
+ 		if (positionTaken[randX][randY]){						//Vérifie que la position est libre et non bloquée.
  			while (positionTaken[randX][randY]) {
  				randX = rand.nextInt(map.getSizeW());
  				randY = rand.nextInt(map.getSizeH());
@@ -413,7 +379,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	active_player.tire();
     	notifyView();
     }
-    private Door getClosestDoor(Sums s, boolean onlyMapDoors) {
+    private Door getClosestDoor(Sums s, boolean onlyMapDoors) {		//Calcule la porte la plus proche du Sums en permettant de choisir si on veut les portes sur les bords de map ou toutes les portes
     	Door closestDoor = null;
     	int distanceMin = 50000;
     	for (GameObject o : objectsOnMap) {
@@ -428,7 +394,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	}
     	return closestDoor;
     }
-    private Sums getRandomSums() {
+    private Sums getRandomSums() {			//Renvoie un Sums aléatoire sur la map n'ayant pas déjà de Thread le faisant bouger.
     	Sums res = null;
     	Collections.shuffle(objectsOnMap);
     	for (GameObject o : objectsOnMap) {
@@ -460,7 +426,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	ActionPanel.getInstance().updateActivableList();
     	notifyView();
     }
-    public void playerWait(long delay, Sums s, String type) {
+    public void playerWait(long delay, Sums s, String type) {	//Fais attendre le personnage un certain temps l'empêchant de bouger et passant au personnage suivant.
     	if (s == active_player) {
     		setNextActivePlayer(s);
     	}
@@ -483,7 +449,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	timers.add(timer);
     }
     
-    public void setNextActivePlayer(Sums s) {
+    public void setNextActivePlayer(Sums s) {			//Met un autre personnage comme personnage actif.
     	for (GameObject perso : objectsOnMap) {
     		if (perso instanceof Sums) {
     			if ((Sums)perso != s && ((Sums) perso).isPlayable()) {
@@ -494,8 +460,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     		}
     	}
     }
-    public void action() { // = appuyé sur interact, open ou premier bouton
-    	String button = ActionPanel.getInstance().getFirstVisibleButton();
+    public void action() { 
+    	String button = ActionPanel.getInstance().getFirstVisibleButton();	//la barre d'espace correspond au premier boutton visible.
     	buttonPressed(button);
     }
 
@@ -509,7 +475,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	public void stop() {
 		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 	}
-	public void sendPlayer(int x, int y) {
+	public void sendPlayer(int x, int y) {		// Selection d'un autre joueur actif.
 		for (GameObject p: objectsOnMap) {
 			if (p instanceof Sums && x == p.getPosX() && y == p.getPosY()) {
 				setActivePlayer((Sums)p);
@@ -517,19 +483,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 			}
 		}
 	}
-	public void run() {
-		while (true) {
-			notifyView();
-			try {
-				Thread.sleep(500);
-	}
-			catch(InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 	public void timePassed() {
-		ArrayList<Sums> newList = new ArrayList<Sums>(sums);
+		ArrayList<Sums> newList = new ArrayList<Sums>(sums);	//Le temps passe pour tous les Sums.
 		for (Sums e: newList) {
 			if (e.isPlayable()) {
 				e.timePassed();
@@ -537,8 +492,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		}
 		notifyView();
 	}
-	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {
-		ArrayList<GameObject> inventory = s.getInventory();
+	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {		//Si un Sums passe un âge et change de classe, cette fonction reprend ses objets et recréer un personnage
+		ArrayList<GameObject> inventory = s.getInventory();						// avec les bons objets.
 		Sums newSums = s;
 		switch (s.getAgeRange()) {
 		case "Kid" : newSums = new Teen(s.getPosX(), s.getPosY(), s.getHouse()); break;
@@ -551,13 +506,12 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		sums.add(newSums);
 		s.getMap().getObjects().add(newSums);
 		s.getMap().getObjects().remove(s);
-		if (s == active_player) {setActivePlayer(newSums);}
+		if (s == active_player) {setActivePlayer(newSums);}			//Le joueur actif est update si c'est ce dernier qui évolue.
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();
 	}
-	public void playerDied(Sums e) {
-		System.out.println("player died");
-		sums.remove(e);
+	public void playerDied(Sums e) {			//Si un joueur meurt...RIP.
+		sums.remove(e);							//Si c'est le joueur actif on va chercher un sums random sur toutes les maps.
 		e.getMap().getObjects().remove(e);
 		if (e == active_player) {
 			Random r = new Random();
@@ -570,9 +524,9 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();
 	}
-	public void changeMap(String s) {
-		for (AStarThread  t : threads) {
-			if (t != null) {
+	public void changeMap(String s) {		//La fonction stoppe tous les threads lors de changement de map.
+		for (AStarThread  t : threads) {	//Elle lance l'initialisation des maps maison si c'est le premier passage sur ces maps.
+			if (t != null) {				//Les variables de maps sont réinitialisées.
 				t.stopThreadChangeMap();
 			}
 		}
@@ -603,7 +557,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
         ActionPanel.getInstance().updateActivableList();
         notifyView();
     }
-	public ActivableObject getFrontObject() {
+	public ActivableObject getFrontObject() {		//Récupère l'objet en face du joueur actif.
 		ActivableObject res = null;
 		for (ActivableObject o : currentMap.getActivableObjects()) {
 			if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
@@ -632,7 +586,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	public Map getCurrentMap() {
 		return currentMap;
 	}
-	public void setActivePlayer(Sums s) {
+	public void setActivePlayer(Sums s) {		//Set le joueur actif et si ce dernier se déplaçait avec un Thread, on stoppe ce thread.
 		active_player = s;
 		window.setPlayer(active_player);
 		ActionPanel.getInstance().setPlayer(active_player);

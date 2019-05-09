@@ -13,7 +13,7 @@ public class ImageDraw extends GameObject{
 		image = s;
 		configureImage();
 	}
-	public ImageDraw(int x, int y, String s) {
+	public ImageDraw(int x, int y, String s) {		//Idem aux Blocks mais ici ce sont des objets ne bloquant pas le passage des personnages.
 		super(x,y);
 		image = s;
 		configureImage();
@@ -26,8 +26,11 @@ public class ImageDraw extends GameObject{
 			sizeH = 3;
 			sizeW = 4; break;
 		}
-		
 	}
+	public String getImage() {
+		return image;
+	}
+	@Override
 	public void makeSprite() {
 		spriteHouse2=Constantes.house2;
 		spriteCarpet=Constantes.carpet;
@@ -35,6 +38,7 @@ public class ImageDraw extends GameObject{
 		spriteStairsMiddlePart = Constantes.stairsMiddlePart;
 		spriteStairsUpPart = Constantes.stairsUpPart;
 	}
+	@Override
 	public BufferedImage getSprite() {
 		BufferedImage sprite = null;
 		switch(image) {
@@ -48,11 +52,7 @@ public class ImageDraw extends GameObject{
 	}
 	@Override
 	public boolean isObstacle() {
-		// TODO Auto-generated method stub
 		return false;
-	}
-	public String getImage() {
-		return image;
 	}
 
 }

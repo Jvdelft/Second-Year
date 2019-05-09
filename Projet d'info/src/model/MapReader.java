@@ -10,11 +10,11 @@ import model.Constantes;
 import view.MapDrawer;
 
 public class MapReader {
-	private static ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();
-	private static ArrayList<Character> Maps = new ArrayList<Character>();
+	private static ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();		//Les images à draw.
+	private static ArrayList<Character> Maps = new ArrayList<Character>();				// Les caractères récupérés dans les fichiers textes.
 	private static int wTiles;
 	private static BlockFactory factory = new BlockFactory();
-	private static ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private static ArrayList<GameObject> objects = new ArrayList<GameObject>();			//les objets à ajouter sur la map.
 	private static Map mapBeingRead;
 	public MapReader() {
 		}
@@ -24,7 +24,7 @@ public class MapReader {
 			int posX = i%wTiles;
 			if (Maps.get(i) == 'A') {
 				tiles.add(Constantes.tree);
-				objects.add(factory.getInstance("Border", posX , posY, mapBeingRead));
+				objects.add(factory.getInstance("Border", posX , posY, mapBeingRead));	//En fonction des caractères certains objets et certaines images sont crées.
 			}
 			else if(Maps.get(i) == 'H') {
 				tiles.add(Constantes.herb);
@@ -58,9 +58,9 @@ public class MapReader {
 		}
 		mapBeingRead.setObjectsOnMap(objects);
 	}
-	public static ArrayList<BufferedImage> ReadMap(String s, Map map) {
-		objects = new ArrayList<GameObject>();
-		int line = 0;
+	public static ArrayList<BufferedImage> ReadMap(String s, Map map) {		//On lit le fichier texte correspondant à la map.
+		objects = new ArrayList<GameObject>();								//on récupère chaque tile et également les objets marqués dans le fichier
+		int line = 0;														//ces derniers sont crées via une factory.
 		mapBeingRead = map;
 		Maps = new ArrayList<Character>();
 		tiles = new ArrayList<BufferedImage>();
@@ -95,7 +95,7 @@ public class MapReader {
 						Building market = new Market(x,y); 
 						readBuilding(market); break;
 					case "spa" : 
-						Building spa = new Spa(x,y);
+						Building spa = Spa.getInstance();
 						readBuilding(spa); break;
 					case "cigaret" : objects.add(factory.getInstance("Cigaret", x , y, mapBeingRead)); break;
 					case "apple" : objects.add(factory.getInstance("Apple", x , y, mapBeingRead)); break;
@@ -141,7 +141,7 @@ public class MapReader {
 		makeTiles();
 		return tiles;
 	}
-	public static void readBuilding(Building b) {
+	public static void readBuilding(Building b) {		//Si on ajoute un building à la map.
 		for (int i = 0; i< b.getSizeH(); i++) {
 			objects.add(new Block(b.getPosX(),i+b.getPosY()));
 			objects.add(new Block (b.getPosX()+b.getSizeW()-1,i+b.getPosY()));
@@ -153,7 +153,7 @@ public class MapReader {
 		objects.add(b);
 		objects.add(b.getDoor());
 	}
-	public static void readWidth(String s) {
+	public static void readWidth(String s) {	//On lit uniquement la taille de la map qui est la première ligne du fichier texte.
 		BufferedReader br = null;
 		FileReader fr = null;
 		try {

@@ -1,7 +1,7 @@
 package model;
 
 public class BlockFactory {
-	public GameObject getInstance(String type,int posX,int posY, Map map) {
+	public GameObject getInstance(String type,int posX,int posY, Map map) {   //La factory permet de construire des objects en dehors des classes pour plus de simplicité.
 		GameObject res = null;
 		switch (type){
 			case "Border": res = new Block(posX,posY); break;
@@ -23,9 +23,6 @@ public class BlockFactory {
 			case "pancarte50" : res = new Block(posX,posY,"pancarte50"); break;
 			case "Bath" : res = new Bath(posX,posY,map); break;
 			case "Dog" : res = new Dog(posX,posY); break;
-		}
-		if (res == null) {
-			System.out.println(type);
 		}
 		return res;
 	}

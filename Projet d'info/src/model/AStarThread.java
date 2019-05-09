@@ -61,10 +61,10 @@ public class AStarThread extends Thread{
 			}
 			if (d != null) {
 				switch (direction) {
-				case 0 : g.movePlayer(1,0,d); break;
-				case 1 : g.movePlayer(0,-1,d); break;
-				case 2 : g.movePlayer(-1,0,d); break;
-				case 3 : g.movePlayer(0,1,d); break;
+				case 0 : g.moveDog(1,0,d); break;
+				case 1 : g.moveDog(0,-1,d); break;
+				case 2 : g.moveDog(-1,0,d); break;
+				case 3 : g.moveDog(0,1,d); break;
 				default : 
 					stopThread();
 					break;
@@ -96,7 +96,7 @@ public class AStarThread extends Thread{
 		   	p.setIsPlayable(false);
 		}
 	}
-	public void stopThreadChangeMap() {
+	public void stopThreadChangeMap() { //lors du changement de map, il faut stopper les Threads sans que les Sums ne passent les portes pour rester cohérent.
 		this.exit = true;
 	}
 	public boolean isNotFinished() {

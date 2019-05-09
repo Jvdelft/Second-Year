@@ -1,28 +1,26 @@
 package model;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import view.Window;
 import view.MapDrawer;
-import java.lang.*;
 public class Door extends ActivableObject{
 	private MapDrawer mapDrawer = MapDrawer.getInstance();
 	private String destination;
 	private Character character;
 
-	public Door(int X, int Y, String s, char c) {
+	public Door(int X, int Y, String s, char c) {		//la destination est donnée par le string et le charactère définit la position de la porte (sur les bords de la map ou sur un maison).
 		super(X, Y);
 		destination = s;
 		character = c;
 	}
-	public Door() {
-		super();
+	public char getChar() {
+		return character;
 	}
+	public String getDestination() {
+		return destination;
+	}
+	@Override
 	public boolean isObstacle() {
 		return true;
 	}
+	@Override
 	public void activate(Sums e) {
 		Game game = Game.getInstance();
 		int sizeH = game.getMaps().get(destination).getSizeH();
@@ -47,13 +45,7 @@ public class Door extends ActivableObject{
 			case 'A' : e.teleportation(1, 1); break;
 			}
 		}
-	
+	@Override
 	public void makeSprite() {
-	}
-	public char getChar() {
-		return character;
-	}
-	public String getDestination() {
-		return destination;
 	}
 }

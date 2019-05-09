@@ -20,14 +20,13 @@ public class Kitchen extends ContainerObject{
 	}
 	public Kitchen() {
 		super();
-		type = "START COOKING";
+		type = "START COOKING";		//La cuisine prend trois cases donc le sprite est dessiné une fois et les deux autres cases ont besoin d'un constructeur mettant leur sprite à null
 		sprite = null;
 	}
 	public void cook(Sums s) {
-		System.out.println(objectContained);
 		double nutritionalValue = 0;
 		for (int i= 0; i<this.objectContained.size(); i++) {
-			nutritionalValue += ((Food) objectContained.get(i)).getNutritionalValue();
+			nutritionalValue += ((Food) objectContained.get(i)).getNutritionalValue();	//Le personnage cuisine et il obtient un plat avec une valeur nutrionelle aléatoire 
 		}
 		objectContained.removeAll(objectContained);
 		Game.getInstance().playerWait(10000L, s, "Cooking");
@@ -39,17 +38,21 @@ public class Kitchen extends ContainerObject{
 		
 		
 	}
+	@Override
 	public void activate(Sums s) {
 		this.open();
 		s.setIsPlayable(false);
 	}
+	@Override
 	public void open() {
 		this.type = "COOK";
-		MapDrawer.getInstance().drawContent(this);
+		MapDrawer.getInstance().drawContent(this);	//Une fois le container ouvert, le personnage a commencé à cuisiner, le type est donc cook.
 	}
+	@Override
 	public void close() {
 		type = "START COOKING";
 	}
+	@Override
 	public void makeSprite() {
 		sprite = Constantes.kitchen;
 	}

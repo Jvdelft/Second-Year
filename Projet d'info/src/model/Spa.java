@@ -8,7 +8,7 @@ public class Spa extends Building{
 	private Door door;
 	private static Spa SpaInstance;
 	private int cleanliness;
-	public Spa(int x, int y) {
+	private Spa(int x, int y) {
 		super(x,y);
 		cleanliness = 10;
 		door = new Door(sizeW/2+x-1,y+sizeH-1,Constantes.mapBase, 's');
@@ -16,27 +16,12 @@ public class Spa extends Building{
 	public Spa() {
 		super();
 	}
-	public boolean isObstacle() {
-		return true;
-	}
-	public int getSizeW() {
-		return sizeW;
-	}
-	public int getSizeH() {
-		return sizeH;
-	}
-	public Door getDoor() {
-		return door;
-	}
-	public void makeSprite() {
-		sprite = Constantes.spa;
-	}
 	public void activate (Sums s) {
 		Game.getInstance().playerWait(5000, s, "activity");
 		s.getHouse().changeMoney(-50);
-		s.energy += s.max_energy;
-		s.happiness = s.max_happiness;
-		s.hygiene += s.max_hygiene;
+		s.setEnergy(s.max_energy);
+		s.setHappiness(s.getMaxHappiness());
+		s.setHygiene(s.getHygiene());
 	}
 	public static Spa getInstance() {
     	if (SpaInstance == null) {
@@ -44,4 +29,24 @@ public class Spa extends Building{
     	}
     	return SpaInstance;
     }
+	@Override
+	public boolean isObstacle() {
+		return true;
+	}
+	@Override
+	public int getSizeW() {
+		return sizeW;
+	}
+	@Override
+	public int getSizeH() {
+		return sizeH;
+	}
+	@Override
+	public Door getDoor() {
+		return door;
+	}
+	@Override
+	public void makeSprite() {
+		sprite = Constantes.spa;
+	}
 }
