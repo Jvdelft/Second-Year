@@ -10,7 +10,6 @@ import view.InventoryPanel;
 import view.Window;
 
 public abstract class Sums extends ActivableObject implements NeedToEat, Directable, DeletableObserver{
-	protected String gender;
 	protected double age;
 	protected int faim;
 	protected int toilet;
@@ -27,17 +26,11 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected String ageRange ;
 	protected String typeAffection = type;
 	protected final int max_hygiene = 7;
-	private transient Timer timer = new Timer();
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();
-	@JsonIgnore
 	protected transient BufferedImage sprite_l;
-	@JsonIgnore
 	protected transient BufferedImage sprite_r;
-	@JsonIgnore
 	protected transient BufferedImage sprite_u;
-	@JsonIgnore
 	protected transient BufferedImage sprite_d;
-	@JsonIgnore
 	protected transient BufferedImage sprite_face;
 	private ArrayList<GameObject> inventory = new ArrayList<GameObject>();
 	protected boolean playable = true;
@@ -128,7 +121,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	
 	public void buy(GameObject object) {
 		this.getHouse().changeMoney(-(object.getPrice()) );
-		if (object instanceof Image) {
+		if (object instanceof ImageDraw) {
 			this.getHouse().setCategory(2);
 		}
 		addInInventory(object);
@@ -202,14 +195,14 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     @Override
     public boolean isObstacle() {
-        return true;
+        return false;
     }
 
     @Override
     public int getDirection() {
     return direction;
     }
-    @JsonIgnore
+    
     public int getFrontX() {
         int delta = 0;
         if (direction % 2 == 0){
@@ -217,7 +210,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
         }
         return this.posX + delta;
     }
-    @JsonIgnore
     public int getFrontY() {
         int delta = 0;
         if (direction % 2 != 0){
@@ -277,7 +269,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public void setIsPlayable(boolean ip) {
     	this.playable = ip;
     }
-    @JsonIgnore
+    
     public BufferedImage getSprite() {
     	BufferedImage sprite = null;
     	switch(this.getDirection()) {
@@ -293,7 +285,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     public void setDirection(int direction) {
     	this.direction = direction;
-    	makeSprite();
     }
     public void setEnergy(int e) {
     	this.energy = e;
@@ -313,12 +304,10 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public int getMaxHappiness() {
     	return this.max_happiness;
     }
-    public Timer getTimer() {
-    	return this.timer;
-    }
     public ArrayList<GameObject> getInventory(){
     	return inventory;
     }
+
 
 
 }

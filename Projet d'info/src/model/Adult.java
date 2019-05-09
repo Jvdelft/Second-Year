@@ -36,15 +36,7 @@ public class Adult extends Sums {
 	public void makeLove() {
 		Game.getInstance().makeBaby(this.getHouse());
 	}
-	public boolean hasFlower() {
-		boolean res = false;
-		for (GameObject go : this.getInventory()) {
-			if (go instanceof Image && ((Image)go).getImage()=="flower") {
-				res = true;
-			}
-		}
-		return res;
-	}
+
 	public void makeSprite() {
     	sprite_d = Constantes.spriteDAdult;
     	sprite_l = Constantes.spriteLAdult;

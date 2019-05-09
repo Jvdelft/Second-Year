@@ -26,7 +26,7 @@ public class MarketShelve extends ContainerObject{
 			}
 		}
 		else if (ShelveType == "House2") {
-			objectContained.add(new Image("house2"));
+			objectContained.add(new ImageDraw("house2"));
 		}
 		else if (ShelveType == "Flower") {
 			for (int i = 0; i<8; i++) {

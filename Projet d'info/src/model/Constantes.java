@@ -112,6 +112,10 @@ public class Constantes {
 	public static BufferedImage kitchen;
 	public static BufferedImage dish;
 	public static BufferedImage bath;
+	public static BufferedImage dogN;
+	public static BufferedImage dogS;
+	public static BufferedImage dogE;
+	public static BufferedImage dogW;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -192,6 +196,10 @@ public class Constantes {
 			kitchen = ImageIO.read(new File("Images/kitchen.png"));
 			dish = ImageIO.read(new File("Images/bento.png"));
 			bath = ImageIO.read(new File("Images/bath.png"));
+			dogN = ImageIO.read(new File("Images/dogN.png"));
+			dogS = ImageIO.read(new File("Images/dogS.png"));
+			dogW = ImageIO.read(new File("Images/dogW.png"));
+			dogE = ImageIO.read(new File("Images/dogE.png"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

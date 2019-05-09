@@ -2,18 +2,18 @@ package model;
 
 import java.awt.image.BufferedImage;
 
-public class Image extends GameObject{
+public class ImageDraw extends GameObject{
 	String image;
 	protected transient BufferedImage spriteHouse2;
 	protected transient BufferedImage spriteCarpet;
 	protected transient BufferedImage spriteStairsDownPart;
 	protected transient BufferedImage spriteStairsMiddlePart;
 	protected transient BufferedImage spriteStairsUpPart;
-	public Image(String s) {
+	public ImageDraw(String s) {
 		image = s;
 		configureImage();
 	}
-	public Image(int x, int y, String s) {
+	public ImageDraw(int x, int y, String s) {
 		super(x,y);
 		image = s;
 		configureImage();

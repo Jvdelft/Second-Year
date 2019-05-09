@@ -53,14 +53,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("EAT IT"));
 		initButton(new JButton("GIVE FLOWER"));
 		initButton(new JButton("MAKE LOVE"));
-		initButton(new JButton("PLAY TOY"));
 		initButton(new JButton("SMOKE"));
 		initButton(new JButton("BUY"));
-		initButton(new JButton("COOK"));
-		initButton(new JButton("START COOKING"));
 		initButton(new JButton("GO TO WORK"));
-		initButton(new JButton("BATH"));
-		initButton(new JButton("SLEEP"));
 		this.setLayout(this.box);
 		
 	}
@@ -83,8 +78,11 @@ public class ActionPanel extends JPanel implements ActionListener {
     	ActivableObject frontObject = null;
     	if (activableObjects != null) { //Détermination de l'objet en face du joueur
 	    	for (ActivableObject object : activableObjects) {
+	    		if (!(buttons.containsKey(object.getType()))) {
+        			initButton(new JButton(object.getType()));
+        		}
 	            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
-	            	frontObject = object; break;
+	            	frontObject = object;
 	            }
 	    	}
     	}

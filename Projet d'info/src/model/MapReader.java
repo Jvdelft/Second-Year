@@ -24,7 +24,7 @@ public class MapReader {
 			int posX = i%wTiles;
 			if (Maps.get(i) == 'A') {
 				tiles.add(Constantes.tree);
-				objects.add(factory.getInstance("Border", posX , posY));
+				objects.add(factory.getInstance("Border", posX , posY, mapBeingRead));
 			}
 			else if(Maps.get(i) == 'H') {
 				tiles.add(Constantes.herb);
@@ -46,14 +46,14 @@ public class MapReader {
 			}
 			else if (Maps.get(i) == 'W') {
 				tiles.add(Constantes.wall);
-				objects.add(factory.getInstance("Border", posX , posY));
+				objects.add(factory.getInstance("Border", posX , posY, mapBeingRead));
 			}
 			else if (Maps.get(i) == 's') {
 				tiles.add(Constantes.sol2);
 			}
 			else if (Maps.get(i) == 'w') {
 				tiles.add(Constantes.wall2);
-				objects.add(factory.getInstance("Border", posX , posY));
+				objects.add(factory.getInstance("Border", posX , posY, mapBeingRead));
 			}
 		}
 		mapBeingRead.setObjectsOnMap(objects);
@@ -97,23 +97,24 @@ public class MapReader {
 					case "spa" : 
 						Building spa = new Spa(x,y);
 						readBuilding(spa); break;
-					case "cigaret" : objects.add(new Cigaret(x,y)); break;
-					case "apple" : objects.add(new Apple(x,y)); break;
-					case "adult" : objects.add(new Adult(x,y,map.getHouse())); break;
-					case "kid" : objects.add(new Kid(x,y,map.getHouse())); break;
-					case "teen" : objects.add(new Teen(x,y,map.getHouse())); break;
-					case "elder" : objects.add(new Elder(x,y,map.getHouse())); break;
-					case "toilet" : objects.add(new Toilet(x,y)); break;
-					case "kitchen" : objects.add(new Kitchen(x,y,map)); break;
-					case "carpet" : objects.add(new Image(x,y,"carpet")); break;
-					case "stairsDownPart" : objects.add(new Image(x,y,"stairsDownPart")); break;
-					case "stairsMiddlePart" : objects.add(new Image(x,y,"stairsMiddlePart")); break;
-					case "stairsUpPart" : objects.add(new Image(x,y,"stairsUpPart")); break;
-					case "table" : objects.add(new Block(x,y,"table")); break;
-					case "pancarte1" : objects.add(new Block(x,y,"pancarte1")); break;
-					case "pancarte50" : objects.add(new Block(x,y,"pancarte50")); break;
-					case "pancarte10" : objects.add(new Block(x,y,"pancarte10")); break;
-					case "bath" : objects.add(new Bath(x,y, map)); break;
+					case "cigaret" : objects.add(factory.getInstance("Cigaret", x , y, mapBeingRead)); break;
+					case "apple" : objects.add(factory.getInstance("Apple", x , y, mapBeingRead)); break;
+					case "adult" : objects.add(factory.getInstance("Adult", x , y, mapBeingRead)); break;
+					case "kid" : objects.add(factory.getInstance("Kid", x , y, mapBeingRead)); break;
+					case "teen" : objects.add(factory.getInstance("Teen ", x , y, mapBeingRead)); break;
+					case "elder" : objects.add(factory.getInstance("Elder", x , y, mapBeingRead)); break;
+					case "toilet" : objects.add(factory.getInstance("Toilet", x , y, mapBeingRead)); break;
+					case "kitchen" : objects.add(factory.getInstance("Kitchen", x , y, mapBeingRead)); break;
+					case "carpet" : objects.add(factory.getInstance("carpet", x , y, mapBeingRead))/*objects.add(new Image(x,y,"carpet"))*/; break;
+					case "stairsDownPart" : objects.add(factory.getInstance("stairsDownPart", x , y, mapBeingRead))/*objects.add(new Image(x,y,"stairsDownPart"))*/; break;
+					case "stairsMiddlePart" : objects.add(factory.getInstance("stairsMiddlePart", x , y, mapBeingRead)); break;
+					case "stairsUpPart" : objects.add(factory.getInstance("stairsUpPart", x , y, mapBeingRead)); break;
+					case "table" : objects.add(factory.getInstance("table", x , y, mapBeingRead)); break;
+					case "pancarte1" : objects.add(factory.getInstance("pancarte1", x , y, mapBeingRead)); break;
+					case "pancarte50" : objects.add(factory.getInstance("pancarte50", x , y, mapBeingRead)); break;
+					case "pancarte10" : objects.add(factory.getInstance("pancarte10", x , y, mapBeingRead)); break;
+					case "bath" : objects.add(factory.getInstance("Bath", x , y, mapBeingRead)); break;
+					case "dog" : objects.add(factory.getInstance("Dog", x , y, mapBeingRead)); break;
 					}
 				}
 			}

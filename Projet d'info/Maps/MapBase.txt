@@ -27,3 +27,4 @@ apple 7 7
 adult 10 9
 kid 5 6
 elder 15 15
+dog 14 14
