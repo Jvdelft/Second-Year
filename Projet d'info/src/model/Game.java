@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -45,6 +46,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     private Sums sumsToSend;
     LocalDateTime localDateTime = LocalDateTime.of(2019, Month.JANUARY, 01, 00 , 00,00);
     private transient ArrayList<AStarThread> threads = new ArrayList<AStarThread>();
+    private Dog dog;
     private Game(Window window) {
     	this.window = window;
     	initMaps();
@@ -56,10 +58,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	//sound = new Sound();
     	//sound.play("Never_Surrender");
     	makeAllTimerTask();
+    	this.dog = Dog.dogInstance;
     }
     private void initMaps() {
     	if (!(Load.load)) {
-    		System.out.println("Hey");
     		maps.put(Constantes.mapBase, new Map(Constantes.mapBase));
     		maps.put(Constantes.mapMaison, new Map(Constantes.mapMaison));
     		maps.put(Constantes.mapMarket, new Map(Constantes.mapMarket));
@@ -93,9 +95,11 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	return sums;
     }
 
-    public void movePlayer(int x, int y, Sums sums) {
+    public void movePlayer(int x, int y, Object s) {
     	int moveX;
     	int moveY;
+    	Sums p = null;
+    	Dog d = null;
     	if (x>1) {
     		moveX = 1;
     	}
@@ -114,11 +118,16 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	else {
     		moveY = y;
     	}
-    	Sums p = sums;
-    	if (p == null) {
+    	if (s instanceof Sums) {
+    		p = (Sums) s;
+    	}
+    	else if (s instanceof Dog) {
+    		d = (Dog) s;
+    	}
+		if (p == null && d == null) {
     		p = active_player;
     	}
-    	if (p.isPlayable()) {
+    	if (p != null && p.isPlayable()) {
 	        int nextX = p.getPosX() + moveX;
 	        int nextY = p.getPosY() + moveY;
 	
@@ -138,9 +147,27 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	            	p.tire();
 	            }
 	        }
+    	}
+    	if (d != null) {
+	        int nextX = d.getPosX() + moveX;
+	        int nextY = d.getPosY() + moveY;
+	
+	        boolean obstacle = false;
+	        for (GameObject object : objectsOnMap) {
+	            if (object.isAtPosition(nextX, nextY)) {
+	                obstacle = object.isObstacle();
+	            }
+	            if (obstacle == true) {
+	                break;
+	            }
+	        }
+	        d.rotate(moveX, moveY);
+	        if (obstacle == false) {
+	            d.move(moveX, moveY);
+	        }
+    	}
 	        ActionPanel.getInstance().updateVisibleButtons();
 	        notifyView();
-    	}
     }
    
    public void buttonPressed(String button) {
@@ -302,9 +329,16 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           		else if (s!= null) {
           			ArrayList<Integer> list = getRandomPosition(currentMap);
           			threads.add(0, new AStarThread(Game.getInstance(), s, list.get(0), list.get(1), null));
-   	        		((AStarThread) threads.get(0)).start();;
+   	        		((AStarThread) threads.get(0)).start();
           		}
           	}
+          };
+          TimerTask movingDogTask = new TimerTask() {
+        	  public void run() {
+            		ArrayList<Integer> list = getRandomPosition(currentMap);
+            		threads.add(0, new AStarThread(Game.getInstance(), dog, list.get(0), list.get(1), null));
+            	   	((AStarThread) threads.get(0)).start();
+        	  }
           };
           TimerTask comingTask = new TimerTask() {
           	public void run() {
@@ -326,7 +360,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
        addList(comingTask, timerTasks,5000,5000);
-       addList(lifeTask, timerTasks, 1000,1000);
+       addList(lifeTask, timerTasks, 5000,5000);
+       addList(movingDogTask, timerTasks, 5000,5000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());
        	TimerTask timerTask = (TimerTask) timerTasks.get(i);
@@ -534,10 +569,15 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 				ActionPanel.getInstance().setPlayer(active_player);
 				MapDrawer.getInstance().requestFocusInWindow();
 			}
-			for (AStarThread t : threads) {
-				if(t.getSums() == p) {
-					t.stopThread();
+			try {
+				for (AStarThread t : threads) {
+					if(t.getSums() == p) {
+						t.stopThread();
 				}
+			}
+		}
+			catch(ConcurrentModificationException e) {
+				e.printStackTrace();
 			}
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
@@ -617,10 +657,15 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
-		for (AStarThread  t : threads) {
-			if (t != null) {
-				t.stopThread();
+		try {
+			for (AStarThread  t : threads) {
+				if (t != null) {
+					t.stopThread();
+				}
 			}
+		}
+		catch(ConcurrentModificationException e) {
+			e.printStackTrace();
 		}
 		objectsOnMap.remove(active_player);
 		currentMap = maps.get(s);
@@ -679,5 +724,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	}
 	public ArrayList<Timer> getTimers() {
 		return timers;
+	}
+	public void setDog(Dog dog) {
+		this.dog = dog;
 	}
 }

@@ -133,12 +133,6 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 	            if (x < 0 || y < 0) {
 	            	continue;
 	            }
-	            else if (object instanceof ActivableObject) {
-	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-	            }
-	            else if(object instanceof Sums) {
-	            	drawSprites((Sums) object, g);
-	            }
 	            else {
 	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
 	            }
@@ -165,11 +159,6 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     }
     public ArrayList<GameObject> getObjects() {
     	return objects;
-    }
-    public void drawSprites(Sums s, Graphics g) {
-    	int x = s.getPosX();
-        int y = s.getPosY();
-    	g.drawImage(s.getSprite(), x*tileSize, y*tileSize, tileSize, tileSize, this);
     }
     public static MapDrawer getInstance() {
     	if (instance_mapDrawer == null) {

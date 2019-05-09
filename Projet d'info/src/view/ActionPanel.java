@@ -52,14 +52,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		initButton(new JButton("EAT IT"));
 		initButton(new JButton("GIVE FLOWER"));
 		initButton(new JButton("MAKE LOVE"));
-		initButton(new JButton("PLAY TOY"));
 		initButton(new JButton("SMOKE"));
 		initButton(new JButton("BUY"));
-		initButton(new JButton("COOK"));
-		initButton(new JButton("START COOKING"));
 		initButton(new JButton("GO TO WORK"));
-		initButton(new JButton("BATH"));
-		initButton(new JButton("SLEEP"));
 		this.setLayout(this.box);
 		
 	}
@@ -81,12 +76,17 @@ public class ActionPanel extends JPanel implements ActionListener {
     	}
     	if (activableObjects != null) {
 	    	for (ActivableObject object : activableObjects) {
+	    		if (!(buttons.containsKey(object.getType()))) {
+        			initButton(new JButton(object.getType()));
+        		}
 	            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
 	                if (object.getUser().contentEquals(active_player.getAgeRange()) || object.getUser().contentEquals("All")) { // = Si l'objet peut etre utilisé par active_player
 	                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
 	                		typeList.add(((Sums)object).getTypeAffection());
 	                	}
-	                	else { typeList.add(object.getType());}
+	                	else {
+	                		typeList.add(object.getType());
+	                		}
 	                }
 	            }
 	        }
