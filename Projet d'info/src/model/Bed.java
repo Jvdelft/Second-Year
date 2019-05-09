@@ -15,23 +15,14 @@ public class Bed extends Furniture{
 			map.addObject(bed);
 		}
 	}
-		public Bed() {
-			super();
-			type = "SLEEP";
-			sprite = null;
-			sizeH = 2;
-			sizeW = 1;
-		}
-	@Override
-	public boolean isObstacle() {
-		return true;
+	public Bed() {
+		super();
+		type = "SLEEP";
+		sprite = null;
+		sizeH = 2;
+		sizeW = 1;
 	}
-
-	@Override
-	public void makeSprite() {
-		sprite = Constantes.bedOne;
-		
-	}
+	
 	@Override
 	public void activate(Sums s) {
 		Game.getInstance().playerWait(50000, s, s.getAgeRange());
@@ -45,6 +36,17 @@ public class Bed extends Furniture{
 	@Override
 	public int getDirection() {
 		return direction;
+	}
+	
+	@Override
+	public boolean isObstacle() {
+		return true;
+	}
+
+	@Override
+	public void makeSprite() {
+		sprite = Constantes.bedOne;
+		
 	}
 
 }

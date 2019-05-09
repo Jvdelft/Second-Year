@@ -34,6 +34,9 @@ public class ContainerObject extends Furniture{
 		}
 		return objectsToReturn;
 	}
+	public void close() {
+		this.type = "OPEN";
+	}
 	public ArrayList<GameObject> getObjectsContained() {
 		return objectContained;
 	}
@@ -49,9 +52,6 @@ public class ContainerObject extends Furniture{
 	@Override
 	public int getDirection() {
 		return direction;
-	}
-	public void close() {
-		this.type = "OPEN";
 	}
 
 }

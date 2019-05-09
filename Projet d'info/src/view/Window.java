@@ -70,36 +70,9 @@ public class Window extends JFrame implements ActionListener {
         };
         this.addWindowListener(exitListener);
     }
-
-    public void setGameObjects(ArrayList<GameObject> objects) {
-        this.mapDrawer.setObjects(objects);
-        this.mapDrawer.redraw();
-    }
-
     public void update() {
         groupPanel.repaint();
     }
-
-    public void setKeyListener(KeyListener keyboard) {
-        this.mapDrawer.addKeyListener(keyboard);
-    }
-
-    public void setMouseListener(Mouse m) {
-        this.mapDrawer.addMouse(m);
-    }
-
-	public int getMapSizeW() {
-		if (mapDrawer.getCurrentMap() != null) {
-			return mapDrawer.getCurrentMap().getSizeW();
-		}
-		return 0;
-	}
-	public int getMapSizeH() {
-		if (mapDrawer.getCurrentMap() != null) {
-			return mapDrawer.getCurrentMap().getSizeH();
-		}
-		return 0;
-	}
 	public void escapePressed() {
 		if (groupPanel.isVisible()) {
 			cards.next(this.getContentPane());
@@ -188,5 +161,29 @@ public class Window extends JFrame implements ActionListener {
 	}
 	public CardLayout getCardLayout() {
 		return cards;
+	}
+	public void setGameObjects(ArrayList<GameObject> objects) {
+        this.mapDrawer.setObjects(objects);
+        this.mapDrawer.redraw();
+    }
+	public void setKeyListener(KeyListener keyboard) {
+        this.mapDrawer.addKeyListener(keyboard);
+    }
+
+    public void setMouseListener(Mouse m) {
+        this.mapDrawer.addMouse(m);
+    }
+
+	public int getMapSizeW() {
+		if (mapDrawer.getCurrentMap() != null) {
+			return mapDrawer.getCurrentMap().getSizeW();
+		}
+		return 0;
+	}
+	public int getMapSizeH() {
+		if (mapDrawer.getCurrentMap() != null) {
+			return mapDrawer.getCurrentMap().getSizeH();
+		}
+		return 0;
 	}
 }

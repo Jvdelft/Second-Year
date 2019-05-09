@@ -134,12 +134,6 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void setPlayer(Sums s) {
-		active_player = s;
-		visibleButtons.removeAll(visibleButtons);
-		this.removeAll();
-	}
-	
 	public void removeButton(JButton button) {
 		if (visibleButtons.contains(button)) {
 			this.remove(button);
@@ -194,6 +188,11 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 		updateVisibleButtons();
 		Game.getInstance().setIndexInventory(index);
+	}
+	public void setPlayer(Sums s) {
+		active_player = s;
+		visibleButtons.removeAll(visibleButtons);
+		this.removeAll();
 	}
 	public static ActionPanel getInstance() {
 		if (actionPanel_instance == null) {

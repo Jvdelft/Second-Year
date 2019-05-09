@@ -25,7 +25,13 @@ public abstract class GameObject implements Serializable{
     protected GameObject() {
     	this.makeSprite();
     }
-
+    public boolean isAtPosition(int x, int y) {
+        return this.posX == x && this.posY == y;
+    }
+    public void teleportation(int x, int y) {
+    	posX = x;
+    	posY = y;
+    }
     public int getPosX() {
         return this.posX;
     }
@@ -52,14 +58,6 @@ public abstract class GameObject implements Serializable{
     
     public int getPrice() {
     	return price;
-    }
- 
-    public boolean isAtPosition(int x, int y) {
-        return this.posX == x && this.posY == y;
-    }
-    public void teleportation(int x, int y) {
-    	posX = x;
-    	posY = y;
     }
     @JsonIgnore
     public abstract boolean isObstacle();

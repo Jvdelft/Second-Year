@@ -59,12 +59,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		int energie = this.energy + f.getEnergyValue();
 		this.energy = Math.min(energie, this.max_energy);
 	}
-	public void Drink(Drinks d) {
-		int energie = this.energy + d.getEnergyValue();
-		this.energy = Math.min(energie, this.max_energy);
-		int Vessie = this.toilet + d.MakeUPee();
-		this.toilet = Math.min(this.max_toilet, Vessie);
-	}
 	public void move(int X, int Y) {
         this.posX = this.posX + X;
         this.posY = this.posY + Y;
@@ -73,6 +67,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		int energie = this.energy + 20;
 		this.energy = Math.min(energie, this.max_energy);
 	}
+	public void activate (Sums s) {}
 	public void timePassed() {
 		energy -=1;
 		faim -= 1;
@@ -96,7 +91,50 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		}
 	}
 	
-	public Map getMap() {
+	public void buy(GameObject object) {
+		this.getHouse().changeMoney(-(object.getPrice()) );
+		if (object instanceof ImageDraw) {
+			this.getHouse().setCategory(2);
+		}
+		else{
+			addInInventory(object);
+		}
+	}
+
+    public void rotate(int x, int y) {
+        if(x == 0 && y == -1)
+            direction = NORTH;
+        else if(x == 0 && y == 1)
+            direction = SOUTH;
+        else if(x == 1 && y == 0)
+            direction = EAST;
+        else if(x == -1 && y == 0)
+            direction = WEST;
+    }
+    
+    public void pee() {
+    	Game.getInstance().playerWait(10000L, this, this.ageRange);
+    }
+    public void interraction(Sums s, int valeur) {
+    	boolean newFriend = true;
+    	for (Sums key : loveHashMap.keySet()) {
+			if (key.equals(s)) {
+				newFriend = false;
+			}
+		}
+		if (newFriend) {
+			loveHashMap.put(s, new Integer(0));
+		}
+		Integer affection = loveHashMap.get(s);
+		affection = affection + valeur;
+		loveHashMap.put(s, affection);
+    }
+    public void tire() {
+		if (energy > 20)
+			energy -= 1;
+	}
+   // //////////////////////////////////////////////////////////////////////////////////////
+    public Map getMap() {
 		HashMap<String, Map> maps = Game.getInstance().getMaps();
 		for (String s: maps.keySet()) {
 			for (Sums sumsOnMap : maps.get(s).getSumsOnMap()) {
@@ -118,48 +156,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	public void setLoveHashMap (HashMap<Sums, Integer> hashmap) {
 		loveHashMap = hashmap;
 	}
-	
-	public void buy(GameObject object) {
-		this.getHouse().changeMoney(-(object.getPrice()) );
-		if (object instanceof ImageDraw) {
-			this.getHouse().setCategory(2);
-		}
-		addInInventory(object);
-	}
-
-    public void rotate(int x, int y) {
-        if(x == 0 && y == -1)
-            direction = NORTH;
-        else if(x == 0 && y == 1)
-            direction = SOUTH;
-        else if(x == 1 && y == 0)
-            direction = EAST;
-        else if(x == -1 && y == 0)
-            direction = WEST;
-    }
     
-    public void pee() {
-    	Game.getInstance().playerWait(10000L, this, this.ageRange);
-    }
-    
-    public void activate(Sums s) {
-
-    }
-    public void interraction(Sums s, int valeur) {
-    	boolean newFriend = true;
-    	for (Sums key : loveHashMap.keySet()) {
-			if (key.equals(s)) {
-				newFriend = false;
-			}
-		}
-		if (newFriend) {
-			loveHashMap.put(s, new Integer(0));
-		}
-		Integer affection = loveHashMap.get(s);
-		affection = affection + valeur;
-		loveHashMap.put(s, affection);
-    }
-   // //////////////////////////////////////////////////////////////////////////////////////
     public int getAffection(Sums s) {
     	int res = 0;
     	for (Sums key : loveHashMap.keySet()) {
@@ -221,15 +218,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public String getAgeRange() {
     	return ageRange;
     }
-    
-    public double getEnergy() {
-    	return energy;
-    }
-
-	public void tire() {
-		if (energy > 20)
-			energy -= 1;
-	}
 	public int getToilet() {
 		return this.toilet;
 	}
@@ -269,25 +257,14 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public void setIsPlayable(boolean ip) {
     	this.playable = ip;
     }
-    
-    public BufferedImage getSprite() {
-    	BufferedImage sprite = null;
-    	switch(this.getDirection()) {
-    	case (EAST) : sprite = this.sprite_r; break;
-    	case(WEST) : sprite = this.sprite_l; break;
-    	case(NORTH) : sprite = this.sprite_u; break;
-    	case(SOUTH) : sprite = this.sprite_d; break;
-    	}
-    	return sprite;
-    }
-    public BufferedImage getFaceSprite() {
-    	return this.sprite_face;
-    }
     public void setDirection(int direction) {
     	this.direction = direction;
     }
     public void setEnergy(int e) {
     	this.energy = e;
+    }
+    public double getEnergy() {
+    	return energy;
     }
     public int getMaxEnergy() {
     	return this.max_energy;
@@ -307,7 +284,19 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     public ArrayList<GameObject> getInventory(){
     	return inventory;
     }
-
+    public BufferedImage getSprite() {
+    	BufferedImage sprite = null;
+    	switch(this.getDirection()) {
+    	case (EAST) : sprite = this.sprite_r; break;
+    	case(WEST) : sprite = this.sprite_l; break;
+    	case(NORTH) : sprite = this.sprite_u; break;
+    	case(SOUTH) : sprite = this.sprite_d; break;
+    	}
+    	return sprite;
+    }
+    public BufferedImage getFaceSprite() {
+    	return this.sprite_face;
+    }
 
 
 }

@@ -52,11 +52,9 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	initMaps();
         sizeW = window.getMapSizeW();
         sizeH = window.getMapSizeH();
-        // Creating one Player at position (1,1)
     	notifyView();
     	t2.start();
-    	//sound = new Sound();
-    	//sound.play("Never_Surrender");
+    	new Thread(new Sound("Never_Surrender", 0.01)).start();//musique de fond
     	makeAllTimerTask();
     	this.dog = Dog.dogInstance;
     }
@@ -90,9 +88,6 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     			((DeletableObject) o).attachDeletable(this);
     		}
     	}
-    }
-    public ArrayList<Sums> getSums() {
-    	return sums;
     }
 
     public void movePlayer(int x, int y, Object s) {
@@ -203,24 +198,6 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 				   ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player);
 			   }
 		   }
-		   /*switch (button) {
-	   		case "GIVE FLOWER" : ((Adult) getFrontObject()).receiveFlower(active_player); break;
-	   		case "MAKE LOVE" : ((Adult) getFrontObject()).makeLove(); break;
-	   		case "STOCK" : GameObject o = active_player.getObjects().get(indexInventory); active_player.getObjects().remove(o); ((ContainerObject) getFrontObject()).getObjectsContained().add(o);break;
-	   		case "COOK" :
-	   			GameObject object = active_player.getObjects().get(indexInventory);
-	   			if (object instanceof Food) {
-	   				active_player.getObjects().remove(object); 
-	   				((Kitchen) getFrontObject()).getObjectsContained().add(object);
-	   				if (((Kitchen) getFrontObject()).getObjectsContained().size()>1) {
-	   					((Kitchen) getFrontObject()).cook(active_player);
-	   				}
-	   			}
-	   			break;
-	   		case "GO TO WORK" : sendPlayerToWork();
-	   		default : if (getFrontObject() != null && getFrontObject().getType() == button) { getFrontObject().activate(active_player); }//action sur objet de la map
-	   				  else { ((ActivableObject) active_player.getObjects().get(indexInventory)).activate(active_player); } //action sur l'inventaire
-	   	   }*/
 	   }
 	   else {
 		   if (getFrontObject() != null && getFrontObject() instanceof ActivableObject) {
@@ -265,27 +242,6 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	   timer.schedule(backFromWorkTask, 50000);
 	   setNextActivePlayer(active_player);
    }
-   public ActivableObject getFrontObject() {
-	   ActivableObject res = null;
-	   for (ActivableObject o : currentMap.getActivableObjects()) {
-			if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
-				res = o;
-			}
-	   }
-	   return res;
-   }
-   
-   public void setIndexInventory(int i) {
-	   if (i <0) {
-		   indexInventory = 0;
-	   }
-	   else if (i<active_player.getObjects().size()) {
-		   indexInventory = i;
-	   }
-	   else {
-		   indexInventory = active_player.getObjects().size()-1;
-	   }
-   }
    
    public void makeAllTimerTask(){
        TimerTask repeatedTask = new TimerTask() {
@@ -301,7 +257,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        };
        TimerTask musicTask = new TimerTask() {
        	public void run() {
-       		//sound.play("Never_Surrender");
+       		new Thread(new Sound("Never_Surrender", 0.15)).start();
        	}
        };
        TimerTask lifeTask = new TimerTask() {
@@ -381,7 +337,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        	long delay = (long) timerTasks.get(i+2);
        	timers.get(i/3).scheduleAtFixedRate(timerTask, first, delay);
        }
-   }
+  }
   private void addList(TimerTask timerTask, ArrayList<Object> timerTasksList, long first, long delay) {
 	   timerTasksList.add(timerTask);
 	   timerTasksList.add(first);
@@ -512,7 +468,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	int x = s.getPosX();
 		int y = s.getPosY();
     	if (type == "TOILET") {
-    		Thread threadSound = new Thread (new Sound("pee",Math.round(delay)));
+    		Thread threadSound = new Thread (new Sound("pee",10, Math.round(delay)));
     		threadSound.start();
 		}
     	Timer timer = new Timer();
@@ -538,7 +494,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     		}
     	}
     }
-    public void action() { // = appuyé sur interact ou premier bouton
+    public void action() { // = appuyé sur interact, open ou premier bouton
     	String button = ActionPanel.getInstance().getFirstVisibleButton();
     	buttonPressed(button);
     }
@@ -547,42 +503,12 @@ public class Game implements DeletableObserver, Runnable, Serializable{
         window.update();
         window.revalidate();
     }
-    public static Game getInstance() {
-    	if (GameInstance == null) {
-    		GameInstance = new Game(Window.getInstance());
-    	}
-    	return GameInstance;
-    }
-
-    public ArrayList<GameObject> getGameObjects() {
-        return this.objectsOnMap;
-    }
-    public ArrayList<ActivableObject> getActivableObjects(){
-    	return currentMap.getActivableObjects();
-    }
-    public void setGameObject(ArrayList<GameObject> o){
-    	this.objectsOnMap = o;
-    }
-
-    @Override
-    synchronized public void delete(Deletable ps) {
-        objectsOnMap.remove(ps);
-        if (ps instanceof Sums) {sums.remove(ps);}
-        ActionPanel.getInstance().updateActivableList();
-        notifyView();
-    }
-
-
     public void playerPos() {
-        System.out.println(active_player.getPosX() + ":" + active_player.getPosY());
-        
+        System.out.println(active_player.getPosX() + ":" + active_player.getPosY());   
     }
-
 	public void stop() {
 		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 	}
-
-
 	public void sendPlayer(int x, int y) {
 		for (GameObject p: objectsOnMap) {
 			if (p instanceof Sums && x == p.getPosX() && y == p.getPosY()) {
@@ -638,32 +564,13 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		if (e == active_player) {
 			Random r = new Random();
 			int index = r.nextInt(sums.size());
-			setActivePlayer(sums.get(index)); //ATTENTION REGLER OBJECTSONMAP
+			setActivePlayer(sums.get(index));
 			if (active_player.getMap() != currentMap ) {
 				changeMap(active_player.getStringMap());
 			}
 		}
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();
-	}
-
-	public void setObjects(ArrayList<GameObject> g) {
-		this.objectsOnMap = g;
-		for (GameObject go : objectsOnMap) {
-			if (go instanceof Sums) {sums.add((Sums)go);}
-		}
-		int i = 0;
-		while (!(objectsOnMap.get(i) instanceof Sums)) {
-			i+= 1;
-		}
-		active_player = (Sums)objectsOnMap.get(i);
-		window.setGameObjects(g);
-	}
-	public ArrayList<GameObject> getObjects(){
-		return this.objectsOnMap;
-	}
-	public void AddObject(GameObject o) {
-		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
 		for (AStarThread  t : threads) {
@@ -691,6 +598,33 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	}
 		
 	}
+	@Override
+    synchronized public void delete(Deletable ps) {
+        objectsOnMap.remove(ps);
+        if (ps instanceof Sums) {sums.remove(ps);}
+        ActionPanel.getInstance().updateActivableList();
+        notifyView();
+    }
+	public ActivableObject getFrontObject() {
+		ActivableObject res = null;
+		for (ActivableObject o : currentMap.getActivableObjects()) {
+			if (o.getPosX() == active_player.getFrontX() && o.getPosY() == active_player.getFrontY()) {
+				res = o;
+			}
+		}
+		return res;
+	}  
+	public void setIndexInventory(int i) {
+		if (i <0) {
+			indexInventory = 0;
+		}
+		else if (i<active_player.getObjects().size()) {
+			indexInventory = i;
+		}
+		else {
+			indexInventory = active_player.getObjects().size()-1;
+		}
+	}
 	public LocalDateTime getTime() {
 		return localDateTime;
 	}
@@ -714,6 +648,24 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		catch(ConcurrentModificationException e) {
 			e.printStackTrace();
 		}
+	}
+	public void setObjects(ArrayList<GameObject> g) {
+		this.objectsOnMap = g;
+		for (GameObject go : objectsOnMap) {
+			if (go instanceof Sums) {sums.add((Sums)go);}
+		}
+		int i = 0;
+		while (!(objectsOnMap.get(i) instanceof Sums)) {
+			i+= 1;
+		}
+		active_player = (Sums)objectsOnMap.get(i);
+		window.setGameObjects(g);
+	}
+	public ArrayList<GameObject> getObjects(){
+		return this.objectsOnMap;
+	}
+	public void AddObject(GameObject o) {
+		objectsOnMap.add(o);
 	}
 	public Sums getActivePlayer() {
 		return active_player;
@@ -748,4 +700,22 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	public Dog getDog() {
 		return dog;
 	}
+	public ArrayList<Sums> getSums() {
+	    return sums;
+	}
+	public static Game getInstance() {
+    	if (GameInstance == null) {
+    		GameInstance = new Game(Window.getInstance());
+    	}
+    	return GameInstance;
+    }
+    public ArrayList<GameObject> getGameObjects() {
+        return this.objectsOnMap;
+    }
+    public ArrayList<ActivableObject> getActivableObjects(){
+    	return currentMap.getActivableObjects();
+    }
+    public void setGameObject(ArrayList<GameObject> o){
+    	this.objectsOnMap = o;
+    }
 }

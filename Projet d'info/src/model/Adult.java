@@ -29,9 +29,7 @@ public class Adult extends Sums {
 		maison.changeMoney(2000); 
 	}
 	public void receiveFlower(Sums s) {
-		//s.getHouse().changeMoney(-10);
 		this.interraction(s, 10);
-		//Window.getInstance().update();
     }
 	public void makeLove() {
 		Game.getInstance().makeBaby(this.getHouse());
