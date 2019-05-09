@@ -90,18 +90,19 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 			Game.getInstance().playerDied(this);
 		}
 		if (ageRange == "Kid" && age >= 12) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
 		}
 		else if (ageRange == "Teen" && age >= 21) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
 		}
 		else if (ageRange == "Adult" && age >= 60) {
-			Game.getInstance().sumsEvolution(this, this.loveHashMap, inventory);
+			Game.getInstance().sumsEvolution(this, this.loveHashMap);
 		}
 		else if (ageRange == "Elder" && age >= 85) {
 			Game.getInstance().playerDied(this);
 		}
 	}
+	
 	public Map getMap() {
 		HashMap<String, Map> maps = Game.getInstance().getMaps();
 		for (String s: maps.keySet()) {
@@ -314,6 +315,9 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     public Timer getTimer() {
     	return this.timer;
+    }
+    public ArrayList<GameObject> getInventory(){
+    	return inventory;
     }
 
 

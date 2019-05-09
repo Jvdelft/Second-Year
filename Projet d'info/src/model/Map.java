@@ -86,7 +86,8 @@ public class Map implements Serializable{
 				this.addObject(new MarketShelve(i, 2, "Apple"));
 			}
 			for (int i = 4 ; i<14;  i++) {
-				this.addObject(new MarketShelve(i, 5, "Cigaret"));
+				if ((i%2) == 0) {this.addObject(new MarketShelve(i, 5, "Cigaret"));}
+				else { this.addObject(new MarketShelve(i, 5, "Flower"));}
 			}
 			this.addObject(new MarketShelve(4,8,"House2"));
 			System.out.println("Chargement MapMarket"); 

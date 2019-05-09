@@ -71,4 +71,8 @@ public class AStarThread extends Thread{
 		}
 		Game.getInstance().getThreads().remove(this);
 	}
+	public void stopThreadChangeMap() {
+		this.exit = true;
+		Game.getInstance().getThreads().remove(this);
+	}
 }

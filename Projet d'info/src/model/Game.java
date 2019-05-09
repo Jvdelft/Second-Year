@@ -145,7 +145,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
    
    public void buttonPressed(String button) {
 	   if (button != null) {
-		   if (button.contentEquals("GIVE FLOWER")) { ((Adult) getFrontObject()).receiveFlower(active_player);}
+		   if (button.contentEquals("GIVE FLOWER")) { 
+			   GameObject o = active_player.getObjects().get(indexInventory);
+			   ((ActivableObject)o).activate(active_player);
+			   ((Adult) getFrontObject()).receiveFlower(active_player);}
 		   else if (button.contentEquals("MAKE LOVE")) { ((Adult) getFrontObject()).makeLove();}
 		   else if (button.contentEquals("GO TO WORK")) { sendPlayerToWork();}
 		   else if (button.contentEquals("STOCK")) { 
@@ -326,7 +329,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
        addList(musicTask, timerTasks, 36000,36000);
        addList(moveTask, timerTasks,2500,2500);
        addList(comingTask, timerTasks,5000,5000);
-       addList(lifeTask, timerTasks, 1000,1000);
+       addList(lifeTask, timerTasks, 3000,3000);
        for (int i = 0; i < timerTasks.size(); i+=3) {
        	timers.add(new Timer());
        	TimerTask timerTask = (TimerTask) timerTasks.get(i);
@@ -529,16 +532,14 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	public void sendPlayer(int x, int y) {
 		for (GameObject p: objectsOnMap) {
 			if (p instanceof Sums && x == p.getPosX() && y == p.getPosY()) {
-				active_player = (Sums) p;
-				window.setPlayer((Sums)p);
-				ActionPanel.getInstance().setPlayer(active_player);
+				setActivePlayer((Sums)p);
 				MapDrawer.getInstance().requestFocusInWindow();
 			}
-			for (AStarThread t : threads) {
+			/*for (AStarThread t : threads) {
 				if(t.getSums() == p) {
 					t.stopThread();
 				}
-			}
+			}*/
 	}
 		//Thread t = new Thread(new AStarThread(this, active_player, x,  y));
 		//t.start();
@@ -563,7 +564,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		}
 		notifyView();
 	}
-	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap, ArrayList<GameObject> inventory) {
+	public void sumsEvolution(Sums s, HashMap<Sums, Integer> loveHasMap) {
+		ArrayList<GameObject> inventory = s.getInventory();
 		Sums newSums = s;
 		switch (s.getAgeRange()) {
 		case "Kid" : newSums = new Teen(s.getPosX(), s.getPosY(), s.getHouse()); break;
@@ -576,7 +578,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		sums.add(newSums);
 		s.getMap().getObjects().add(newSums);
 		s.getMap().getObjects().remove(s);
-		if (s == active_player) { active_player = newSums; ActionPanel.getInstance().setPlayer(active_player); window.setPlayer(active_player);}
+		if (s == active_player) {setActivePlayer(newSums);}
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();
 	}
@@ -587,12 +589,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		if (e == active_player) {
 			Random r = new Random();
 			int index = r.nextInt(sums.size());
-			active_player = sums.get(index); //ATTENTION REGLER OBJECTSONMAP
+			setActivePlayer(sums.get(index)); //ATTENTION REGLER OBJECTSONMAP
 			if (active_player.getMap() != currentMap ) {
 				changeMap(active_player.getStringMap());
 			}
-			ActionPanel.getInstance().setPlayer(active_player);
-			window.setPlayer(active_player);
 		}
 		window.setGameObjects(objectsOnMap);
 		ActionPanel.getInstance().updateActivableList();
@@ -617,9 +617,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
-		for (AStarThread  t : threads) {
+		ArrayList <AStarThread> threadToStop = new ArrayList<AStarThread>(threads);
+		for (AStarThread  t : threadToStop) {
 			if (t != null) {
-				t.stopThread();
+				t.stopThreadChangeMap();
 			}
 		}
 		objectsOnMap.remove(active_player);
@@ -652,6 +653,14 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	}
 	public void setActivePlayer(Sums s) {
 		active_player = s;
+		window.setPlayer(active_player);
+		ActionPanel.getInstance().setPlayer(active_player);
+		ArrayList<AStarThread> threadList = new ArrayList<AStarThread>(threads);
+		for (AStarThread t : threadList) {
+			if (t.getSums() == active_player) {
+				t.stopThread();
+			}
+		}
 	}
 	public Sums getActivePlayer() {
 		return active_player;

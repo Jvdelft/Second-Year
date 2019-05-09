@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import model.ActivableObject;
+import model.Adult;
 import model.Game;
 import model.GameObject;
 import model.Sums;
@@ -79,25 +80,31 @@ public class ActionPanel extends JPanel implements ActionListener {
     	if (active_player != null && active_player.getAgeRange().contentEquals("Adult")) {
     		typeList.add("GO TO WORK");
     	}
-    	if (activableObjects != null) {
+    	ActivableObject frontObject = null;
+    	if (activableObjects != null) { //Détermination de l'objet en face du joueur
 	    	for (ActivableObject object : activableObjects) {
 	            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
-	                if (object.getUser().contentEquals(active_player.getAgeRange()) || object.getUser().contentEquals("All")) { // = Si l'objet peut etre utilisé par active_player
-	                	if (object instanceof Sums && ((Sums)object).getAffection(active_player) >= 40) { // = si affection du sums pour active_player est grande
-	                		typeList.add(((Sums)object).getTypeAffection());
-	                	}
-	                	else { typeList.add(object.getType());}
-	                }
+	            	frontObject = object; break;
 	            }
+	    	}
+    	}
+	    if (frontObject != null && (frontObject.getUser().contentEquals(active_player.getAgeRange()) || frontObject.getUser().contentEquals("All"))) { // = Si l'objet en face du joueur peut etre utilisé par le joueur
+	    	if (frontObject instanceof Sums && ((Sums)frontObject).getAffection(active_player) >= 40) { // = si affection du sums en face est grande pour le joueur
+	    		typeList.add(((Sums)frontObject).getTypeAffection()); // = imprimer bouton spéciale
 	        }
-    	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > index) {
+	        else if (!(frontObject.getType().contentEquals("Other"))){ typeList.add(frontObject.getType());} // imprmer bouton normal
+	    }
+    	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > index) { //On s'intéresse au bouton lié a l'inventaire
     		ActivableObject object = ((ActivableObject) active_player.getObjects().get(index));
-    		if (object.getUser().contentEquals(active_player.getAgeRange()) || object.getUser().contentEquals("All")) {
+    		if (frontObject != null & frontObject instanceof Sums && object.getUser().contentEquals(((Sums)frontObject).getAgeRange())) { //Si l'objet de l'inventaire peut etre donné au sums en face
     			typeList.add(object.getType());
     		}
+    		else if ((object.getUser().contentEquals(active_player.getAgeRange()) && !(object.isForAnotherSums()))|| object.getUser().contentEquals("All")) { //Si l'objet peut etre utilisé par soi meme
+    			typeList.add(object.getType());
+    		}
+    		
 		}
     	showButtons(typeList);
-    	}
     }
 	
 	public void showButtons(ArrayList<String> typeList) {

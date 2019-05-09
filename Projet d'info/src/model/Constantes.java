@@ -30,6 +30,7 @@ public class Constantes {
 	public static BufferedImage wall;
 	public static BufferedImage wall2;
 	public static BufferedImage carpet;
+	public static BufferedImage flower;
 	public static BufferedImage table;
 	public static BufferedImage path;
 	public static BufferedImage chemin;
@@ -133,6 +134,7 @@ public class Constantes {
 			imageList.add(arrowDown);
 			inventoryCase = ImageIO.read(new File("Images/inventorycase.png"));
 			apple = ImageIO.read(new File("Images/Apple.png"));
+			flower = ImageIO.read(new File("Images/flower.png"));
 			cigaret = ImageIO.read(new File("Images/cigaret.png"));
 			spa = ImageIO.read(new File("Images/spa.png"));
 			étagère = ImageIO.read(new File("Images/étagère.png"));
