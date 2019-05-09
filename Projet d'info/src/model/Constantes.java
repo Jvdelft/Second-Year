@@ -116,6 +116,7 @@ public class Constantes {
 	public static BufferedImage dogS;
 	public static BufferedImage dogE;
 	public static BufferedImage dogW;
+	public static BufferedImage helpPanel;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
@@ -200,6 +201,7 @@ public class Constantes {
 			dogS = ImageIO.read(new File("Images/dogS.png"));
 			dogW = ImageIO.read(new File("Images/dogW.png"));
 			dogE = ImageIO.read(new File("Images/dogE.png"));
+			helpPanel = ImageIO.read(new File("Images/helpPanel.jpg"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

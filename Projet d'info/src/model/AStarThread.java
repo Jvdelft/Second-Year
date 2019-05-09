@@ -19,7 +19,6 @@ public class AStarThread extends Thread{
 		}
 		if (o instanceof Dog) {
 			this.d = (Dog) o;
-	        System.out.println("HEY");
 		}
 		this.x = x;
 		this.y = y;
@@ -96,10 +95,11 @@ public class AStarThread extends Thread{
 			p.teleportation(-1, -1);
 		   	p.setIsPlayable(false);
 		}
-		Game.getInstance().getThreads().remove(this);
 	}
 	public void stopThreadChangeMap() {
 		this.exit = true;
-		Game.getInstance().getThreads().remove(this);
+	}
+	public boolean isNotFinished() {
+		return (!(exit));
 	}
 }

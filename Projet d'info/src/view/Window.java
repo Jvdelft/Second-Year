@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import java.awt.Graphics;
 
+import javax.management.timer.Timer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -40,7 +41,7 @@ public class Window extends JFrame implements ActionListener {
     private CardLayout cards = new CardLayout();
     private MainMenu mainMenu = new MainMenu();
     private Sums active_player;
-    private static Window WindowInstance;
+    private static Window windowInstance;
     private MenuInGame menuInGame;
 
     private Window(String title) {
@@ -52,20 +53,18 @@ public class Window extends JFrame implements ActionListener {
         this.getContentPane().setLayout(cards);
         this.getContentPane().add((JPanel)mainMenu);
         this.getContentPane().add(groupPanel);
+        this.setDefaultCloseOperation(Window.DO_NOTHING_ON_CLOSE);
         makeMenu();
         //this.getContentPane().setBackground(Color.BLACK);
         this.setVisible(true);
         WindowListener exitListener = new WindowAdapter() {
-
-            @Override
             public void windowClosing(WindowEvent e) {
                 int confirm = JOptionPane.showOptionDialog(
                      null, "Are You Sure to Close Application?", 
                      "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                      JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == 0) {
-                	//Window.Exit();
-                   System.exit(0);
+                	System.exit(0);
                 }
             }
         };
@@ -126,7 +125,7 @@ public class Window extends JFrame implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "EXIT") {
-			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			System.exit(0);
 		}
 		else if (e.getActionCommand() == "NEW GAME") {
 			initGame();
@@ -140,15 +139,24 @@ public class Window extends JFrame implements ActionListener {
 			mapDrawer.requestFocusInWindow();
 		}
 		else if (e.getActionCommand() == "QUIT") {
-			Window.Exit();
 			System.exit(0);
 		}
+		else if (e.getActionCommand() == "SAVE AND QUIT") {
+			Window.Exit();
+		}
 		else if (e.getActionCommand() == "HELP") {
-			
+			HelpPanel help = new HelpPanel();
+			((JButton) help.getButton()).addActionListener(this);
+			this.getContentPane().add(help);
+			cards.next(this.getContentPane());
+		}
+		else if (e.getActionCommand() == "BACK") {
+			cards.previous(this.getContentPane());
 		}
 	}
 	public static void Exit() {
 		Save save = new Save();
+		System.exit(0);
 	}
 	public void initGame() {
 		this.setPlayer(active_player);
@@ -164,10 +172,10 @@ public class Window extends JFrame implements ActionListener {
         makeMenuInGame();
 	}
 	public static Window getInstance() {
-		if (WindowInstance == null) {
-			WindowInstance = new Window("El joc de la muerte");
+		if (windowInstance == null) {
+			windowInstance = new Window("El joc de la muerte");
 		}
-		return WindowInstance;
+		return windowInstance;
 	}
 	public Status getStatus() {
 		return this.status;
@@ -178,10 +186,7 @@ public class Window extends JFrame implements ActionListener {
 	public Sums getActivePlayer() {
 		return active_player;
 	}
-	/*public Window getInstance() {
-		if (InstanceWindow == null) {
-			InstanceWindow = new Window("Game");
-		}
-		return InstanceWindow;
-	}*/
+	public CardLayout getCardLayout() {
+		return cards;
+	}
 }

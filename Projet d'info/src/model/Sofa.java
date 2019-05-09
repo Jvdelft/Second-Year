@@ -6,14 +6,8 @@ public class Sofa extends Furniture implements Directable{
 		super(x,y);
 		type = "SIT";
 		this.map = map;
-		sizeH = 2;
+		sizeH = 1;
 		sizeW = 1;
-		for (int i = 0; i < sizeH-1 ; i++) {
-			Sofa sofa = new Sofa();
-			sofa.setPosX(x);
-			sofa.setPosY(y+i+1);
-			map.addObject(sofa);
-		}
 	}
 		public Sofa() {
 			super();

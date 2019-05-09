@@ -44,7 +44,7 @@ public class Bed extends Furniture{
 
 	@Override
 	public int getDirection() {
-		return 0;
+		return direction;
 	}
 
 }

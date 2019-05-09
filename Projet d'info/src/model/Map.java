@@ -157,12 +157,12 @@ public class Map implements Serializable{
 	}
 	
 	public void addObject(GameObject o) {
-		lastObjectPlaced = o;
 		if (o != null) {
 			if (o instanceof Sums) {
 				objects.add(o);
 			}
 			else if (!(positionTaken[o.getPosX()][o.getPosY()])) {
+				lastObjectPlaced = o;
 		    	objects.add(o);
 		    	positionTaken[o.getPosX()][o.getPosY()] = true;
 		    }
@@ -203,8 +203,10 @@ public class Map implements Serializable{
 	
 	public ArrayList<ActivableObject> getActivableObjects(){
 		ArrayList<ActivableObject> res = new ArrayList<ActivableObject>();
-		for (GameObject object : objects) {
-			if (object instanceof ActivableObject) { res.add((ActivableObject)object);}
+		synchronized(objects) {
+			for (GameObject object : objects) {
+				if (object instanceof ActivableObject) { res.add((ActivableObject)object);}
+			}
 		}
 		return res;
 	}
@@ -264,7 +266,7 @@ public class Map implements Serializable{
 		return lastObjectPlaced;
 	}
 	
-	public void setLastObjectPlace(GameObject o) {
+	public void setLastObjectPlace(Furniture o) {
 		lastObjectPlaced = o;
 	}
 	

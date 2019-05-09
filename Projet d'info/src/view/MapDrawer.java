@@ -101,7 +101,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		});
     }
     
-    public void paintComponent(Graphics g) throws ConcurrentModificationException{
+    public void paintComponent(Graphics g){
     	super.paintComponent(g);
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
     	if (currentMap.getTiles() != null) {
@@ -127,23 +127,25 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		g.drawString(localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), 50, 1010);
     	
         if (!(objects.isEmpty())) {
-        	for (GameObject object : this.objects) {
-	            int x = object.getPosX();
-	            int y = object.getPosY();
-	            if (x < 0 || y < 0) {
-	            	continue;
-	            }
-	            else {
-	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-	            }
-	            if (textToPaint != null) {
-	            	g.setColor(Color.WHITE);
-	            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-	            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-	            	g.setColor(Color.BLACK);
-	            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
-	            	g.drawString(textToPaint, tileSize/2, tileSize/2);
-	            }
+        	synchronized(objects) {
+	        	for (GameObject object : this.objects) {
+		            int x = object.getPosX();
+		            int y = object.getPosY();
+		            if (x < 0 || y < 0) {
+		            	continue;
+		            }
+		            else {
+		            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
+		            }
+		            if (textToPaint != null) {
+		            	g.setColor(Color.WHITE);
+		            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+		            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+		            	g.setColor(Color.BLACK);
+		            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
+		            	g.drawString(textToPaint, tileSize/2, tileSize/2);
+		            }
+	        	}
         	}
             /*else if (object instanceof Building) {
             	g.drawImage(object.getSprite(), x*tileSize, y*tileSize, ((Building) object).getSizeH()*tileSize,((Building) object).getSizeV()*tileSize, this);
@@ -324,7 +326,12 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		
 	}
 	public void removeDrawArrows() {
-		this.remove(panelToDrawArrows);
+		try {
+			this.remove(panelToDrawArrows);
+		}
+		catch(NullPointerException e) {
+			e.printStackTrace();
+		}
 		this.remove(panelButtons);
 	}
 	public void drawArrowsToDirect(GameObject o) {
@@ -335,7 +342,9 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		int pref = Constantes.image_size*5/2;
 		String width = Integer.toString(min) + ":" + Integer.toString(pref) + ":" + Integer.toString(max);
 		String pos = "pos " + (textToPaint.length()*21) + "px " + 5 + "px," + "width " + (width) + ", height " +(width);
-		this.add(panelToDrawArrows, pos);
+		if (o instanceof Sofa) {
+			this.add(panelToDrawArrows, pos);
+		}
 		pos = "pos " + (this.textToPaint.length()*27) + "px " + (Constantes.image_size-10) + "px," + "width " + (Constantes.image_size*5) + ", height " +(Constantes.image_size);
 		this.add(panelButtons,pos);
 	}

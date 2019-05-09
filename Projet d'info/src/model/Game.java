@@ -166,8 +166,10 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	            d.move(moveX, moveY);
 	        }
     	}
-	        ActionPanel.getInstance().updateVisibleButtons();
-	        notifyView();
+    		if (p == active_player) {
+    			ActionPanel.getInstance().updateVisibleButtons();
+    			notifyView();
+    		}
     }
    
    public void buttonPressed(String button) {
@@ -315,7 +317,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           		Door randomDoor = getRandomDoor();
           		Random rand = new Random();
           		int choice = rand.nextInt(2);
-          		if (s != null && choice == 1) {
+          		if (s != null && choice == 1 && s.isPlayable()) {
    	        		int posX = randomDoor.getPosX();
    	        		int posY = randomDoor.getPosY();
    	        		switch(String.valueOf(randomDoor.getChar())) {
@@ -329,7 +331,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
    	        		threads.add(0, new AStarThread(Game.getInstance(), s, posX, posY, randomDoor));
    	        		((AStarThread) threads.get(0)).start();
    	        	}
-          		else if (s!= null) {
+          		else if (s!= null && s.isPlayable()) {
           			ArrayList<Integer> list = getRandomPosition(currentMap);
           			threads.add(0, new AStarThread(Game.getInstance(), s, list.get(0), list.get(1), null));
    	        		((AStarThread) threads.get(0)).start();
@@ -338,9 +340,16 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           };
           TimerTask movingDogTask = new TimerTask() {
         	  public void run() {
-            		ArrayList<Integer> list = getRandomPosition(currentMap);
-            		threads.add(0, new AStarThread(Game.getInstance(), dog, list.get(0), list.get(1), null));
-            	   	((AStarThread) threads.get(0)).start();
+        		  for (AStarThread t : threads) {
+          	   		if (t.getDog() == dog) {
+          	   			t.stopThread();
+          	   		}
+          	   	}
+        		  synchronized(threads) {
+	            		ArrayList<Integer> list = getRandomPosition(currentMap);
+	            		threads.add(0, new AStarThread(Game.getInstance(), dog, list.get(0), list.get(1), null));
+	            	   	((AStarThread) threads.get(0)).start();
+        		  }
         	  }
           };
           TimerTask comingTask = new TimerTask() {
@@ -349,7 +358,7 @@ public class Game implements DeletableObserver, Runnable, Serializable{
           		if (list.size()>0) {
    	        		Sums s = (Sums) list.get(0);
    	        		Door door = (Door) list.get(1);
-   	        		if (s != null) {
+   	        		if (s != null && s.isPlayable()) {
    	        			door.activate(s);
    	        			ArrayList<Integer> position = getRandomPosition(maps.get(door.getDestination()));
    	        			threads.add(0, new AStarThread(Game.getInstance(), s, position.get(0), position.get(1), null));
@@ -388,10 +397,15 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		for (Map map: mapList) {
 			for (GameObject o : map.getObjects()) {
 				if (o instanceof Sums && res == null && o != active_player) {
-					for (AStarThread t : threads) {
-						if (t.getSums() == o){
-							isAlreadyMoving = true;
+					try {
+						for (AStarThread t : threads) {
+							if (t.getSums() == o && t.isNotFinished()){
+								isAlreadyMoving = true;
+							}
 						}
+					}
+					catch (ConcurrentModificationException e) {
+						e.printStackTrace();
 					}
 					if (!(isAlreadyMoving) && ((Sums) o).isPlayable()) {
 						res = (Sums) o;
@@ -464,10 +478,15 @@ public class Game implements DeletableObserver, Runnable, Serializable{
     	for (GameObject o : objectsOnMap) {
         	boolean isAlreadyMoving = false;
     		if (o instanceof Sums && o != active_player) {
-    			for (AStarThread t : threads) {
-    				if (t.getSums() == o) {
-    					isAlreadyMoving = true;
-    				}
+    			try {
+	    			for (AStarThread t : threads) {
+	    				if (t.getSums() == o && t.isNotFinished()) {
+	    					isAlreadyMoving = true;
+	    				}
+	    			}
+    			}
+    			catch(ConcurrentModificationException e) {
+    				e.printStackTrace();
     			}
     			if (!(isAlreadyMoving) && ((Sums) o).isPlayable()) {
         			res = (Sums) o;
@@ -647,17 +666,12 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		objectsOnMap.add(o);
 	}
 	public void changeMap(String s) {
-		ArrayList <AStarThread> threadToStop = new ArrayList<AStarThread>(threads);
-		try {
-		for (AStarThread  t : threadToStop) {
+		for (AStarThread  t : threads) {
 			if (t != null) {
 				t.stopThreadChangeMap();
 			}
 		}
-		}
-		catch(ConcurrentModificationException e) {
-			e.printStackTrace();
-		}
+		threads.removeAll(threads);
 		objectsOnMap.remove(active_player);
 		currentMap = maps.get(s);
 		MapDrawer.getInstance().changeMap(currentMap);
@@ -690,9 +704,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 		active_player = s;
 		window.setPlayer(active_player);
 		ActionPanel.getInstance().setPlayer(active_player);
-		ArrayList<AStarThread> threadList = new ArrayList<AStarThread>(threads);
 		try {
-			for (AStarThread t : threadList) {
+			for (AStarThread t : threads) {
 				if (t.getSums() == active_player) {
 					t.stopThread();
 				}
@@ -731,5 +744,8 @@ public class Game implements DeletableObserver, Runnable, Serializable{
 	}
 	public void setDog(Dog dog) {
 		this.dog = dog;
+	}
+	public Dog getDog() {
+		return dog;
 	}
 }

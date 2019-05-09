@@ -1,5 +1,8 @@
 package model;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+
 public abstract class Furniture extends ActivableObject implements Directable{
 	protected int direction;
 	public Furniture(int x, int y) {

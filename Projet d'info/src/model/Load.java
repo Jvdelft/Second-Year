@@ -47,6 +47,7 @@ public class Load {
 			Window.getInstance().setGameObjects(newGame.getGameObjects());
 			Window.getInstance().setPlayer(newGame.getActivePlayer());
 			ArrayList<Map> maps = new ArrayList<Map>(newGame.getMaps().values());
+			newGame.setDog(game.getDog());
 			for (int i = 0; i < maps.size(); i++) {
 				Map map = maps.get(i);
 				for (int j = 0;j< map.getObjects().size(); j++) {

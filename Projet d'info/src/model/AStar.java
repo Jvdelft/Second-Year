@@ -33,7 +33,6 @@ public class AStar {
 		endI = xf;
 		endJ = yf;
 		grid = new Cell[mapSizeW][mapSizeH];
-		System.out.println(("xi :" + xi + "yi :" + yi + "xf :" + xf + "yf :" + yf));
 
 
         closed = new boolean[mapSizeW][mapSizeH];
