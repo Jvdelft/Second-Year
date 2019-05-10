@@ -41,8 +41,9 @@ import controller.Mouse;
 import model.*;
 import net.miginfocom.swing.MigLayout;
 import controller.Keyboard;
+import controller.MapDrawerListener;
 
-public class MapDrawer extends JPanel implements ActionListener, ListSelectionListener{
+public class MapDrawer extends JPanel{
     private ArrayList<GameObject> objects = new ArrayList<GameObject>();
     public final int MAP_SIZE = 30;
     private boolean firstMap = true;
@@ -74,6 +75,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     private PanelToDrawArrows panelToDrawArrows = null;
     private ButtonsForPlacingFurniture panelButtons = null;
     private LocalDateTime localDateTime;
+    private MapDrawerListener listener;
 	
     private MapDrawer() {
         this.setFocusable(true);
@@ -225,8 +227,8 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		img = (Image) Constantes.imageHashMap.get(Constantes.arrowDown);
 		down = new JButton(new ImageIcon(img));
 		down.setBackground(Color.ORANGE.darker());
-		down.addActionListener(this);
-		up.addActionListener(this);
+		down.addActionListener(listener);
+		up.addActionListener(listener);
 		down.setName("Down");
 		up.setName("Up");
 		String pos1 ="pos " + (posX+width+120) + "px " + (posY+Constantes.image_size/2+5) + "px," + "width " + ("35:55:75") + ", height " + ("35:55:75");
@@ -252,10 +254,12 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			this.add(buttonBUY, posButton2);
 		}
 		this.add(buttonCLOSE, posButton1);
-		buttonTAKE.addActionListener(this);
-		buttonEAT.addActionListener(this);
-		buttonCLOSE.addActionListener(this);
-		buttonBUY.addActionListener(this);
+		listener = new MapDrawerListener();
+		listener.setContainer(container);
+		buttonTAKE.addActionListener(listener);
+		buttonEAT.addActionListener(listener);
+		buttonCLOSE.addActionListener(listener);
+		buttonBUY.addActionListener(listener);
 	}
 	private void initJList(int nLabels) {
 		ArrayList<GameObject> listToDraw = container.switchRow(row);		//On dessine les cases vides puis les sprites des objects contenus dans les cases.
@@ -269,19 +273,19 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			items.add(i, new ImageIcon(combined));
 		}
 		content.setModel(items);
-		content.addListSelectionListener(this);
+		content.addListSelectionListener(listener);
 	}
 	public void removeDrawContent() {		//On supprime tous le contenu et les bouttons dessinés.
 		items.removeAllElements();
 		this.remove(content);
-		buttonCLOSE.removeActionListener(this);
+		buttonCLOSE.removeActionListener(listener);
 		this.remove(buttonCLOSE);
 		try {
-			buttonEAT.removeActionListener(this);
+			buttonEAT.removeActionListener(listener);
 			this.remove(buttonEAT);
-			buttonTAKE.removeActionListener(this);
+			buttonTAKE.removeActionListener(listener);
 			this.remove(buttonTAKE);
-			buttonBUY.removeActionListener(this);
+			buttonBUY.removeActionListener(listener);
 			this.remove(buttonBUY);
 		}
 		finally {
@@ -349,70 +353,25 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
     	}
     	return instance_mapDrawer;
     }
-    @Override
-	public void actionPerformed(ActionEvent arg0) {
-		int index = content.getSelectedIndex();
-		if (index < 0) {
-			index = 0;
-		}
-		active_player = Window.getInstance().getActivePlayer();
-		if (((JButton) arg0.getSource()).getLocationOnScreen().getX() < 1470) {
-			if (arg0.getSource().equals(down) && container.getObjectsContained().size() > (row+1)*4) {
-				row++;
-				updateContent();
-			}
-			else if (arg0.getSource().equals(up) && row >0) {
-				row --;
-				updateContent();
-			}
-			if (arg0.getActionCommand().contentEquals("CLOSE")) {
-				removeDrawContent();
-				if (container instanceof MarketShelve) {
-					((MarketShelve)container).initObjectContained(((MarketShelve) container).getShelveType());
-				}
-				active_player.setIsPlayable(true);
-			}
-			else if (arg0.getActionCommand().contentEquals("EAT IT")) {
-				ActivableObject object = (ActivableObject) container.getObjectsContained().get(index);
-				object.activate(active_player);
-				container.getObjectsContained().remove(object);
-				updateContent();
-			}
-			else if (arg0.getActionCommand().contentEquals("TAKE")) {
-				GameObject object = container.getObjectsContained().get(index);
-				container.getObjectsContained().remove(object);
-				active_player.addInInventory(object);
-				updateContent();
-			}
-			else if (arg0.getActionCommand().contentEquals("BUY")) {
-				GameObject object = container.getObjectsContained().get(index);
-				container.getObjectsContained().remove(object);
-				active_player.buy(object);
-				updateContent();
-			}
-		}
-		ActionPanel.getInstance().updateVisibleButtons();
-	}
-    @Override
-	public void valueChanged(ListSelectionEvent arg0) {
-		int index = content.getSelectedIndex();
-		ArrayList<GameObject> objects = container.switchRow(row);
-		if (index < 0) {
-			index = 0;
-		}
-		if (index <= objects.size()-1) {
-			if (container instanceof Fridge) {
-				if (objects.get(index) instanceof ActivableObject && ((ActivableObject) objects.get(index)).getType().contentEquals("EAT")){
-					this.add(buttonEAT, posButton3);
-				}
-				else {
-					try {
-						this.remove(buttonEAT);
-						}
-					finally {
-						}
-					}
-				}
-			}
-		}
-	}
+    public void setRow(int row) {
+    	this.row = row;
+    }
+    public JList getContent() {
+    	return content;
+    }
+    public JButton getUp() {
+    	return up;
+    }
+    public JButton getDown() {
+    	return down;
+    }
+    public String getPos3() {
+    	return posButton3;
+    }
+    public ContainerObject getContainer() {
+    	return container;
+    }
+    public JButton getButtonEat() {
+    	return buttonEAT;
+    }
+}

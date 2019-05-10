@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import controller.InventoryPanelListener;
 import model.Constantes;
 import model.Game;
 import model.GameObject;
@@ -18,7 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-public class InventoryPanel extends JPanel implements ActionListener, ListSelectionListener{
+public class InventoryPanel extends JPanel {
 	private JList list = new JList();
 	private Sums p = null;
 	private int row;
@@ -32,7 +33,7 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 	private JButton down;
 	private transient Image inventoryCase = Constantes.inventoryCase.getScaledInstance(Constantes.image_size+10, Constantes.image_size+10, Image.SCALE_SMOOTH);
 	private static InventoryPanel inventoryPanel_instance;
-	private int lastSelectedIndex;
+	private transient InventoryPanelListener listener;
 	private InventoryPanel() {
 		Constantes.makeList();			//On instancie la liste pour remettre les flèches à la bonne taille pour les bouttons.
 		limits.weightx = 1;
@@ -47,6 +48,10 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		g = combined.getGraphics();
 	}
 	public void updateInventory() {
+		if (listener == null) {
+			listener = new InventoryPanelListener();
+			listener.initListener();
+		}
 		for (int i = 0; i < items.size();i++) {			//On dessine d'abord les cases vides puis les objets dedans si ils existent.
 			removeImage();
 			g.drawImage(inventoryCase, 0, 0, null);
@@ -73,7 +78,6 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		limits.gridwidth = 1;
 		limits.gridx = 2;
 		limits.gridy = 3;
-		list.addListSelectionListener(this);
 	}
 	private void initLabels(int nLabels) {			//On dessine l'inventaire vide.
 		for (int i = 0; i<nLabels;i++) {
@@ -91,8 +95,6 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		down = new JButton(new ImageIcon(img));
 		down.setBackground(Color.ORANGE);
 		up.setPreferredSize(new Dimension(Constantes.image_size,Constantes.image_size));
-		down.addActionListener(this);
-		up.addActionListener(this);
 		down.setName("Down");
 		up.setName("Up");
 		down.setPreferredSize(new Dimension(Constantes.image_size,Constantes.image_size));
@@ -106,7 +108,14 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		this.p = p2;
 		if (this.p != null) {
 			updateInventory();
+			listener.setPlayer(p2);
 		}
+	}
+	public JButton getUp() {
+		return up;
+	}
+	public JButton getDown() {
+		return down;
 	}
 	public static InventoryPanel getInstance() {
 		if (inventoryPanel_instance == null) {
@@ -114,26 +123,11 @@ public class InventoryPanel extends JPanel implements ActionListener, ListSelect
 		}
 		return inventoryPanel_instance;
 	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Window.getInstance().getMapDrawer().requestFocusInWindow();		//On monte dans l'inventaire si il y a une rangée précédente.
-		if(e.getSource().equals(up) && row > 0) {
-			row --;
-		}
-		else if (e.getSource().equals(down) && row +1 <= p.getObjects().size()/4) {	//On descend dans l'inventaire si il y a une rangée suivante.
-			row ++;
-		}
-		updateInventory();
+	public JList getList() {
+		return list;
 	}
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		if (list.getSelectedIndex() == lastSelectedIndex) {
-			ActionPanel.getInstance().setSelectedIndexInventory(list.getSelectedIndex());
-			MapDrawer.getInstance().requestFocusInWindow();
-			ActionPanel.getInstance().updateVisibleButtons();
-		}
-		else {
-			lastSelectedIndex = list.getSelectedIndex();
-		}
+	public void setRow(int row) {
+		this.row = row;
+		updateInventory();
 	}
 }

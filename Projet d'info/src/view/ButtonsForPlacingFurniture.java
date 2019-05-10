@@ -13,24 +13,26 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import controller.ButtonsForPlacingFurnitureListener;
 import model.Map;
 
-public class ButtonsForPlacingFurniture extends JPanel implements ActionListener{
+public class ButtonsForPlacingFurniture extends JPanel{
 	private Map map;
 	private int numberOfButtons;
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
+	private ButtonsForPlacingFurnitureListener listener = new ButtonsForPlacingFurnitureListener();
 	public ButtonsForPlacingFurniture() {
 		initButton(new JButton("DONE"));
 		initButton(new JButton("CANCEL"));
 		this.setLayout(box);
 		this.setOpaque(false);
 		map = MapDrawer.getInstance().getCurrentMap();
-		this.setVisible(true);
+		this.setVisible(true); 
 		limits.weightx = 1;
 	}
 	private void initButton(JButton button) {
-		button.addActionListener(this);
+		button.addActionListener(listener);
 		limits.insets = new Insets(0,0,0,10);
 		button.setBackground(Color.CYAN.darker());
 		button.setFont(new Font("Monotype Corsiva", Font.BOLD, 30));
@@ -44,15 +46,4 @@ public class ButtonsForPlacingFurniture extends JPanel implements ActionListener
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		if (((JButton)  arg0.getSource()).getText() == "DONE") {
-			map.placeNextObject();
-		}
-		else {
-			map.getObjects().remove(map.getLastObjectPlace());
-			map.setLastObjectPlace(null);
-		}
-	}
-
 }

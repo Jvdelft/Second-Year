@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JButton;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.omg.CosNaming.IstringHelper;
@@ -108,7 +109,7 @@ public class Game implements DeletableObserver, Serializable{
 	        }
     	}
     	if (p == active_player) {
-    		ActionPanel.getInstance().updateVisibleButtons();
+    		updateVisibleButtons();
     		notifyView();
     	}
     }
@@ -173,7 +174,7 @@ public class Game implements DeletableObserver, Serializable{
 	   }
 	   MapDrawer.getInstance().updateContent();
 	   MapDrawer.getInstance().requestFocusInWindow();			//On update tous les panels ayant changé.
-	   ActionPanel.getInstance().updateVisibleButtons();
+	   updateVisibleButtons();
 	   InventoryPanel.getInstance().updateInventory();
    }
    private void sendPlayerToWork() {
@@ -213,7 +214,6 @@ public class Game implements DeletableObserver, Serializable{
    private void makeAllTimerTask(){
        TimerTask repeatedTask = new TimerTask() {			//Initiation de tous les timers et de leurs tâches respectives, faire passer le temps, faire bouger des sums aléatoires, etc...
            public void run() {
-           	ActionPanel.getInstance().updateActivableList();
            	notifyView();
            	MapDrawer.getInstance().updateContent();
            }
@@ -266,8 +266,10 @@ public class Game implements DeletableObserver, Serializable{
           TimerTask movingDogTask = new TimerTask() {
         	  public void run() {
         		  for (AStarThread t : threads) {
-          	   		if (t!= null & t.getDog() == dog) {
-          	   			t.stopThread();
+        			  if (t != null) {
+        				  if (t.getDog() == dog) {
+        					  t.stopThread();
+        				  }
           	   		}
           	   	}
         		  synchronized(threads) {
@@ -312,6 +314,42 @@ public class Game implements DeletableObserver, Serializable{
 	   timerTasksList.add(first);
 	   timerTasksList.add(delay);
   }
+  public void updateVisibleButtons() {
+	  	ArrayList <ActivableObject> activableObjects = getActivableObjects();
+  		ArrayList <String> typeList = new ArrayList <String>();
+  		HashMap<String, JButton> buttons = ActionPanel.getInstance().getButtonsHashMap();
+  		if (active_player != null && active_player.getAgeRange().contentEquals("Adult")) {
+	  		typeList.add("GO TO WORK");
+	  	}
+	  	ActivableObject frontObject = null;
+	  	if (activableObjects != null) { //Détermination de l'objet en face du joueur
+		    	for (ActivableObject object : activableObjects) {
+		    		if (!(buttons.containsKey(object.getType()))) {
+	      			ActionPanel.getInstance().initButton(new JButton(object.getType()));
+	      		}
+		            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
+		            	frontObject = object;
+		            }
+		    	}
+	  	}
+		    if (frontObject != null && (frontObject.getUser().contentEquals(active_player.getAgeRange()) || frontObject.getUser().contentEquals("All"))) { // = Si l'objet en face du joueur peut etre utilisé par le joueur
+		    	if (frontObject instanceof Sums && ((Sums)frontObject).getAffection(active_player) >= 40) { // = si affection du sums en face est grande pour le joueur
+		    		typeList.add(((Sums)frontObject).getTypeAffection()); // = imprimer bouton spéciale
+		        }
+		        else if (!(frontObject.getType().contentEquals("Other"))){ typeList.add(frontObject.getType());} // imprmer bouton normal
+		    }
+	  	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > indexInventory) { //On s'intéresse au bouton lié a l'inventaire
+	  		ActivableObject object = ((ActivableObject) active_player.getObjects().get(indexInventory));
+	  		if (frontObject != null & frontObject instanceof Sums && object.getUser().contentEquals(((Sums)frontObject).getAgeRange())) { //Si l'objet de l'inventaire peut etre donné au sums en face
+	  			typeList.add(object.getType());
+	  		}
+	  		else if ((object.getUser().contentEquals(active_player.getAgeRange()) && !(object.isForAnotherSums()))|| object.getUser().contentEquals("All")) { //Si l'objet peut etre utilisé par soi meme
+	  			typeList.add(object.getType());
+	  		}
+	  		
+			}
+	  	ActionPanel.getInstance().showButtons(typeList);
+	  }
   private ArrayList<GameObject> getRandomSumsAndDoor(){					//Cette fonction renvoie un Sums et une porte aléatoire sur la carte.
  		ArrayList<Map> mapList = new ArrayList<Map>(maps.values());		//En vérifiant que ce personnage ne bouge pas déjà en suivant un thread.
 		Collections.shuffle(mapList);
@@ -423,7 +461,6 @@ public class Game implements DeletableObserver, Serializable{
     	Sums k = new Kid(1,1,h);
     	sums.add(k);
     	objectsOnMap.add(k);
-    	ActionPanel.getInstance().updateActivableList();
     	notifyView();
     }
     public void playerWait(long delay, Sums s, String type) {	//Fais attendre le personnage un certain temps l'empêchant de bouger et passant au personnage suivant.
@@ -508,7 +545,6 @@ public class Game implements DeletableObserver, Serializable{
 		s.getMap().getObjects().remove(s);
 		if (s == active_player) {setActivePlayer(newSums);}			//Le joueur actif est update si c'est ce dernier qui évolue.
 		window.setGameObjects(objectsOnMap);
-		ActionPanel.getInstance().updateActivableList();
 	}
 	public void playerDied(Sums e) {			//Si un joueur meurt...RIP.
 		sums.remove(e);							//Si c'est le joueur actif on va chercher un sums random sur toutes les maps.
@@ -522,7 +558,6 @@ public class Game implements DeletableObserver, Serializable{
 			}
 		}
 		window.setGameObjects(objectsOnMap);
-		ActionPanel.getInstance().updateActivableList();
 	}
 	public void changeMap(String s) {		//La fonction stoppe tous les threads lors de changement de map.
 		for (AStarThread  t : threads) {	//Elle lance l'initialisation des maps maison si c'est le premier passage sur ces maps.
@@ -554,7 +589,6 @@ public class Game implements DeletableObserver, Serializable{
     synchronized public void delete(Deletable ps) {
         objectsOnMap.remove(ps);
         if (ps instanceof Sums) {sums.remove(ps);}
-        ActionPanel.getInstance().updateActivableList();
         notifyView();
     }
 	public ActivableObject getFrontObject() {		//Récupère l'objet en face du joueur actif.
@@ -567,6 +601,7 @@ public class Game implements DeletableObserver, Serializable{
 		return res;
 	}   
 	public void setIndexInventory(int i) {
+		updateVisibleButtons();
 		if (i <0) {
 			indexInventory = 0;
 		}

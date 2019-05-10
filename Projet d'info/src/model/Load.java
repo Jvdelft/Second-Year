@@ -60,8 +60,7 @@ public class Load {
 				map.setTiles(MapReader.ReadMap(map.getMapName(),map));
 				MapDrawer.getInstance().updateContent();
 				MapDrawer.getInstance().requestFocusInWindow();
-				ActionPanel.getInstance().updateActivableList();
-				ActionPanel.getInstance().updateVisibleButtons();
+				newGame.updateVisibleButtons();
 				InventoryPanel.getInstance().updateInventory();
 			}
 		} catch (FileNotFoundException e) {

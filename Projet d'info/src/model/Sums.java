@@ -25,7 +25,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected int direction = EAST ;
 	protected String ageRange ;
 	protected String typeAffection = type;
-	protected final int max_hygiene = 70;
+	protected int max_hygiene = Constantes.max_hygiene;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();		//Dictionnaire contenant tous les sums et l'affection que ce sums leur porte sous la forme d'un entier.
 	protected transient BufferedImage sprite_l;
 	protected transient BufferedImage sprite_r;
@@ -302,7 +302,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     @Override
     public void delete(Deletable d) {
         inventory.remove(d);
-        Window.getInstance().getStatus().getActionPanel().updateActivableList();
         InventoryPanel.getInstance().updateInventory();
     }
 }

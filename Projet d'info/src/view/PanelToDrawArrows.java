@@ -17,14 +17,17 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import controller.PanelToDrawArrowsListener;
 import model.Furniture;
 import model.Constantes;
 
-public class PanelToDrawArrows extends JPanel implements ActionListener{
+public class PanelToDrawArrows extends JPanel{
 	private ArrayList<JButton> buttons = new ArrayList<JButton>();
 	private int numberOfButtons;
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
+	private PanelToDrawArrowsListener listener = new PanelToDrawArrowsListener();
 	public PanelToDrawArrows() {
 		this.setOpaque(false);
 		this.setLayout(box);
@@ -37,7 +40,7 @@ public class PanelToDrawArrows extends JPanel implements ActionListener{
 	}
 	private void initButton(JButton button) {
 		buttons.add(button);
-		button.addActionListener(this);
+		button.addActionListener(listener);
 		button.setBackground(Color.GRAY.darker());
 		switch(numberOfButtons) {
 		case 0 : limits.gridx = 1; button.setName("up");this.add(button,limits); break;
@@ -50,21 +53,5 @@ public class PanelToDrawArrows extends JPanel implements ActionListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	}
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		if (((JButton) arg0.getSource()).getName() == "up") {
-			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(0, -1);		// Le meuble en train d'être placé est tourné.
-		}
-		else if (((JButton) arg0.getSource()).getName() == "down") {
-			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(0, 1);
-		}
-		else if (((JButton) arg0.getSource()).getName() == "left") {
-			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(-1, 0);
-		}
-		else if (((JButton) arg0.getSource()).getName() == "right") {
-			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(1, 0);
-		}
-		
 	}
 }

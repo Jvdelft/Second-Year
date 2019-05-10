@@ -120,6 +120,7 @@ public class Constantes {											//Cette classe regroupe toutes les constante
 	public static final int BAR_LENGTH = 1;
 	public static final int BAR_WIDTH = 20;
 	public static final int AVATAR_SIZE = 100;
+	public static final int max_hygiene = 70;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));
