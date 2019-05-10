@@ -27,7 +27,7 @@ public class Status extends JPanel {
 	
     public Status() {
     	this.setLayout(new BorderLayout());
-    	this.setPreferredSize(new Dimension(450,1000));
+    	this.setPreferredSize(new Dimension(450,1000));			//Le status est le panel contenant tous les panels autre que la map.
     	this.setOpaque(true);
     	hud.setPreferredSize(new Dimension(450,500));
         this.add(hud, BorderLayout.NORTH);

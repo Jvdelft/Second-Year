@@ -49,15 +49,14 @@ public class Window extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBounds(0, 0, 1920, 1020);
         groupPanel.add(mapDrawer, BorderLayout.CENTER);
-        groupPanel.add(status, BorderLayout.EAST);
+        groupPanel.add(status, BorderLayout.EAST);				//Les panels sont organisés dans un cardLayout permettant de passer aisément d'un panel ou groupe de panel à un autre.
         this.getContentPane().setLayout(cards);
         this.getContentPane().add((JPanel)mainMenu);
         this.getContentPane().add(groupPanel);
         this.setDefaultCloseOperation(Window.DO_NOTHING_ON_CLOSE);
         makeMenu();
-        //this.getContentPane().setBackground(Color.BLACK);
         this.setVisible(true);
-        WindowListener exitListener = new WindowAdapter() {
+        WindowListener exitListener = new WindowAdapter() {			//On ajoute une demande de confirmation avant la fermeture de la fenètre.
             public void windowClosing(WindowEvent e) {
                 int confirm = JOptionPane.showOptionDialog(
                      null, "Are You Sure to Close Application?", 
@@ -73,15 +72,10 @@ public class Window extends JFrame implements ActionListener {
     public void update() {
         groupPanel.repaint();
     }
-	public void escapePressed() {
+	public void escapePressed() {			//On passe au menuInGame si le joueur presse escape.
 		if (groupPanel.isVisible()) {
 			cards.next(this.getContentPane());
 		}
-	}
-	
-	public void setPlayer(Sums o) {
-		active_player = o;
-		status.setPlayer(o);
 	}
 	public void makeMenu() {
 		ArrayList<JButton> Buttons = mainMenu.getButtons();
@@ -96,42 +90,11 @@ public class Window extends JFrame implements ActionListener {
 		}
 		
 	}
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand() == "EXIT") {
-			System.exit(0);
-		}
-		else if (e.getActionCommand() == "NEW GAME") {
-			initGame();
-		}
-		else if (e.getActionCommand() == "CONTINUE") {
-			this.setPlayer(active_player);
-			Load load = new Load();
-		}
-		else if (e.getActionCommand() == "RESUME") {
-			cards.previous(this.getContentPane());
-			mapDrawer.requestFocusInWindow();
-		}
-		else if (e.getActionCommand() == "QUIT") {
-			System.exit(0);
-		}
-		else if (e.getActionCommand() == "SAVE AND QUIT") {
-			Window.Exit();
-		}
-		else if (e.getActionCommand() == "HELP") {
-			HelpPanel help = new HelpPanel();
-			((JButton) help.getButton()).addActionListener(this);
-			this.getContentPane().add(help);
-			cards.next(this.getContentPane());
-		}
-		else if (e.getActionCommand() == "BACK") {
-			cards.previous(this.getContentPane());
-		}
-	}
 	public static void Exit() {
-		Save save = new Save();
+		Save save = new Save();		//Le jeu est sauvegardé.
 		System.exit(0);
 	}
-	public void initGame() {
+	public void initGame() {				//Le jeu est crée et instancié.
 		this.setPlayer(active_player);
 		Game game = Game.getInstance();
 		Keyboard keyboard = Keyboard.getInstance();
@@ -185,5 +148,41 @@ public class Window extends JFrame implements ActionListener {
 			return mapDrawer.getCurrentMap().getSizeH();
 		}
 		return 0;
+	}
+	public void setPlayer(Sums o) {
+		active_player = o;
+		status.setPlayer(o);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "EXIT") {
+			System.exit(0);
+		}
+		else if (e.getActionCommand() == "NEW GAME") {
+			initGame();
+		}
+		else if (e.getActionCommand() == "CONTINUE") {		//on charge la dernière sauvegarde.
+			this.setPlayer(active_player);
+			Load load = new Load();
+		}
+		else if (e.getActionCommand() == "RESUME") {		//On repasse au panel précédent qui est le jeu.
+			cards.previous(this.getContentPane());
+			mapDrawer.requestFocusInWindow();
+		}
+		else if (e.getActionCommand() == "QUIT") {
+			System.exit(0);
+		}
+		else if (e.getActionCommand() == "SAVE AND QUIT") {
+			Window.Exit();
+		}
+		else if (e.getActionCommand() == "HELP") {
+			HelpPanel help = new HelpPanel();
+			((JButton) help.getButton()).addActionListener(this);	//On crée un panel qui va être ajouté au cardLayout.
+			this.getContentPane().add(help);
+			cards.next(this.getContentPane());
+		}
+		else if (e.getActionCommand() == "BACK") {
+			cards.previous(this.getContentPane());
+		}
 	}
 }

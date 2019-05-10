@@ -25,7 +25,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 	protected int direction = EAST ;
 	protected String ageRange ;
 	protected String typeAffection = type;
-	protected final int max_hygiene = 7;
+	protected final int max_hygiene = 70;
 	private HashMap<Sums, Integer> loveHashMap = new HashMap <Sums, Integer>();		//Dictionnaire contenant tous les sums et l'affection que ce sums leur porte sous la forme d'un entier.
 	protected transient BufferedImage sprite_l;
 	protected transient BufferedImage sprite_r;
@@ -75,7 +75,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		energy -=1;
 		faim -= 1;
 		toilet += 1;
-		hygiene -= 1;
+		hygiene -= 2;
 		age += 1;
 		if (energy == 0 || faim == 0) {
 			Game.getInstance().playerDied(this);
@@ -112,10 +112,6 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
             direction = EAST;
         else if(x == -1 && y == 0)
             direction = WEST;
-    }
-    @Override
-    public void pee() {
-    	Game.getInstance().playerWait(10000L, this, this.ageRange);
     }
     public void interraction(Sums s, int valeur) {    //Interaction entre les Sums.
     	boolean newFriend = true;
@@ -276,6 +272,10 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     public BufferedImage getFaceSprite() {
     	return this.sprite_face;
+    }
+    @Override
+    public void pee() {
+    	Game.getInstance().playerWait(10000L, this, this.ageRange);
     }
     @Override
 	public void activate (Sums s) {}

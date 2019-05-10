@@ -85,7 +85,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		content.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		content.setVisibleRowCount(1);
         
-        addMouseListener(new MouseListener() {
+        addMouseListener(new MouseListener() {				//La souris est instanciée pour placer les meubles.
 			public void mousePressed(MouseEvent e) {
 				int x = e.getX()/tileSize;
 				int y = e.getY()/tileSize;
@@ -100,22 +100,20 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			public void mouseReleased(MouseEvent arg0) {}
 		});
     }
-    
+    @Override
     public void paintComponent(Graphics g){
     	super.paintComponent(g);
     	g.drawImage(Constantes.background, 0, 0, 1470, 1080, this);
+    	drawClock(g);
     	if (currentMap.getTiles() != null) {
-	    	for (int i = 0; i < sizeH; i++) {
-	        	int lines = i;
-	            for (int j = 0; j < sizeW; j++) {
-	                int Tileposx = j * tileSize;
-	                int Tileposy = i * tileSize;
-	 
-	                g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
-	            }
-	        }
+	    	drawTiles(g);
     	}
-        g.setColor(Color.BLUE.darker());
+        if (!(objects.isEmpty())) {
+        	drawObjects(g);
+        }
+    }
+    private void drawClock(Graphics g) {			//On dessine l'horloge du temps qui avance.
+    	g.setColor(Color.BLUE.darker());
         g.drawRect(0,975,400,50);
         g.fillRect(0,975,400,50);
         g.setColor(Color.BLUE);
@@ -123,69 +121,59 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		g.fillRect(10, 985, 380, 30);
 		g.setFont(new Font("Monotype Corsiva", Font.BOLD, 30));
 		g.setColor(Color.ORANGE);
-		
 		g.drawString(localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)), 50, 1010);
     	
-        if (!(objects.isEmpty())) {
-        	synchronized(objects) {
-	        	for (GameObject object : this.objects) {
-		            int x = object.getPosX();
-		            int y = object.getPosY();
-		            if (x < 0 || y < 0) {
-		            	continue;
-		            }
-		            else {
-		            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-		            }
-		            if (textToPaint != null) {
-		            	g.setColor(Color.WHITE);
-		            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-		            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-		            	g.setColor(Color.BLACK);
-		            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
-		            	g.drawString(textToPaint, tileSize/2, tileSize/2);
-		            }
-	        	}
-        	}
+    }
+    private void drawTiles(Graphics g) {			//On dessine les tiles formant le sol de la map.
+    	for (int i = 0; i < sizeH; i++) {
+        	int lines = i;
+            for (int j = 0; j < sizeW; j++) {
+                int Tileposx = j * tileSize;
+                int Tileposy = i * tileSize;
+                g.drawImage(currentMap.getTiles().get(j+lines*sizeW), Tileposx, Tileposy, tileSize, tileSize, this);
+            }
         }
     }
-
-    public void redraw() {
-        this.repaint();
+    private void drawObjects(Graphics g) {			//On dessine les objects sur la map.
+    	synchronized(objects) {
+        	for (GameObject object : this.objects) {
+	            int x = object.getPosX();
+	            int y = object.getPosY();
+	            if (x < 0 || y < 0) {
+	            	continue;
+	            }
+	            else {
+	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
+	            }
+	            if (textToPaint != null) {
+	            	g.setColor(Color.WHITE);
+	            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.setColor(Color.BLACK);
+	            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
+	            	g.drawString(textToPaint, tileSize/2, tileSize/2);
+	            }
+        	}
+    	}
     }
-    public Dimension getDimension() {
-    	return new Dimension(sizeW,sizeH);
-    }
-    public void changeMap(Map map) {
+    public void changeMap(Map map) {		//On change la map.
     	currentMap = map;
     	sizeH = currentMap.getSizeH();
     	sizeW = currentMap.getSizeW();
     	tileSize = currentMap.getTileSize();
     }
 
-	public void addMouse(Mouse m) {
-		this.mouseController = m;
-	}
-	public Mouse getMouse() {
-		return this.mouseController;
-	}
-	/*public void drawTimeRemaining(int time, Sums s) {
-	    posX = s.getPosX() + Constantes.image_size;
-		posY = s.getPosY()+Constantes.image_size;
-		int size = Math.round(Constantes.image_size/2);
-		removeImage();
-		graphe.drawImage(Constantes.bubbleThought, 0,0,null);
-		graphe.setFont(new Font("Monotype Corsiva", Font.BOLD, 20));
-		graphe.drawString(Integer.toString(time), size, size);
-	}*/
+    public void redraw() {
+        this.repaint();
+    }
 	private void removeImage() {
-		combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);
+		combined = new BufferedImage(Constantes.image_size+10,Constantes.image_size+10,BufferedImage.TYPE_INT_ARGB);		//On supprime l'ancienne image pour dessiner la nouvelle.
 		graphe = combined.getGraphics();
 	}
 	public void updateContent(){
 		items.setSize(Constantes.itemsNumber);
 		if (container != null) {
-			ArrayList<GameObject> listToDraw = container.switchRow(row);
+			ArrayList<GameObject> listToDraw = container.switchRow(row);		//On update le contenant, on dessine d'abord les cases vides puis on ajoute le sprite de l'objet si il existe.
 			for (int i = 0; i < Constantes.itemsNumber;i++) {
 				removeImage();
 				graphe.drawImage(inventoryCase, 0, 0, null);
@@ -198,7 +186,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 			content.setModel(items);
 		}
 	}
-	public void drawContent(ContainerObject container) {
+	public void drawContent(ContainerObject container) {			//On dessine le contenu juste au dessus de l'objet et on le colle au bord de la map si il dépasse.
 		this.container = container;
 		int posX;
 		int width = 220;
@@ -230,7 +218,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		
 		
 	}
-	private void initButton(int width, int height, int posX, int posY) {
+	private void initButton(int width, int height, int posX, int posY) {		//On dessine les flèches juste à coté du contenu.
 		Image img = (Image) Constantes.imageHashMap.get(Constantes.arrowUp);
 		up = new JButton(new ImageIcon(img));
 		up.setBackground(Color.ORANGE.darker());
@@ -246,7 +234,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		this.add(down, pos1);
 		this.add(up, pos2);
 	}
-	private void initActionButtons(int width, int height, int posX, int posY) {
+	private void initActionButtons(int width, int height, int posX, int posY) {		//Idem, on dessine les bouttons en dessous du contenu.
 		buttons =ActionPanel.getInstance().getButtonsHashMap();
 		buttonEAT = (JButton) buttons.get("EAT IT");
 		buttonTAKE = (JButton) buttons.get("TAKE");
@@ -270,7 +258,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		buttonBUY.addActionListener(this);
 	}
 	private void initJList(int nLabels) {
-		ArrayList<GameObject> listToDraw = container.switchRow(row);
+		ArrayList<GameObject> listToDraw = container.switchRow(row);		//On dessine les cases vides puis les sprites des objects contenus dans les cases.
 		for (int i = 0; i < Constantes.itemsNumber;i++) {
 			removeImage();
 			graphe.drawImage(inventoryCase, 0, 0, null);
@@ -283,7 +271,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		content.setModel(items);
 		content.addListSelectionListener(this);
 	}
-	public void removeDrawContent() {
+	public void removeDrawContent() {		//On supprime tous le contenu et les bouttons dessinés.
 		items.removeAllElements();
 		this.remove(content);
 		buttonCLOSE.removeActionListener(this);
@@ -306,7 +294,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		row = 0;
 		
 	}
-	public void removeDrawArrows() {
+	public void removeDrawArrows() {		//On supprime les flèches et les bouttons pour placer les meubles.
 		try {
 			this.remove(panelToDrawArrows);
 		}
@@ -315,7 +303,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		}
 		this.remove(panelButtons);
 	}
-	public void drawArrowsToDirect(GameObject o) {
+	public void drawArrowsToDirect(GameObject o) {		// On dessine les flèches après le texte et les bouttons encore plus loin.
 		panelToDrawArrows = new PanelToDrawArrows();
 		panelButtons = new ButtonsForPlacingFurniture();
 		int max = Constantes.image_size*3;
@@ -333,7 +321,35 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		localDateTime = Game.getInstance().getTime();
 		redraw();
 	}
-
+	public Dimension getDimension() {
+    	return new Dimension(sizeW,sizeH);
+    }
+	public void addMouse(Mouse m) {
+		this.mouseController = m;
+	}
+	public Mouse getMouse() {
+		return this.mouseController;
+	}
+	public void setTextToPaint(String s) {
+		textToPaint = s;
+	}
+	public Map getCurrentMap() {
+		return currentMap;
+	}
+	public void setObjects(ArrayList<GameObject> objects) {
+        this.objects = objects;
+        this.redraw();
+    }
+    public ArrayList<GameObject> getObjects() {
+    	return objects;
+    }
+    public static MapDrawer getInstance() {
+    	if (instance_mapDrawer == null) {
+    		instance_mapDrawer = new MapDrawer();
+    	}
+    	return instance_mapDrawer;
+    }
+    @Override
 	public void actionPerformed(ActionEvent arg0) {
 		int index = content.getSelectedIndex();
 		if (index < 0) {
@@ -377,6 +393,7 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 		}
 		ActionPanel.getInstance().updateVisibleButtons();
 	}
+    @Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		int index = content.getSelectedIndex();
 		ArrayList<GameObject> objects = container.switchRow(row);
@@ -391,30 +408,11 @@ public class MapDrawer extends JPanel implements ActionListener, ListSelectionLi
 				else {
 					try {
 						this.remove(buttonEAT);
-					}
+						}
 					finally {
+						}
 					}
 				}
 			}
 		}
-	}
-	public void setTextToPaint(String s) {
-		textToPaint = s;
-	}
-	public Map getCurrentMap() {
-		return currentMap;
-	}
-	public void setObjects(ArrayList<GameObject> objects) {
-        this.objects = objects;
-        this.redraw();
-    }
-    public ArrayList<GameObject> getObjects() {
-    	return objects;
-    }
-    public static MapDrawer getInstance() {
-    	if (instance_mapDrawer == null) {
-    		instance_mapDrawer = new MapDrawer();
-    	}
-    	return instance_mapDrawer;
-    }
 	}

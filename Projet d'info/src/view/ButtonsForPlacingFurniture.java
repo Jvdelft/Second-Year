@@ -40,6 +40,7 @@ public class ButtonsForPlacingFurniture extends JPanel implements ActionListener
 		}
 		numberOfButtons++;
 	}
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}

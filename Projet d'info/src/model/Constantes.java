@@ -117,6 +117,9 @@ public class Constantes {											//Cette classe regroupe toutes les constante
 	public static BufferedImage dogE;
 	public static BufferedImage dogW;
 	public static BufferedImage helpPanel;
+	public static final int BAR_LENGTH = 1;
+	public static final int BAR_WIDTH = 20;
+	public static final int AVATAR_SIZE = 100;
 	public static void Images() {
 		try {
 			tree = ImageIO.read(new File("Images/tree.png"));

@@ -38,7 +38,7 @@ public class MenuInGame extends JPanel{
 		
 		this.box = new GridBagLayout();
 		this.box.preferredLayoutSize(this);
-		Icon imgIcon = new ImageIcon(Constantes.menuInGame);
+		Icon imgIcon = new ImageIcon(Constantes.menuInGame);	//Initialisation d'un gif qui tourne en fond du menu.
 		JLabel label = new JLabel(imgIcon);
 		label.setBounds(0, 0, 1920, 1080);
 		this.add(panel,BorderLayout.CENTER);
@@ -55,10 +55,7 @@ public class MenuInGame extends JPanel{
 		initButton(help);
 		
 	}
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-	}
-	private void initButton(JButton b) {
+	private void initButton(JButton b) {		// On initialise les bouttons sur le menu disposé en grille et on les centres.
 		buttons.add(b);
 		b.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
 		b.setForeground(Color.WHITE);
@@ -72,5 +69,9 @@ public class MenuInGame extends JPanel{
 	}
 	public ArrayList<JButton> getButtons(){
 		return buttons;
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 	}
 }

@@ -31,7 +31,7 @@ public class PanelToDrawArrows extends JPanel implements ActionListener{
 		limits.weightx = 1;
 		limits.weighty = 1;
 		initButton(new JButton(new ImageIcon((Image)Constantes.imageHashMap.get(Constantes.arrowUp))));
-		initButton(new JButton(new ImageIcon((Image)Constantes.imageHashMap.get(Constantes.arrowDown))));
+		initButton(new JButton(new ImageIcon((Image)Constantes.imageHashMap.get(Constantes.arrowDown))));	//On initialise les bouttons.
 		initButton(new JButton(new ImageIcon((Image)Constantes.imageHashMap.get(Constantes.arrowLeft))));
 		initButton(new JButton(new ImageIcon((Image)Constantes.imageHashMap.get(Constantes.arrowRight))));
 	}
@@ -47,12 +47,14 @@ public class PanelToDrawArrows extends JPanel implements ActionListener{
 		}
 		numberOfButtons++;
 	}
+	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (((JButton) arg0.getSource()).getName() == "up") {
-			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(0, -1);
+			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(0, -1);		// Le meuble en train d'être placé est tourné.
 		}
 		else if (((JButton) arg0.getSource()).getName() == "down") {
 			((Furniture) MapDrawer.getInstance().getCurrentMap().getLastObjectPlace()).rotate(0, 1);

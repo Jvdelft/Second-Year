@@ -42,14 +42,10 @@ public class ActionPanel extends JPanel implements ActionListener {
 	private ActionPanel() {
 		limits.weightx = 1;
 		limits.weighty = 1;
-		initButton(new JButton("EAT"));
 		initButton(new JButton("STOCK"));
 		initButton(new JButton("GIVE"));
-		initButton(new JButton("TOILET"));
-		initButton(new JButton("INTERACT"));
 		initButton(new JButton("TAKE"));
 		initButton(new JButton("CLOSE"));
-		initButton(new JButton("OPEN"));
 		initButton(new JButton("EAT IT"));
 		initButton(new JButton("GIVE FLOWER"));
 		initButton(new JButton("MAKE LOVE"));
@@ -105,32 +101,22 @@ public class ActionPanel extends JPanel implements ActionListener {
     	showButtons(typeList);
     }
 	
-	public void showButtons(ArrayList<String> typeList) {
+	public void showButtons(ArrayList<String> typeList) {				//La fonction affiche les bouttons utilisables à cet instant.
 		ArrayList<JButton> mustAddButtons = new ArrayList<JButton>();
 		for (String type : typeList) {
 			mustAddButtons.add((JButton) buttons.get(type));
 		}
-		for (JButton object : allButtons) {
+		for (JButton object : allButtons) {					//On supprime les bouttons qui ne sont plus disponibles
 			if (!(mustAddButtons.contains(object))) {
 				removeButton(object);
 			}
 		}
-		if (!(mustAddButtons.isEmpty())){
+		if (!(mustAddButtons.isEmpty())){					//On ajoute les nouveaux bouttons.
 			for (JButton type : mustAddButtons) {
 				if (type != null) {
 					this.addButton(type.getText());
 				}
 			}
-		}
-	}
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-        g.drawImage(background, 0, 0, null);
-	}
-	public void actionPerformed(ActionEvent e) {
-		JButton buttonPressed = (JButton) e.getSource();
-		if (buttonPressed.isValid() && buttonPressed.getLocationOnScreen().getX()>1470) {
-			Game.getInstance().buttonPressed(buttonPressed.getText());
 		}
 	}
 	
@@ -141,7 +127,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 		
 	}
-	public void addButton(String s) {
+	public void addButton(String s) {					//Les bouttons sont organisés en grille et s'ajoute donc l'un à la suite de l'autre dans la grille.
 		JButton button = (JButton) buttons.get(s);
 		Boolean notIn = true;
 		if (visibleButtons.contains(button)) {
@@ -170,9 +156,9 @@ public class ActionPanel extends JPanel implements ActionListener {
 		else if (visibleButtons.contains((JButton) buttons.get("OPEN"))) {
 			res = "OPEN";
 		}
-		else if (!(visibleButtons.isEmpty()) && visibleButtons.get(0) != buttons.get("EAT")){
+		else if (!(visibleButtons.isEmpty()) && (visibleButtons.get(0) != buttons.get("EAT") && visibleButtons.get(0) != buttons.get("GO TO WORK"))){
 			res = visibleButtons.get(0).getText();
-			}
+		}
 		else if (visibleButtons.size()-1>0){
 			res = visibleButtons.get(1).getText();
 		}
@@ -181,7 +167,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		}
 		return res;
 	}
-	public void setSelectedIndexInventory(int index) {
+	public void setSelectedIndexInventory(int index) {		//On prend la case que le joueur a selectionné sur l'inventaire.
 		this.index = index;
 		if(this.index <0) {
 			this.index = 0;
@@ -189,7 +175,7 @@ public class ActionPanel extends JPanel implements ActionListener {
 		updateVisibleButtons();
 		Game.getInstance().setIndexInventory(index);
 	}
-	public void setPlayer(Sums s) {
+	public void setPlayer(Sums s) {					//On change le personnage controllé et donc on retire tous les bouttons car ils ne correspondent plus au nouveau personnage.
 		active_player = s;
 		visibleButtons.removeAll(visibleButtons);
 		this.removeAll();
@@ -199,5 +185,17 @@ public class ActionPanel extends JPanel implements ActionListener {
 			actionPanel_instance = new ActionPanel();
 		}
 		return actionPanel_instance;
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+        g.drawImage(background, 0, 0, null);
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton buttonPressed = (JButton) e.getSource();
+		if (buttonPressed.isValid() && buttonPressed.getLocationOnScreen().getX()>1470) {		//On vérifie que le boutton est bien dans l'ActionPanel.
+			Game.getInstance().buttonPressed(buttonPressed.getText());
+		}
 	}
 }

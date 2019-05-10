@@ -13,7 +13,10 @@ public class Sofa extends Furniture implements Directable{
 		super();
 		type = "SIT";
 		sprite = null;
+		sizeH = 2;
+		sizeW = 1;
 	}
+
 	@Override
 	public boolean isObstacle() {
 		return true;

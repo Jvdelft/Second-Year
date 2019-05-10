@@ -32,15 +32,7 @@ public class MainMenu extends JPanel{
 		initButton(Continue);
 		initButton(Exit);
 	}
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(Constantes.menu, 0, 0, 1920, 1080, this);
-		
-	}
-	public ArrayList<JButton> getButtons(){
-		return Buttons;
-	}
-	private void initButton(JButton b) {
+	private void initButton(JButton b) {		//On initialise chaque boutton l'un à la suite de l'autre.
 		Buttons.add(b);
 		b.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
 		b.setBackground(Color.green.darker());
@@ -50,6 +42,15 @@ public class MainMenu extends JPanel{
 		b.setPreferredSize(new Dimension(600,150));
 		b.setAlignmentX(Component.CENTER_ALIGNMENT);
 		b.setAlignmentY(Component.CENTER_ALIGNMENT);
+	}
+	public ArrayList<JButton> getButtons(){
+		return Buttons;
+	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(Constantes.menu, 0, 0, 1920, 1080, this);
+		
 	}
 	
 }
