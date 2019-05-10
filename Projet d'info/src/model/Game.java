@@ -266,7 +266,7 @@ public class Game implements DeletableObserver, Serializable{
           TimerTask movingDogTask = new TimerTask() {
         	  public void run() {
         		  for (AStarThread t : threads) {
-          	   		if (t.getDog() == dog) {
+          	   		if (t!= null & t.getDog() == dog) {
           	   			t.stopThread();
           	   		}
           	   	}
@@ -324,7 +324,7 @@ public class Game implements DeletableObserver, Serializable{
 				if (o instanceof Sums && res == null && o != active_player) {
 					synchronized(threads) {
 						for (AStarThread t : threads) {
-							if (t.getSums() == o && t.isNotFinished()){
+							if (t!= null & t.getSums() == o && t.isNotFinished()){
 								isAlreadyMoving = true;
 							}
 						}
