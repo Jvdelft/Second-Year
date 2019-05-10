@@ -565,7 +565,7 @@ public class Game implements DeletableObserver, Serializable{
 			}
 		}
 		return res;
-	}  
+	}   
 	public void setIndexInventory(int i) {
 		if (i <0) {
 			indexInventory = 0;
