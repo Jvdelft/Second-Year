@@ -1,7 +1,6 @@
 package model;
 
 public abstract class ActivableObject extends GameObject implements Activable {
-	protected int lifePoints;
 	protected String type = "INTERACT"; //on définit un type afin que le programme sache quel JButton afficher.
 	protected String user = "All";      //on définit les utilisateurs possibles afin que seuls certains personnages puissent utiliser l'objet.
 	protected boolean other = false;    //on définit un booléen qui détermine si l'utilisation de l'objet se fait sur le personnage joué ou un autre.

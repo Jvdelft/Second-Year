@@ -19,7 +19,7 @@ public class Bath extends ActivableObject{
 		super();
 		type = "BATH";
 		sprite = null;  //il est important de mettre le sprite à la valeur null car comme le sprite du bain s'étend sur 2 cases, le sprite est dessiné une fois mais les deux cases
-	}					//être activable.
+	}					//vont être activable.
 	@Override
 	public void activate(Sums s) {			//Les bains amènent propreté et bonheur :).
 		s.hygiene = s.getMaxHygiene();

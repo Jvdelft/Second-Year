@@ -1,6 +1,6 @@
 package model;
 
-public class Fridge extends ContainerObject implements Activable{
+public class Fridge extends ContainerObject {
 	public Fridge(int x, int y) {
 		super(x,y);
 	}

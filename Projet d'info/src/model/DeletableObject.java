@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public abstract class DeletableObject extends ActivableObject implements Deletable{
-
+	protected int lifePoints;
     private ArrayList<DeletableObserver> observers = new ArrayList<DeletableObserver>();
     protected DeletableObject (int X, int Y) {
         super(X, Y); 

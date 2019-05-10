@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-public abstract class Food extends DeletableObject implements Deletable{
+public abstract class Food extends DeletableObject {
     protected int NutritionalValue;
 	protected int EnergyValue;
 	protected Food(int X, int Y) {
