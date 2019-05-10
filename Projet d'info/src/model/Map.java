@@ -27,6 +27,7 @@ public class Map implements Serializable{
 	private GameObject lastObjectPlaced = null;
 	private House house = new House(20,1);
 	private Dog dog;
+	private transient BlockFactory factory = new BlockFactory();
 	public Map(String path) {
 		if(path != Constantes.mapMaison && path != Constantes.mapMaison2) {
 			notInitHouse = false;
@@ -59,21 +60,21 @@ public class Map implements Serializable{
 
 		}
 		else if (mapName.equals(Constantes.mapMaison)) {
-			objectsToPlace.add(new Fridge());
+			objectsToPlace.add(factory.getInstance("Fridge", this));
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
-			objectsToPlace.add(new Sofa());
-			objectsToPlace.add(new Toy());
-			objectsToPlace.add(new Bed());
+			objectsToPlace.add(factory.getInstance("Sofa", this));
+			objectsToPlace.add(factory.getInstance("Toy", this));
+			objectsToPlace.add(factory.getInstance("Bed", this));
 			System.out.println("Chargement MapMaison"); 
 		}
 		else if (mapName.equals(Constantes.mapMaison2)) {
 			this.addObject(new Door(Math.round(sizeW/2),sizeH-1, Constantes.mapBase, 'H'));
 			this.addObject(new Door(1,0, Constantes.mapAttic, 'N'));
-			objectsToPlace.add(new Sofa());
-			objectsToPlace.add(new Toy());
-			objectsToPlace.add(new Bed());
-			objectsToPlace.add(new Fridge());
-			objectsToPlace.add(new Bed());
+			objectsToPlace.add(factory.getInstance("Sofa", this));
+			objectsToPlace.add(factory.getInstance("Toy", this));
+			objectsToPlace.add(factory.getInstance("Bed", this));
+			objectsToPlace.add(factory.getInstance("Fridge", this));
+			objectsToPlace.add(factory.getInstance("Bed", this));
 			System.out.println("Chargement MapMaison2"); 
 		}
 		else if (mapName.equals(Constantes.mapAttic)) {

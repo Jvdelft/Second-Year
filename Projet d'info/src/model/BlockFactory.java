@@ -26,5 +26,15 @@ public class BlockFactory {
 		}
 		return res;
 	}
+	public GameObject getInstance(String type, Map map) {
+		GameObject res = null;
+		switch(type) {
+			case "Sofa" : res = new Sofa(); break;
+			case "Fridge": res = new Fridge(); break;
+			case "Toy" : res = new Toy(); break;
+			case "Bed" : res = new Bed(); break;
+		}
+		return res;
+	}
 
 }
