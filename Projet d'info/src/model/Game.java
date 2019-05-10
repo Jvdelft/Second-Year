@@ -107,10 +107,10 @@ public class Game implements DeletableObserver, Serializable{
 	            }
 	        }
     	}
-    		if (p == active_player) {
-    			ActionPanel.getInstance().updateVisibleButtons();
-    			notifyView();
-    		}
+    	if (p == active_player) {
+    		ActionPanel.getInstance().updateVisibleButtons();
+    		notifyView();
+    	}
     }
     public void moveDog(int x, int y, Dog d) {     //Idem à la fonction précédente mais pour les chiens.
     	if (d != null) {
@@ -210,7 +210,7 @@ public class Game implements DeletableObserver, Serializable{
 	   setNextActivePlayer(active_player);
    }
    
-   public void makeAllTimerTask(){
+   private void makeAllTimerTask(){
        TimerTask repeatedTask = new TimerTask() {			//Initiation de tous les timers et de leurs tâches respectives, faire passer le temps, faire bouger des sums aléatoires, etc...
            public void run() {
            	ActionPanel.getInstance().updateActivableList();
@@ -449,7 +449,7 @@ public class Game implements DeletableObserver, Serializable{
     	timers.add(timer);
     }
     
-    public void setNextActivePlayer(Sums s) {			//Met un autre personnage comme personnage actif.
+    private void setNextActivePlayer(Sums s) {			//Met un autre personnage comme personnage actif.
     	for (GameObject perso : objectsOnMap) {
     		if (perso instanceof Sums) {
     			if ((Sums)perso != s && ((Sums) perso).isPlayable()) {
@@ -483,7 +483,7 @@ public class Game implements DeletableObserver, Serializable{
 			}
 		}
 	}
-	public void timePassed() {
+	private void timePassed() {
 		ArrayList<Sums> newList = new ArrayList<Sums>(sums);	//Le temps passe pour tous les Sums.
 		for (Sums e: newList) {
 			if (e.isPlayable()) {

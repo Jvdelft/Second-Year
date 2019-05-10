@@ -13,7 +13,12 @@ public class Keyboard implements KeyListener {
     private Keyboard(Game game) {
         this.game = game;
     }
-
+    public static Keyboard getInstance() { 
+    	if (keyboard_instance == null) {
+    		keyboard_instance = new Keyboard(Game.getInstance());
+    	}
+    	return keyboard_instance;
+    }
     @Override
     public void keyPressed(KeyEvent event) {
         int key = event.getKeyCode();
@@ -48,11 +53,5 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-    }
-    public static Keyboard getInstance() { 
-    	if (keyboard_instance == null) {
-    		keyboard_instance = new Keyboard(Game.getInstance());
-    	}
-    	return keyboard_instance;
     }
 }
