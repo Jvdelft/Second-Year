@@ -14,7 +14,7 @@ public class Adult extends Sums {
 		max_faim = Constantes.max_faim_adult;
 		max_toilet = Constantes.max_toilet_adult;
 		max_happiness = Constantes.max_happiness_adult;
-		type = "Other";
+		type = "other";
 		typeAffection = "MAKE LOVE";
 		ageRange = "Adult";			
 		user = "Adult";			//Seuls les adultes peuvent se séduire et avoir des enfants.

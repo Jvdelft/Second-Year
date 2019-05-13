@@ -71,6 +71,7 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
 		}
 		if(toilet>this.getMaxToilet()) {
 			energy -=1;
+			toilet -= 1;
 		}
 		energy -=1;
 		faim -= 1;
@@ -275,7 +276,8 @@ public abstract class Sums extends ActivableObject implements NeedToEat, Directa
     }
     @Override
     public void pee() {
-    	Game.getInstance().playerWait(10000L, this, this.ageRange);
+    	Game.getInstance().playerWait(10000L, this, "TOILET");
+    	this.setToilet(0);
     }
     @Override
 	public void activate (Sums s) {}

@@ -10,12 +10,12 @@ import model.Constantes;
 import view.MapDrawer;
 
 public class MapReader {
-	private static ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();		//Les images à draw.
+	private transient static ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();		//Les images à draw.
 	private static ArrayList<Character> Maps = new ArrayList<Character>();				// Les caractères récupérés dans les fichiers textes.
 	private static int wTiles;
 	private static BlockFactory factory = new BlockFactory();
 	private static ArrayList<GameObject> objects = new ArrayList<GameObject>();			//les objets à ajouter sur la map.
-	private static Map mapBeingRead;
+	private transient static Map mapBeingRead;
 	public MapReader() {
 		}
 	private static void makeTiles() {

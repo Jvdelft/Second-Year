@@ -47,7 +47,8 @@ public class InventoryPanelListener implements ActionListener, ListSelectionList
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (list.getSelectedIndex() == lastSelectedIndex) {
-			Game.getInstance().setIndexInventory(list.getSelectedIndex());
+			Game.getInstance().setIndexInventory(list.getSelectedIndex()+row*4);
+			System.out.println(list.getSelectedIndex()+row*4);
 			MapDrawer.getInstance().requestFocusInWindow();
 		}
 		else {

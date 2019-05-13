@@ -282,7 +282,7 @@ public class Game implements DeletableObserver, Serializable{
           TimerTask comingTask = new TimerTask() {
           	public void run() {
           		ArrayList<GameObject> list = new ArrayList<GameObject>(getRandomSumsAndDoor());		//Un Sums aléatoire qui est hors de la map revient sur cette dernière.
-          		if (list.size()>0) {
+          		if (!(list.isEmpty())) {
    	        		Sums s = (Sums) list.get(0);
    	        		Door door = (Door) list.get(1);
    	        		if (s != null && s.isPlayable()) {
@@ -324,7 +324,7 @@ public class Game implements DeletableObserver, Serializable{
 	  	ActivableObject frontObject = null;
 	  	if (activableObjects != null) { //Détermination de l'objet en face du joueur
 		    	for (ActivableObject object : activableObjects) {
-		    		if (!(buttons.containsKey(object.getType()))) {
+		    		if (!(buttons.containsKey(object.getType())) && object.getType() != "other") {
 	      			ActionPanel.getInstance().initButton(new JButton(object.getType()));
 	      		}
 		            if (object.isAtPosition(active_player.getFrontX(), active_player.getFrontY())) { 
@@ -341,6 +341,7 @@ public class Game implements DeletableObserver, Serializable{
 	  	if (active_player.getObjects().size() >0 && active_player.getObjects().size() > indexInventory) { //On s'intéresse au bouton lié a l'inventaire
 	  		ActivableObject object = ((ActivableObject) active_player.getObjects().get(indexInventory));
 	  		if (frontObject != null & frontObject instanceof Sums && object.getUser().contentEquals(((Sums)frontObject).getAgeRange())) { //Si l'objet de l'inventaire peut etre donné au sums en face
+	  			System.out.println("Hey");
 	  			typeList.add(object.getType());
 	  		}
 	  		else if ((object.getUser().contentEquals(active_player.getAgeRange()) && !(object.isForAnotherSums()))|| object.getUser().contentEquals("All")) { //Si l'objet peut etre utilisé par soi meme
@@ -357,6 +358,7 @@ public class Game implements DeletableObserver, Serializable{
 		Door door = null;
 		ArrayList<GameObject> resList = new ArrayList<GameObject>();
 		boolean isAlreadyMoving = false;
+		try {
 		for (Map map: mapList) {
 			for (GameObject o : map.getObjects()) {
 				if (o instanceof Sums && res == null && o != active_player) {
@@ -380,6 +382,9 @@ public class Game implements DeletableObserver, Serializable{
 					break;
 				}
 			}
+		}
+		}
+		catch(java.util.ConcurrentModificationException e) {
 		}
 		return resList;
  	}
@@ -704,5 +709,13 @@ public class Game implements DeletableObserver, Serializable{
     }
     public void setGameObject(ArrayList<GameObject> o){
     	this.objectsOnMap = o;
+    }
+    public void stopThread() {
+    	for (AStarThread t : threads) {
+    		t.stopThread();
+    	}
+    	timers.get(3).cancel();
+    	timers.get(4).cancel();
+    	timers.get(6).cancel();
     }
 }

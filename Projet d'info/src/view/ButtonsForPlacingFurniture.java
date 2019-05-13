@@ -17,11 +17,11 @@ import controller.ButtonsForPlacingFurnitureListener;
 import model.Map;
 
 public class ButtonsForPlacingFurniture extends JPanel{
-	private Map map;
+	private transient Map map;
 	private int numberOfButtons;
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
-	private ButtonsForPlacingFurnitureListener listener = new ButtonsForPlacingFurnitureListener();
+	private transient ButtonsForPlacingFurnitureListener listener = new ButtonsForPlacingFurnitureListener();
 	public ButtonsForPlacingFurniture() {
 		initButton(new JButton("DONE"));
 		initButton(new JButton("CANCEL"));

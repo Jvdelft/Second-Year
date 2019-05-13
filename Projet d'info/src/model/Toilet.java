@@ -19,7 +19,6 @@ public class Toilet extends ActivableObject {
 	}
 	@Override
 	public void activate (Sums s) {
-		Game.getInstance().playerWait(10000L, s, type);
 		s.pee();
 	}
 

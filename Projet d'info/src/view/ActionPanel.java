@@ -37,7 +37,7 @@ public class ActionPanel extends JPanel {
 	private ArrayList<JButton> allButtons = new ArrayList<JButton>();
 	private ArrayList<JButton> visibleButtons = new ArrayList<JButton>();
 	private static ActionPanel actionPanel_instance;
-	private ActionPanelListener actionpanelListener = new ActionPanelListener();
+	private transient ActionPanelListener actionpanelListener = new ActionPanelListener();
 	private ActionPanel() {
 		limits.weightx = 1;
 		limits.weighty = 1;

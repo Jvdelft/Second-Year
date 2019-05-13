@@ -23,7 +23,7 @@ public class Map implements Serializable{
 	private transient ArrayList<BufferedImage> tiles = new ArrayList<BufferedImage>();	//les tiles sont les images constituant le sol de la map.
 	private boolean notInitHouse = true;
 	private ArrayList<GameObject> objectsToPlace = new ArrayList<GameObject>();		//Les objets à placer lors de la première entrée sur la map.
-	private MapDrawer mapDrawer;
+	private transient MapDrawer mapDrawer;
 	private GameObject lastObjectPlaced = null;
 	private House house = new House(20,1);
 	private Dog dog;
