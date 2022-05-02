@@ -1,0 +1,129 @@
+/*
+Régulation PID position
+*/
+const int frequence_echantillonnage = 50;
+const int entraxe = 18;
+const float coeff_dist_G = ;
+const float coeff_dist_D = ;
+const float coeff_angle_G = ;
+const float coeff_angle_D = ;
+const double kp_l = ;
+const double ki_l = ;
+const double kd_l = ;
+const double kp_theta = ;
+const double ki_theta = ;
+const double kd_theta = ;
+double x_cible =   ;
+double y_cible =  ;
+double x_robot = 0.;
+double y_robot = 0.;
+double theta_robot = 0.;
+
+int tic_D = 0;
+int tic_G = 0;
+
+float somme_erreur_theta = 0.;
+float erreur_theta_old = consigne(2);
+float somme_erreur_l = 0.;
+float erreur_l_old = consigne(1);
+
+int compteur_tic(){
+  
+  
+}
+double odometry(){
+  
+  delta_l = (coeff_dist_G*tic_G + coeff_dist_D*tic_D)/2;
+  delta_theta = (coeff_dist_G*tic_G - coeff_dist_D*tic_D)/entraxe;
+  
+  delta_x = delta_l*cos(theta_robot);
+  delta_y = delta_l*sin(theta_robot);
+  
+  x_robot += delta_x;
+  y_robot += delta_y;
+  theta_robot += delta_theta;
+  
+  return x_robot, y_robot and theta_robot;
+  
+}
+  
+const float consigne(){
+  
+  double x_robot, y_robot and theta_robot = odometry();
+  const float l = sqrt((x_robot - x_cible)*(x_robot - x_cible) + ((y_robot - y_cible)*(y_robot - y_cible)));
+  const float theta_rad = atan2(y_cible - y_robot, x_cible - x_robot) - theta_robot;
+  const float theta_deg = theta_rad * (180/pi);
+  
+  
+  return l, theta
+    
+}
+
+float profile_vitesse(){
+  
+}
+  
+float regulation_position(){
+  
+  float erreur_theta = consigne(2) - odometry(3);
+  float somme_erreur_theta += erreur_theta;
+  float delta_erreur_theta = erreur_theta_old - erreur_theta;
+  float erreur_theta_old = erreur_theta;
+  
+  float cmd_theta = kp_theta*erreur_theta + ki_theta*somme_erreur_theta + kd_theta*delta_erreur_theta;
+  
+  
+  float x_robot = odometry(1);
+  float y_robot = odometry(2);
+  float dist_robot_cible = sqrt((x_robot - x_cible)*(x_robot - x_cible) + ((y_robot - y_cible)*(y_robot - y_cible)));
+  
+  float erreur_l = consigne(1) - dist_robot_cible;
+  float somme_erreur_l += erreur_l;
+  float delta_erreur_l = erreur_l_old - erreur_l;
+  float erreur_l_old = erreur_l
+  
+  float cmd_l = kp_l*erreur_l + ki_l*somme_erreur_l + kd_l*delta_erreur_l;
+  
+  if(cmd_theta>255)
+	{
+	  	cmd_theta = 255;
+	}
+	else if(cmd_tetha < 0)
+	{
+	  	cmd_theta = 0;
+	}
+	
+	if(cmd_l>255)
+	{
+	  	cmd_l = 255;
+	}
+	else if(cmd_l < 0)
+	{
+	  	cmd_l = 0;
+	}
+  
+  return cmd_theta and cmd_l;
+}
+  
+void compteur_tic(){
+  
+  return nb_tic_G and nb_tic_G;
+}
+
+void intern_timer(){
+  
+}
+  
+
+  
+  
+  
+  
+
+
+  
+}
+  
+
+
+
