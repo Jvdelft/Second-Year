@@ -1,0 +1,22 @@
+18
+wDwwwwwwwwwwwwwwww
+wSwsssswsssssssssw
+wswsssswsssssssssw
+wswsssswsssssssssw
+wswwswwwsssssssssw
+wssssssssssssssssw
+wwwwwssssssssssssw
+wssswssssssssssssw
+wssssssssssssssssw
+wssswssssssssssssw
+wssswssssssssssssw
+wwwwwwwwwDwwwwwwww
+toilet 3 7
+carpet 11 6
+table 11 4
+stairsDownPart 1 3
+stairsMiddlePart 1 2
+stairsUpPart 1 1
+kitchen 14 1
+bath 1 9
+bath 3 9
