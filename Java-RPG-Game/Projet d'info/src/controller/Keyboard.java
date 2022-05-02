@@ -43,8 +43,6 @@ public class Keyboard implements KeyListener {
              game.playerPos();
         case KeyEvent.VK_ESCAPE:
         	Window.getInstance().escapePressed();
-        case KeyEvent.VK_G :
-        	game.stopThread();
         }
         
     }

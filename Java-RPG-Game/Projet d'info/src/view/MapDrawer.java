@@ -71,11 +71,11 @@ public class MapDrawer extends JPanel{
     private int sizeH;
     private int sizeW;
     private int tileSize;
-    private transient String textToPaint;
-    private transient PanelToDrawArrows panelToDrawArrows = null;
-    private transient ButtonsForPlacingFurniture panelButtons = null;
+    private String textToPaint;
+    private PanelToDrawArrows panelToDrawArrows = null;
+    private ButtonsForPlacingFurniture panelButtons = null;
     private LocalDateTime localDateTime;
-    private transient MapDrawerListener listener;
+    private MapDrawerListener listener;
 	
     private MapDrawer() {
         this.setFocusable(true);
@@ -137,24 +137,24 @@ public class MapDrawer extends JPanel{
         }
     }
     private void drawObjects(Graphics g) {			//On dessine les objects sur la map.
+    	synchronized(objects) {
         	for (GameObject object : this.objects) {
-        		synchronized(object){
-		            int x = object.getPosX();
-		            int y = object.getPosY();
-		            if (x < 0 || y < 0) {
-		            	continue;
-		            }
-		            else {
-		            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
-		            }
-		            if (textToPaint != null) {
-		            	g.setColor(Color.WHITE);
-		            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-		            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
-		            	g.setColor(Color.BLACK);
-		            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
-		            	g.drawString(textToPaint, tileSize/2, tileSize/2);
-		            }
+	            int x = object.getPosX();
+	            int y = object.getPosY();
+	            if (x < 0 || y < 0) {
+	            	continue;
+	            }
+	            else {
+	            	g.drawImage(object.getSprite(), x*tileSize, y*tileSize,  object.getSizeW()*tileSize,object.getSizeH()*tileSize, this);
+	            }
+	            if (textToPaint != null) {
+	            	g.setColor(Color.WHITE);
+	            	g.drawRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.fillRect(0, tileSize/8, textToPaint.length()*20, tileSize/2);
+	            	g.setColor(Color.BLACK);
+	            	g.setFont(new Font("Monotype Corsiva", Font.BOLD, 40));
+	            	g.drawString(textToPaint, tileSize/2, tileSize/2);
+	            }
         	}
     	}
     }
@@ -174,7 +174,6 @@ public class MapDrawer extends JPanel{
 	}
 	public void updateContent(){
 		items.setSize(Constantes.itemsNumber);
-		try {
 		if (container != null) {
 			ArrayList<GameObject> listToDraw = container.switchRow(row);		//On update le contenant, on dessine d'abord les cases vides puis on ajoute le sprite de l'objet si il existe.
 			for (int i = 0; i < Constantes.itemsNumber;i++) {
@@ -187,9 +186,6 @@ public class MapDrawer extends JPanel{
 				items.setElementAt(new ImageIcon(combined), i);
 			}
 			content.setModel(items);
-		}
-		}
-		catch(java.lang.NullPointerException e) {
 		}
 	}
 	public void drawContent(ContainerObject container) {			//On dessine le contenu juste au dessus de l'objet et on le colle au bord de la map si il dépasse.
@@ -280,10 +276,6 @@ public class MapDrawer extends JPanel{
 		content.addListSelectionListener(listener);
 	}
 	public void removeDrawContent() {		//On supprime tous le contenu et les bouttons dessinés.
-		container.close();
-		this.requestFocusInWindow();
-		row = 0;
-		container = null;
 		items.removeAllElements();
 		this.remove(content);
 		buttonCLOSE.removeActionListener(listener);
@@ -301,6 +293,9 @@ public class MapDrawer extends JPanel{
 		
 		this.remove(up);
 		this.remove(down);
+		container.close();
+		this.requestFocusInWindow();
+		row = 0;
 		
 	}
 	public void removeDrawArrows() {		//On supprime les flèches et les bouttons pour placer les meubles.

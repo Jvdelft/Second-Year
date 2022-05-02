@@ -27,7 +27,7 @@ public class PanelToDrawArrows extends JPanel{
 	private int numberOfButtons;
 	private GridBagLayout box = new GridBagLayout();
 	private GridBagConstraints limits = new GridBagConstraints();
-	private transient PanelToDrawArrowsListener listener = new PanelToDrawArrowsListener();
+	private PanelToDrawArrowsListener listener = new PanelToDrawArrowsListener();
 	public PanelToDrawArrows() {
 		this.setOpaque(false);
 		this.setLayout(box);
